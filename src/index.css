@@ -1,0 +1,37 @@
+/* Add this to your index.css file to remove default browser margins/padding */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Alternative approach - you can also add these specific resets */
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* If you're still seeing white space, try this more aggressive reset */
+html, body, #root {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  outline: none !important;
+}
