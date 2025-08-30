@@ -324,9 +324,6 @@ const FeaturesPage = () => {
               <button className="cta-primary-button">
                 Start Learning Free
               </button>
-              <button className="cta-secondary-button">
-                Watch Demo
-              </button>
             </div>
           </div>
         </div>
