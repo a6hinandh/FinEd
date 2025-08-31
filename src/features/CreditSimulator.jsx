@@ -435,7 +435,7 @@ const styles = {
   },
   chartsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
     gap: '20px',
     className: 'charts-grid',
   },
@@ -1480,7 +1480,7 @@ const CreditCardSimulator = () => {
 
               <div style={styles.chartCard}>
                 <h3 style={styles.chartTitle}>Transaction History</h3>
-                <div style={{maxHeight: '250px', overflowY: 'auto'}}>
+                <div style={{maxHeight: '250px', overflowY: 'auto',width:"100%"}}>
                   {paymentHistory.length === 0 ? (
                     <p style={{color: '#6B7280', textAlign: 'center', padding: '40px'}}>
                       No transactions yet
@@ -1496,7 +1496,8 @@ const CreditCardSimulator = () => {
                             padding: '12px',
                             backgroundColor: entry.action.includes('Bill') ? '#EEF2FF' : '#F8FAFC',
                             borderRadius: '6px',
-                            fontSize: '0.875rem'
+                            fontSize: '0.875rem',
+                            backgroundColor:"black"
                           }}
                         >
                           <span>Month {entry.month}: {entry.action}</span>

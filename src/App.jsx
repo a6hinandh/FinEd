@@ -10,10 +10,12 @@ import LoanSimulator from "./features/LoanSimulator";
 import FinancialChatbot from "./features/FinChatbot";
 import FinNews from "./features/finNews";
 import StockSimulator from "./features/StockSimulator";
+import ScrollToTop from "./features/ScrollToTop";
 
 function App() {
   return (
     <Router>
+      <ScrollToTop/>
       <Routes>
         <Route path="/" element={<FinEdLanding />} />
         <Route path="/features" element={<FeaturesPage />} />

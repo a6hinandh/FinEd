@@ -1414,7 +1414,7 @@ const CommunityPage = () => {
 
         {/* Study Groups Tab */}
         {activeTab === 'groups' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '24px' }}>
             {studyGroups.map(group => (
               <div key={group.id} style={{
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
