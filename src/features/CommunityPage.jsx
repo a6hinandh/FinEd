@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { MessageCircle, Users, Trophy, BookOpen, DollarSign, TrendingUp, Star, Calendar, Award, Target, Clock, ArrowRight, Heart, Share2, ChevronRight, Plus, Send, Bell, Search } from 'lucide-react';
+import { db } from "../firebase.js";
+import { collection, addDoc, serverTimestamp, updateDoc, doc, increment, arrayUnion } from "firebase/firestore";
+import { auth } from "../firebase.js";
+import { format } from "timeago.js";
+import {  fetchPosts } from '../FetchPosts.js';
+import { onAuthStateChanged } from "firebase/auth";
+
+
 
 const CommunityPage = () => {
   const [activeTab, setActiveTab] = useState('forums');
@@ -21,132 +29,35 @@ const CommunityPage = () => {
     challengesCompleted: 3
   });
 
-  const [forumTopics, setForumTopics] = useState([
-    {
-      id: 1,
-      title: "First Time Investor - Help with Portfolio Allocation",
-      author: "Alex_22",
-      replies: 24,
-      views: 156,
-      lastActivity: "2 minutes ago",
-      category: "Investing",
-      isHot: true,
-      avatar: "💼",
-      likes: 15,
-      content: "Hey everyone! I'm 22 and just started my first job. I have about $5000 to invest and I'm completely overwhelmed by all the options. Should I go with index funds, individual stocks, or a mix? Any advice for a complete beginner?",
-      repliesData: [
-        {
-          id: 1,
-          author: "FinanceWiz_Maya",
-          content: "Great question! For beginners, I always recommend starting with low-cost index funds. They're diversified and perfect for long-term growth. Consider a simple three-fund portfolio: total stock market, international, and bonds.",
-          timestamp: "1 hour ago",
-          likes: 8,
-          avatar: "👑"
-        },
-        {
-          id: 2,
-          author: "BudgetBoss_Mike",
-          content: "Maya's advice is solid! Also, make sure you have an emergency fund first before investing. Rule of thumb: 3-6 months of expenses saved up.",
-          timestamp: "45 minutes ago",
-          likes: 5,
-          avatar: "🎖️"
-        },
-        {
-          id: 3,
-          author: "InvestmentIvy",
-          content: "@Alex_22 What's your risk tolerance? If you're young and can handle volatility, you might consider 80% stocks, 20% bonds. But start simple with target-date funds!",
-          timestamp: "30 minutes ago",
-          likes: 3,
-          avatar: "🏆"
-        }
-      ]
-    },
-    {
-      id: 2,
-      title: "Student Loan Forgiveness - Latest Updates",
-      author: "FinanceGuru_Sarah",
-      replies: 67,
-      views: 423,
-      lastActivity: "15 minutes ago",
-      category: "Debt Management",
-      isHot: true,
-      avatar: "🎓",
-      likes: 32,
-      content: "Just saw the latest news about student loan forgiveness programs. There are some new changes that might affect eligibility. Has anyone successfully applied recently? What was the process like?",
-      repliesData: [
-        {
-          id: 1,
-          author: "DebtDestroyer_Dan",
-          content: "I got approved for PSLF last month! The key is making sure all your payments are certified and you're on the right payment plan. Document everything!",
-          timestamp: "2 hours ago",
-          likes: 12,
-          avatar: "⭐"
-        },
-        {
-          id: 2,
-          author: "You",
-          content: "Thanks for sharing Dan! Did you use the PSLF Help Tool? I've been hearing mixed reviews about it.",
-          timestamp: "1 hour ago",
-          likes: 2,
-          avatar: "🌟"
-        }
-      ]
-    },
-    {
-      id: 3,
-      title: "Side Hustle Success: From $0 to $2k/month",
-      author: "EntrepreneurJoe",
-      replies: 89,
-      views: 892,
-      lastActivity: "1 hour ago",
-      category: "Income",
-      isHot: false,
-      avatar: "🚀",
-      likes: 48,
-      content: "Wanted to share my journey building a side hustle! Started freelance writing 8 months ago with zero experience. Now making consistent $2k/month. Here's what I learned...",
-      repliesData: [
-        {
-          id: 1,
-          author: "SavingsQueen_Sam",
-          content: "This is inspiring! What platform did you start on? Upwork, Fiverr, or direct client outreach?",
-          timestamp: "3 hours ago",
-          likes: 6,
-          avatar: "💎"
-        },
-        {
-          id: 2,
-          author: "BudgetBoss_Mike",
-          content: "Great success story! Don't forget to set aside money for taxes - freelance income can surprise you at tax time!",
-          timestamp: "2 hours ago",
-          likes: 9,
-          avatar: "🎖️"
-        }
-      ]
-    },
-    {
-      id: 4,
-      title: "Emergency Fund: How Much is Really Enough?",
-      author: "PragmaticPenny",
-      replies: 43,
-      views: 287,
-      lastActivity: "3 hours ago",
-      category: "Emergency Planning",
-      isHot: false,
-      avatar: "🛡️",
-      likes: 21,
-      content: "The standard advice is 3-6 months of expenses, but with inflation and job market uncertainty, I'm wondering if that's still enough. What do you all think? How much do you keep in your emergency fund?",
-      repliesData: [
-        {
-          id: 1,
-          author: "FinanceWiz_Maya",
-          content: "I keep 8 months of expenses. Better safe than sorry, especially if you're in a volatile industry or have dependents.",
-          timestamp: "4 hours ago",
-          likes: 7,
-          avatar: "👑"
-        }
-      ]
-    }
-  ]);
+  function useCurrentUser() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  return user;
+}
+
+  const user = useCurrentUser();
+
+   
+
+  const [forumTopics, setForumTopics] = useState([])
+
+  useEffect(() => {
+    const loadPosts = async () => {
+      const data = await fetchPosts();
+      setForumTopics(data);
+    };
+    loadPosts();
+  }, []);
+
+ 
 
   const [studyGroups, setStudyGroups] = useState([
     {
@@ -314,15 +225,32 @@ const CommunityPage = () => {
     setJoinedChallenges(newJoined);
   };
 
-  const handleCreatePost = () => {
+  const handleCreatePost = async () => {
     if (newPost.title.trim() && newPost.content.trim()) {
+
+
+      const docRef = await addDoc(collection(db, "posts"), {
+      title: newPost.title,
+      author: user.displayName,
+      replies: 0,
+      views: 1,
+      lastActivity: new Date().toDateString(),
+      category: newPost.category,
+      isHot: false,
+      avatar: "🆕",
+      likes: 0,
+      content: newPost.content,
+      createdAt: serverTimestamp(),
+      repliesData: [] 
+      // ✅ Firebase timestamp
+    });
       const newTopic = {
-        id: forumTopics.length + 1,
+        id: docRef.id,
         title: newPost.title,
-        author: "You",
+        author: user.displayName,
         replies: 0,
         views: 1,
-        lastActivity: "Just now",
+        lastActivity:new Date().toDateString(),
         category: newPost.category,
         isHot: false,
         avatar: "🆕",
@@ -344,7 +272,7 @@ const CommunityPage = () => {
     }
   };
 
-  const handleReply = (topicId) => {
+  const handleReply = async (topicId) => {
     if (newReply.trim()) {
       const newReplyData = {
         id: Date.now(),
@@ -354,6 +282,13 @@ const CommunityPage = () => {
         likes: 0,
         avatar: "🌟"
       };
+
+      const docRef = doc(db, "posts", topicId.toString());
+
+      await updateDoc(docRef, {
+        repliesData: arrayUnion(newReplyData),
+        replies: increment(1),
+      });
 
       setForumTopics(prev => prev.map(topic => 
         topic.id === topicId 
