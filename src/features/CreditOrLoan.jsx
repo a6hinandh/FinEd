@@ -94,12 +94,12 @@ const FinancialSimulatorLanding = () => {
                 </div>
               </div>
               
-              <button onClick={()=>navigate('/features/credit/simulator')} style={styles.simulatorButton}>
+              <button onClick={()=>navigate('/credit')} style={styles.simulatorButton}>
                 Start Credit Simulation
                 <span style={styles.buttonArrow}>→</span>
               </button>
 
-              <button onClick={()=>navigate('/features/credit/working')} style={{...styles.simulatorButton, marginTop: '20px'}}>
+              <button onClick={()=>navigate('/credit!help')} style={{...styles.simulatorButton, marginTop: '20px'}}>
                 Learn How It Works
                 <span style={styles.buttonArrow}>→</span>
               </button>
@@ -136,12 +136,12 @@ const FinancialSimulatorLanding = () => {
                 </div>
               </div>
               
-              <button onClick={()=>navigate('/features/loan/simulator')} style={styles.simulatorButton}>
+              <button onClick={()=>navigate('/loan')} style={styles.simulatorButton}>
                 Start Loan Simulation
                 <span style={styles.buttonArrow}>→</span>
               </button>
 
-              <button onClick={()=>navigate('/features/loan/working')} style={{...styles.simulatorButton, marginTop: '20px'}}>
+              <button onClick={()=>navigate('/loan!help')} style={{...styles.simulatorButton, marginTop: '20px'}}>
                 Learn How It Works
                 <span style={styles.buttonArrow}>→</span>
               </button>
@@ -551,7 +551,7 @@ const styles = {
   },
 
   statsSection: {
-    marginBottom: '80px',
+    marginBottom: '80px'
   },
 
   statsTitle: {
@@ -567,7 +567,7 @@ const styles = {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
     gap: '24px',
-    maxWidth: '800px',
+    maxWidth: '1000px',
     margin: '0 auto',
   },
 

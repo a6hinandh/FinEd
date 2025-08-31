@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ChevronDown, Bot, TrendingDown, Newspaper, Users, Target, PiggyBank, BarChart3, Shield, Award, BookOpen, Zap, ArrowRight, Check, Star, PlayCircle, Calculator, Gamepad2, Heart } from 'lucide-react';
 import './FeaturePage.css';
 
@@ -6,6 +7,7 @@ const FeaturesPage = () => {
   const [activeFeature, setActiveFeature] = useState(null);
   const [isVisible, setIsVisible] = useState({});
   const sectionRefs = useRef({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -33,6 +35,29 @@ const FeaturesPage = () => {
     sectionRefs.current[id] = ref;
   };
 
+  const handleDemoClick = (featureId) => {
+    switch (featureId) {
+      case 'ai-mentor':
+        navigate('/chatbot');
+        break;
+      case 'credit-simulator':
+        navigate('/creditOrLoan');
+        break;
+      case 'finance-news':
+        navigate('/news');
+        break;
+      case 'community':
+        navigate('/community');
+        break;
+      case 'stock':
+        navigate('/stock');
+        break;
+      default:
+        // For features without existing routes, do nothing for now
+        break;
+    }
+  };
+
   const features = [
     {
       id: 'ai-mentor',
@@ -47,7 +72,8 @@ const FeaturesPage = () => {
         'Learns your preferences and adapts advice'
       ],
       color: 'ai-mentor',
-      demo: 'Chat with AI about budgeting basics'
+      demo: 'Chat with AI about budgeting basics',
+      hasRoute: true
     },
     {
       id: 'credit-simulator',
@@ -62,7 +88,8 @@ const FeaturesPage = () => {
         'Practice without real financial risk'
       ],
       color: 'credit-simulator',
-      demo: 'Simulate $5,000 credit card debt scenarios'
+      demo: 'Simulate $5,000 credit card debt scenarios',
+      hasRoute: true
     },
     {
       id: 'finance-news',
@@ -77,7 +104,8 @@ const FeaturesPage = () => {
         'Track trends that affect your finances'
       ],
       color: 'finance-news',
-      demo: 'See how interest rate changes affect you'
+      demo: 'See how interest rate changes affect you',
+      hasRoute: true
     },
     {
       id: 'community',
@@ -92,7 +120,8 @@ const FeaturesPage = () => {
         'Build accountability partnerships'
       ],
       color: 'community',
-      demo: 'Join discussion: "First apartment budgeting"'
+      demo: 'Join discussion: "First apartment budgeting"',
+      hasRoute: true
     },
     {
       id: 'budgeting-challenges',
@@ -107,7 +136,8 @@ const FeaturesPage = () => {
         'Build lasting financial habits'
       ],
       color: 'budgeting-challenges',
-      demo: 'Challenge: Save $50 on dining out this week'
+      demo: 'Challenge: Save $50 on dining out this week',
+      hasRoute: false
     },
     {
       id: 'savings-goals',
@@ -122,10 +152,11 @@ const FeaturesPage = () => {
         'Celebrate milestones with rewards'
       ],
       color: 'savings-goals',
-      demo: 'Goal: Save $2,000 for vacation in 8 months'
+      demo: 'Goal: Save $2,000 for vacation in 8 months',
+      hasRoute: false
     },
     {
-      id: 'investment-simulator',
+      id: 'stock',
       icon: <BarChart3 className="icon-size-large" />,
       title: 'Investment Simulator',
       subtitle: 'Learn Investing Risk-Free',
@@ -137,7 +168,8 @@ const FeaturesPage = () => {
         'See compound growth in action'
       ],
       color: 'investment-simulator',
-      demo: 'Invest $1,000 in tech stocks simulation'
+      demo: 'Invest $1,000 in tech stocks simulation',
+      hasRoute: true
     }
   ];
 
@@ -253,7 +285,15 @@ const FeaturesPage = () => {
                       ))}
                     </div>
 
-                    <button className="feature-demo-button">
+                    <button 
+                      className="feature-demo-button"
+                      onClick={() => handleDemoClick(feature.id)}
+                      disabled={!feature.hasRoute}
+                      style={{ 
+                        opacity: feature.hasRoute ? 1 : 0.6,
+                        cursor: feature.hasRoute ? 'pointer' : 'not-allowed'
+                      }}
+                    >
                       <PlayCircle className="icon-size-medium" />
                       <span>{feature.demo}</span>
                       <ArrowRight className="demo-button-arrow" />
