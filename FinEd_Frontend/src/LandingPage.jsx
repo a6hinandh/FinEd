@@ -7,6 +7,7 @@ import { degToRad } from "three/src/math/MathUtils.js";
 import './LandingPage.css';
 import { useNavigate } from "react-router-dom";
 
+
 // Utility function for extending materials
 function extendMaterial(BaseMaterial, cfg) {
   const physical = THREE.ShaderLib.physical;
@@ -354,7 +355,7 @@ const DirLight = ({ position, color }) => {
 };
 
 // Header Component
-const Header = () => (
+const Header = ({handleNav}) => (
   <header className="header">
     <nav className="nav">
       <div className="nav-brand">
@@ -365,7 +366,7 @@ const Header = () => (
         <a href="#features" className="nav-link">Features</a>
         <a href="#about" className="nav-link">About</a>
         <a href="#community" className="nav-link">Community</a>
-        <button className="nav-cta">Get Started</button>
+        <button onClick={()=>handleNav("/signup")} className="nav-cta">Get Started</button>
       </div>
     </nav>
   </header>
@@ -514,7 +515,7 @@ const FinEdLanding = () => {
       
       {/* Content Overlay */}
       <div className="content-overlay">
-        <Header />
+        <Header handleNav={navigate} />
         <HeroSection 
           isLoaded={isLoaded}
           onLearnMore={handleLearnMore}

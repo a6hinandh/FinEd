@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, Bot, TrendingDown, Newspaper, Users, Target, PiggyBank, BarChart3, Shield, Award, BookOpen, Zap, ArrowRight, Check, Star, PlayCircle, Calculator, Gamepad2, Heart, Wallet, TrendingUp } from 'lucide-react';
 import './FeaturePage.css';
+import { signOut } from 'firebase/auth';
+import { auth } from './firebase.js';
 
 const FeaturesPage = () => {
   const [activeFeature, setActiveFeature] = useState(null);
@@ -36,6 +38,13 @@ const FeaturesPage = () => {
   };
 
   const handleDemoClick = (featureId) => {
+  
+    const user=auth.currentUser;
+   
+    if(!user){
+      navigate('/signup');
+      return;
+    }
     switch (featureId) {
       case 'ai-mentor':
         navigate('/chatbot');
@@ -167,6 +176,34 @@ const FeaturesPage = () => {
     { number: '24/7', label: 'AI Support', icon: <Bot className="icon-size-medium" /> }
   ];
 
+  
+  const user=auth.currentUser;
+  const dropdownRef = useRef(null);
+  const [open, setOpen] = useState(false);
+   const handleLogout = () => {
+    console.log("hello")
+    signOut(auth)
+      .then(() => {
+        console.log("User signed out");
+        navigate('/')
+      })
+      .catch((error) => {
+        console.error("Error signing out:", error);
+      });
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="features-page">
       {/* Header */}
@@ -177,9 +214,66 @@ const FeaturesPage = () => {
               <span className="logo-fin">Fin</span>
               <span>Ed</span>
             </div>
-            <button className="header-button">
+            {!user ? (<button onClick={()=>navigate("/signup")} className="header-button">
               Get Started
-            </button>
+            </button>):(
+              <div ref={dropdownRef} style={{ position: "relative", display: "inline-block" }}>
+      {/* Profile Button */}
+      <button
+        onClick={() => setOpen(!open)}
+        className="header-button"
+        
+      >
+        Hello, {user.displayName ? user.displayName : "Profile"}
+      </button>
+
+      {/* Dropdown */}
+      {open && (
+        <div
+  style={{
+    position: "absolute",
+    right: 0,
+    marginTop: "8px",
+    width: "160px",
+    backgroundColor: "#000", // Black background
+    border: "1px solid #d4af37", // Gold border
+    borderRadius: "6px",
+    boxShadow: "0px 4px 12px rgba(0,0,0,0.6)",
+    zIndex: 10,
+    overflow: "hidden",
+  }}
+>
+  <button
+    onClick={handleLogout}
+    style={{
+      width: "100%",
+      padding: "12px",
+      textAlign: "left",
+      background: "none",
+      border: "none",
+      cursor: "pointer",
+      fontSize: "14px",
+      color: "#d4af37", // Gold text
+      fontWeight: "500",
+      transition: "all 0.2s ease-in-out",
+    }}
+    onMouseEnter={(e) => {
+      e.target.style.background = "#d4af37"; // Gold background on hover
+      e.target.style.color = "#000"; // Black text on hover
+    }}
+    onMouseLeave={(e) => {
+      e.target.style.background = "none";
+      e.target.style.color = "#d4af37";
+    }}
+  >
+    Logout
+  </button>
+</div>
+
+      )}
+    </div>
+            )}
+            
           </div>
         </div>
       </header>

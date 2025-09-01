@@ -12,6 +12,7 @@ import FinNews from "./features/finNews";
 import StockSimulator from "./features/StockSimulator";
 import ScrollToTop from "./features/ScrollToTop";
 import { Tracker } from "./features/tracker";
+import AuthPage from "./features/SignUpPage";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/news" element={<FinNews/>}/>
         <Route path="/stock" element={<StockSimulator/>}/>
         <Route path="/tracker" element={<Tracker/>}/>
+        <Route path="/signup" element={<AuthPage/>}/>
       </Routes>
     </Router>
   );

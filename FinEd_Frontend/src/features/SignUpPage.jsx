@@ -48,7 +48,7 @@ const firebaseConfig = {
 // };
 
 const AuthPage = () => {
-  const [isSignup, setIsSignup] = useState(true);
+  const [isSignup, setIsSignup] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -124,9 +124,7 @@ const AuthPage = () => {
       } else {
         const result = await signInWithEmailAndPassword(auth,formData.email, formData.password);
         const user = result.user;
-        await updateProfile(user, {
-      displayName: formData.fullName
-    });
+        
         alert(`Welcome back ${result.user.displayName}!`);
       }
       navigate('/features');
@@ -145,7 +143,7 @@ const AuthPage = () => {
       const result = await signInWithPopup(auth,googleProvider);
       const user = result.user;
       await updateProfile(user, {
-      displayName: formData.fullName
+      displayName: formData.fullName ? formData.fullName : user.displayName
     });
       alert(`${isSignup ? 'Account created' : 'Signed in'} successfully with Google! Welcome ${result.user.displayName}`);
       navigate('/features');
@@ -173,9 +171,9 @@ const AuthPage = () => {
       
       <div style={styles.signupContainer}>
         <div style={styles.logo}>
-          <h1 style={styles.logoTitle}>PREMIUM</h1>
+          <h1 style={styles.logoTitle}>FinEd</h1>
           <p style={styles.logoSubtitle}>
-            {isSignup ? 'Join the Elite Experience' : 'Welcome Back to Premium'}
+            {isSignup ? 'Join the Elite Experience' : 'Welcome Back to FinEd'}
           </p>
         </div>
 
