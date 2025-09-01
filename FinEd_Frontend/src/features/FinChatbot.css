@@ -790,24 +790,24 @@
 }
 
 /* Input Container */
-.input-container {
+.cinput-container {
   padding: 20px 25px;
   background: rgba(26, 26, 26, 0.5);
   border-top: 2px solid rgba(139, 69, 255, 0.2);
   backdrop-filter: blur(20px);
 }
 
-.input-wrapper {
+.cinput-wrapper {
   position: relative;
 }
 
-.input-group {
+.cinput-group {
   display: flex;
   gap: 15px;
   align-items: flex-end;
 }
 
-.message-input {
+.cmessage-input {
   flex: 1;
   background: #2d2d2d;
   border: 2px solid rgba(255, 255, 255, 0.2);
@@ -823,13 +823,13 @@
   outline: none;
 }
 
-.message-input:focus {
+.cmessage-input:focus {
   border-color: #8b45ff;
   box-shadow: 0 0 0 4px rgba(139, 69, 255, 0.1);
   background: #1a1a1a;
 }
 
-.message-input::placeholder {
+.cmessage-input::placeholder {
   color: #666;
 }
 
@@ -870,7 +870,7 @@
   height: 20px;
 }
 
-.loading-spinner {
+.cloading-spinner {
   width: 20px;
   height: 20px;
   border: 2px solid rgba(255, 255, 255, 0.3);
@@ -884,7 +884,7 @@
   to { transform: rotate(360deg); }
 }
 
-.input-hint {
+.cinput-hint {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -893,7 +893,7 @@
   color: #666;
 }
 
-.message-count {
+.cmessage-count {
   color: #888;
   font-weight: 500;
 }

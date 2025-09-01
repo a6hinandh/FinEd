@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './FinNews.css';
+import './finNews.css';
 
 const FinNews = () => {
   const [newsData, setNewsData] = useState([]);
@@ -12,9 +12,12 @@ const FinNews = () => {
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [lastUpdated, setLastUpdated] = useState(null);
 
+  const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
+
+
   // Fetch categories on component mount
   useEffect(() => {
-    fetch('http://localhost:8000/api/categories')
+    fetch(`${API_BASE}/api/categories`)
       .then(res => res.json())
       .then(data => setCategories(data.categories))
       .catch(err => console.error('Failed to fetch categories:', err));
@@ -33,7 +36,7 @@ const FinNews = () => {
         sentiment_filter: sentimentFilter
       });
 
-      const response = await fetch(`http://localhost:8000/api/finnews?${params}`);
+      const response = await fetch(`${API_BASE}/api/finnews?${params}`);
       const data = await response.json();
       
       if (response.ok) {
@@ -57,7 +60,7 @@ const FinNews = () => {
   // Fetch definition for financial terms
   const fetchDefinition = async (term) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/dictionary/${encodeURIComponent(term)}`);
+      const response = await fetch(`${API_BASE}/api/dictionary/${encodeURIComponent(term)}`);
       const data = await response.json();
       return data.definition;
     } catch (err) {

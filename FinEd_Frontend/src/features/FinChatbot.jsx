@@ -526,16 +526,16 @@ const FinancialChatbot = () => {
         )}
 
         {/* Input Area */}
-        <div className="input-container">
-          <div className="input-wrapper">
-            <div className="input-group">
+        <div className="cinput-container">
+          <div className="cinput-wrapper">
+            <div className="cinput-group">
               <textarea
                 ref={inputRef}
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder={`Ask about ${getModeDescription(advisoryMode)}...`}
-                className="message-input"
+                className="cmessage-input"
                 rows="1"
                 disabled={isTyping}
               />
@@ -545,14 +545,14 @@ const FinancialChatbot = () => {
                 disabled={!inputMessage.trim() || isTyping}
               >
                 {isTyping ? (
-                  <div className="loading-spinner"></div>
+                  <div className="cloading-spinner"></div>
                 ) : (
                   <Send className="send-icon" />
                 )}
               </button>
             </div>
           </div>
-          <div className="input-hint">
+          <div className="cinput-hint">
             <span>Press Enter to send • Shift+Enter for new line</span>
             <span className="message-count">{messages.length - 1} messages</span>
           </div>

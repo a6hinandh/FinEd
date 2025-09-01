@@ -11,6 +11,7 @@ import FinancialChatbot from "./features/FinChatbot";
 import FinNews from "./features/finNews";
 import StockSimulator from "./features/StockSimulator";
 import ScrollToTop from "./features/ScrollToTop";
+import { Tracker } from "./features/tracker";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/chatbot" element={<FinancialChatbot/>}/>
         <Route path="/news" element={<FinNews/>}/>
         <Route path="/stock" element={<StockSimulator/>}/>
+        <Route path="/tracker" element={<Tracker/>}/>
       </Routes>
     </Router>
   );

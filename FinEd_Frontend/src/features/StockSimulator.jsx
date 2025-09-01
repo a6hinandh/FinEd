@@ -370,33 +370,33 @@ const StockSimulator = () => {
     const isPositive = stock.change >= 0;
     
     return (
-      <div key={symbol} className="stock-card" onClick={() => setSelectedStock(symbol)}>
-        <div className="stock-header">
+      <div key={symbol} className="ssstock-card" onClick={() => setSelectedStock(symbol)}>
+        <div className="ssstock-header">
           <div>
-            <h3 className="stock-symbol">{symbol}</h3>
-            <p className="company-name">{company.name}</p>
+            <h3 className="ssstock-symbol">{symbol}</h3>
+            <p className="sscompany-name">{company.name}</p>
           </div>
-          <div className="stock-price">
-            <span className="price">₹{stock.currentPrice}</span>
-            <span className={`change ${isPositive ? 'positive' : 'negative'}`}>
+          <div className="ssstock-price">
+            <span className="ssprice">₹{stock.currentPrice}</span>
+            <span className={`sschange ${isPositive ? 'sspositive' : 'ssnegative'}`}>
               {isPositive ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
               {Math.abs(stock.change).toFixed(2)}%
             </span>
           </div>
         </div>
         
-        <div className="stock-info">
-          <div className="info-row">
+        <div className="ssstock-info">
+          <div className="ssinfo-row">
             <span>Sector: {company.sector}</span>
             <span>P/E: {company.pe}</span>
           </div>
-          <div className="info-row">
+          <div className="ssinfo-row">
             <span>Market Cap: {company.marketCap}</span>
-            {holding > 0 && <span className="holding">Holdings: {holding}</span>}
+            {holding > 0 && <span className="ssholding">Holdings: {holding}</span>}
           </div>
         </div>
         
-        <div className="mini-chart">
+        <div className="ssmini-chart">
           <ResponsiveContainer width="100%" height={60}>
             <LineChart data={stock.history}>
               <XAxis 
@@ -428,20 +428,20 @@ const StockSimulator = () => {
     const holding = holdings[selectedStock] || 0;
     
     return (
-      <div className="modal-overlay" onClick={() => setSelectedStock(null)}>
-        <div className="stock-detail-modal" onClick={e => e.stopPropagation()}>
-          <div className="modal-header">
+      <div className="ssmodal-overlay" onClick={() => setSelectedStock(null)}>
+        <div className="ssstock-detail-modal" onClick={e => e.stopPropagation()}>
+          <div className="ssmodal-header">
             <h2>{selectedStock} - {company.name}</h2>
-            <button className="close-btn" onClick={() => setSelectedStock(null)}>
+            <button className="ssclose-btn" onClick={() => setSelectedStock(null)}>
               <X size={24} />
             </button>
           </div>
           
-          <div className="modal-content">
-            <div className="stock-chart-section">
-              <div className="price-info">
-                <span className="current-price">₹{stock.currentPrice}</span>
-                <span className={`price-change ${stock.change >= 0 ? 'positive' : 'negative'}`}>
+          <div className="ssmodal-content">
+            <div className="ssstock-chart-section">
+              <div className="ssprice-info">
+                <span className="sscurrent-price">₹{stock.currentPrice}</span>
+                <span className={`ssprice-change ${stock.change >= 0 ? 'sspositive' : 'ssnegative'}`}>
                   {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)}%
                 </span>
               </div>
@@ -487,49 +487,49 @@ const StockSimulator = () => {
               </ResponsiveContainer>
             </div>
             
-            <div className="company-info">
+            <div className="sscompany-info">
               <h3>Company Information</h3>
               <p>{company.description}</p>
-              <div className="company-stats">
-                <div className="stat">
+              <div className="sscompany-stats">
+                <div className="ssstat">
                   <span>Sector</span>
                   <span>{company.sector}</span>
                 </div>
-                <div className="stat">
+                <div className="ssstat">
                   <span>Market Cap</span>
                   <span>{company.marketCap}</span>
                 </div>
-                <div className="stat">
+                <div className="ssstat">
                   <span>P/E Ratio</span>
                   <span>{company.pe}</span>
                 </div>
-                <div className="stat">
+                <div className="ssstat">
                   <span>Your Holdings</span>
                   <span>{holding} shares</span>
                 </div>
               </div>
             </div>
             
-            <div className="trade-section">
+            <div className="sstrade-section">
               <h3>Trade {selectedStock}</h3>
-              <div className="trade-controls">
+              <div className="sstrade-controls">
                 <input
                   type="number"
                   placeholder="Quantity"
                   value={tradeAmount}
                   onChange={(e) => setTradeAmount(e.target.value)}
-                  className="trade-input"
+                  className="sstrade-input"
                 />
-                <div className="trade-buttons">
+                <div className="sstrade-buttons">
                   <button 
-                    className="btn-buy"
+                    className="ssbtn-buy"
                     onClick={() => handleTrade(selectedStock, 'buy')}
                     disabled={!tradeAmount || tradeAmount * stock.currentPrice > wallet}
                   >
                     Buy (₹{tradeAmount ? (tradeAmount * stock.currentPrice).toFixed(2) : '0'})
                   </button>
                   <button 
-                    className="btn-sell"
+                    className="ssbtn-sell"
                     onClick={() => handleTrade(selectedStock, 'sell')}
                     disabled={!tradeAmount || tradeAmount > holding}
                   >
@@ -546,34 +546,34 @@ const StockSimulator = () => {
 
   // Render portfolio view
   const renderPortfolio = () => (
-    <div className="portfolio-view">
-      <div className="portfolio-summary">
-        <div className="summary-card">
-          <div className="summary-item">
-            <DollarSign className="summary-icon" />
+    <div className="ssportfolio-view">
+      <div className="ssportfolio-summary">
+        <div className="sssummary-card">
+          <div className="sssummary-item">
+            <DollarSign className="sssummary-icon" />
             <div>
-              <span className="summary-label">Cash Balance</span>
-              <span className="summary-value">₹{wallet.toLocaleString()}</span>
+              <span className="sssummary-label">Cash Balance</span>
+              <span className="sssummary-value">₹{wallet.toLocaleString()}</span>
             </div>
           </div>
         </div>
         
-        <div className="summary-card">
-          <div className="summary-item">
-            <PieChart className="summary-icon" />
+        <div className="sssummary-card">
+          <div className="sssummary-item">
+            <PieChart className="sssummary-icon" />
             <div>
-              <span className="summary-label">Portfolio Value</span>
-              <span className="summary-value">₹{calculatePortfolioValue().toLocaleString()}</span>
+              <span className="sssummary-label">Portfolio Value</span>
+              <span className="sssummary-value">₹{calculatePortfolioValue().toLocaleString()}</span>
             </div>
           </div>
         </div>
         
-        <div className="summary-card">
-          <div className="summary-item">
-            <TrendingUp className="summary-icon" />
+        <div className="sssummary-card">
+          <div className="sssummary-item">
+            <TrendingUp className="sssummary-icon" />
             <div>
-              <span className="summary-label">Total P&L</span>
-              <span className={`summary-value ${calculateTotalPL() >= 0 ? 'positive' : 'negative'}`}>
+              <span className="sssummary-label">Total P&L</span>
+              <span className={`sssummary-value ${calculateTotalPL() >= 0 ? 'sspositive' : 'ssnegative'}`}>
                 ₹{calculateTotalPL().toLocaleString()}
               </span>
             </div>
@@ -581,14 +581,14 @@ const StockSimulator = () => {
         </div>
       </div>
 
-      <div className="holdings-section">
+      <div className="ssholdings-section">
         <h2>Your Holdings</h2>
         {Object.keys(holdings).filter(symbol => holdings[symbol] > 0).length === 0 ? (
-          <div className="empty-state">
+          <div className="ssempty-state">
             <p>No holdings yet. Start trading to build your portfolio!</p>
           </div>
         ) : (
-          <div className="holdings-grid">
+          <div className="ssholdings-grid">
             {Object.entries(holdings)
               .filter(([symbol, quantity]) => quantity > 0)
               .map(([symbol, quantity]) => {
@@ -597,36 +597,36 @@ const StockSimulator = () => {
                 const change = stockData[symbol].change;
                 const isPositive = change >= 0;
                 return (
-                  <div key={symbol} className="holding-card">
-                    <div className="holding-header">
+                  <div key={symbol} className="ssholding-card">
+                    <div className="ssholding-header">
                       <div>
-                        <span className="holding-symbol">{symbol}</span>
-                        <span className="company-name-small">{companies[symbol].name}</span>
+                        <span className="ssholding-symbol">{symbol}</span>
+                        <span className="sscompany-name-small">{companies[symbol].name}</span>
                       </div>
-                      <span className="holding-quantity">{quantity} shares</span>
+                      <span className="ssholding-quantity">{quantity} shares</span>
                     </div>
                     
-                    <div className="holding-price-info">
-                      <div className="current-price-small">₹{currentPrice}</div>
-                      <div className={`change-small ${isPositive ? 'positive' : 'negative'}`}>
+                    <div className="ssholding-price-info">
+                      <div className="sscurrent-price-small">₹{currentPrice}</div>
+                      <div className={`sschange-small ${isPositive ? 'sspositive' : 'ssnegative'}`}>
                         {isPositive ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
                         {Math.abs(change).toFixed(2)}%
                       </div>
                     </div>
                     
-                    <div className="holding-value">
+                    <div className="ssholding-value">
                       <span>₹{currentValue.toLocaleString()}</span>
                     </div>
                     
-                    <div className="holding-actions">
+                    <div className="ssholding-actions">
                       <button 
-                        className="btn-view-details"
+                        className="ssbtn-view-details"
                         onClick={() => setSelectedStock(symbol)}
                       >
                         View Details
                       </button>
                       <button 
-                        className="btn-sell-holding"
+                        className="ssbtn-sell-holding"
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedStock(symbol);
@@ -643,26 +643,26 @@ const StockSimulator = () => {
         )}
       </div>
 
-      <div className="recent-trades">
+      <div className="ssrecent-trades">
         <h2>Recent Trades</h2>
         {tradeHistory.length === 0 ? (
-          <div className="empty-state">
+          <div className="ssempty-state">
             <p>No trades yet. Start trading to see your history!</p>
           </div>
         ) : (
-          <div className="trade-list">
+          <div className="sstrade-list">
             {tradeHistory.slice(0, 10).map(trade => (
-              <div key={trade.id} className="trade-item">
-                <div className="trade-info">
-                  <span className={`trade-action ${trade.action.toLowerCase()}`}>
+              <div key={trade.id} className="sstrade-item">
+                <div className="sstrade-info">
+                  <span className={`sstrade-action ${trade.action.toLowerCase() === 'buy' ? 'ssbuy' : 'sssell'}`}>
                     {trade.action}
                   </span>
-                  <span className="trade-symbol">{trade.symbol}</span>
-                  <span className="trade-details">
+                  <span className="sstrade-symbol">{trade.symbol}</span>
+                  <span className="sstrade-details">
                     {trade.quantity} @ ₹{trade.price}
                   </span>
                 </div>
-                <div className="trade-total">
+                <div className="sstrade-total">
                   ₹{trade.total.toLocaleString()}
                 </div>
               </div>
@@ -675,10 +675,10 @@ const StockSimulator = () => {
 
   // Render trade view
   const renderTrade = () => (
-    <div className="trade-view">
-      <div className="market-overview">
+    <div className="sstrade-view">
+      <div className="ssmarket-overview">
         <h2>Market Overview</h2>
-        <div className="stocks-grid">
+        <div className="ssstocks-grid">
           {Object.keys(companies).map(renderStockCard)}
         </div>
       </div>
@@ -687,21 +687,21 @@ const StockSimulator = () => {
 
   // Render learn view
   const renderLearn = () => (
-    <div className="learn-view">
-      <div className="learn-section">
+    <div className="sslearn-view">
+      <div className="sslearn-section">
         <h2>Financial Terms</h2>
-        <div className="terms-grid">
+        <div className="ssterms-grid">
           {Object.entries(financialTerms).map(([term, definition]) => (
             <div 
               key={term} 
-              className="term-card"
+              className="ssterm-card"
               onMouseEnter={() => setShowTooltip(term)}
               onMouseLeave={() => setShowTooltip(null)}
             >
               <h3>{term}</h3>
               <p>{definition}</p>
               {showTooltip === term && (
-                <div className="tooltip">
+                <div className="sstooltip">
                   <Info size={16} />
                   Click to learn more about {term}
                 </div>
@@ -711,12 +711,12 @@ const StockSimulator = () => {
         </div>
       </div>
 
-      <div className="learn-section">
+      <div className="sslearn-section">
         <h2>Investment Tips</h2>
-        <div className="tips-grid">
+        <div className="sstips-grid">
           {investmentTips.map((tip, index) => (
-            <div key={index} className="tip-card">
-              <div className="tip-number">{index + 1}</div>
+            <div key={index} className="sstip-card">
+              <div className="sstip-number">{index + 1}</div>
               <p>{tip}</p>
             </div>
           ))}
@@ -726,25 +726,25 @@ const StockSimulator = () => {
   );
 
   return (
-    <div className="app">
-      <header className="headerc">
-        <div className="header-content">
-          <h1 className="logo">StockSim Pro</h1>
-          <nav className="nav">
+    <div className="ssapp">
+      <header className="ssheaderc">
+        <div className="ssheader-content">
+          <h1 className="sslogo">StockSim Pro</h1>
+          <nav className="ssnav">
             <button 
-              className={`nav-item ${currentView === 'portfolio' ? 'active' : ''}`}
+              className={`ssnav-item ${currentView === 'portfolio' ? 'ssactive' : ''}`}
               onClick={() => setCurrentView('portfolio')}
             >
               Portfolio
             </button>
             <button 
-              className={`nav-item ${currentView === 'trade' ? 'active' : ''}`}
+              className={`ssnav-item ${currentView === 'trade' ? 'ssactive' : ''}`}
               onClick={() => setCurrentView('trade')}
             >
               Trade
             </button>
             <button 
-              className={`nav-item ${currentView === 'learn' ? 'active' : ''}`}
+              className={`ssnav-item ${currentView === 'learn' ? 'ssactive' : ''}`}
               onClick={() => setCurrentView('learn')}
             >
               Learn
@@ -753,12 +753,12 @@ const StockSimulator = () => {
         </div>
       </header>
 
-      <div className="news-ticker">
+      <div className="ssnews-ticker">
         <Bell size={16} />
-        <span className="news-text">{newsHeadlines[currentNews]}</span>
+        <span className="ssnews-text">{newsHeadlines[currentNews]}</span>
       </div>
 
-      <main className="main-content">
+      <main className="ssmain-content">
         {currentView === 'portfolio' && renderPortfolio()}
         {currentView === 'trade' && renderTrade()}
         {currentView === 'learn' && renderLearn()}

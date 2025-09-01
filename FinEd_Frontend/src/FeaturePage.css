@@ -176,8 +176,9 @@
 .features {
   width: 100%;
   text-align: center;
-  margin-bottom: 4rem; /* pushes the features grid below */
+  margin-bottom: 4rem;
 }
+
 .features-section {
   padding: 5rem 1.5rem;
 }
@@ -188,7 +189,6 @@
   align-items: center;
   padding: 40px;
 }
-
 
 .features-header {
   text-align: center;
@@ -274,12 +274,8 @@
   background: linear-gradient(to right, #8b5cf6, #ec4899);
 }
 
-.feature-icon.budgeting-challenges {
-  background: linear-gradient(to right, #eab308, #ea580c);
-}
-
-.feature-icon.savings-goals {
-  background: linear-gradient(to right, #059669, #2563eb);
+.feature-icon.expense-tracker {
+  background: linear-gradient(to right, #22c55e, #3b82f6);
 }
 
 .feature-icon.investment-simulator {
@@ -391,12 +387,8 @@
   background: linear-gradient(to right, #8b5cf6, #ec4899);
 }
 
-.visual-background.budgeting-challenges {
-  background: linear-gradient(to right, #eab308, #ea580c);
-}
-
-.visual-background.savings-goals {
-  background: linear-gradient(to right, #059669, #2563eb);
+.visual-background.expense-tracker {
+  background: linear-gradient(to right, #22c55e, #3b82f6);
 }
 
 .visual-background.investment-simulator {
@@ -826,242 +818,292 @@
   color: #9ca3af;
 }
 
-.mockup-challenge {
+/* Expense Tracker Mockup */
+.mockup-expense-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.expense-summary {
+  margin-bottom: 1rem;
+}
+
+.expense-card {
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.expense-card-title {
+  font-weight: bold;
+  color: #4ade80;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.expense-amount {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #4ade80;
+  margin-bottom: 0.75rem;
+}
+
+.expense-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.expense-category {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.category-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+}
+
+.category-dot.food {
+  background: #ef4444;
+}
+
+.category-dot.transport {
+  background: #3b82f6;
+}
+
+.category-dot.entertainment {
+  background: #8b5cf6;
+}
+
+.savings-goals-mini {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.challenge-card {
-  background: rgba(234, 179, 8, 0.2);
-  border: 1px solid rgba(234, 179, 8, 0.3);
-  border-radius: 0.5rem;
-  padding: 1rem;
-}
-
-.challenge-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-}
-
-.challenge-title {
-  font-weight: bold;
-  color: #fbbf24;
-}
-
-.challenge-status {
-  font-size: 0.75rem;
-  background: #fbbf24;
-  color: black;
-  padding: 0.25rem 0.5rem;
-  border-radius: 9999px;
-  font-weight: bold;
-}
-
-.challenge-description {
-  font-size: 0.875rem;
-  margin-bottom: 0.75rem;
-}
-
-.challenge-progress {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.progress-info {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.875rem;
-}
-
-.progress-value {
-  color: #fbbf24;
-}
-
-.progress-bar {
-  width: 100%;
-  background: #4b5563;
-  border-radius: 9999px;
-  height: 0.5rem;
-}
-
-.progress-fill {
-  background: #fbbf24;
-  height: 0.5rem;
-  border-radius: 9999px;
-}
-
-.progress-meta {
-  font-size: 0.75rem;
-  color: #9ca3af;
-}
-
-.mockup-savings {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.savings-goal {
-  border: 1px solid rgba(34, 197, 94, 0.3);
-  border-radius: 0.5rem;
-  padding: 1rem;
-}
-
-.savings-goal.vacation {
-  background: rgba(34, 197, 94, 0.2);
-}
-
-.savings-goal.emergency {
+.goal-card {
   background: rgba(59, 130, 246, 0.2);
-  border-color: rgba(59, 130, 246, 0.3);
-}
-
-.goal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
 }
 
 .goal-title {
   font-weight: bold;
-}
-
-.goal-title.vacation {
-  color: #4ade80;
-}
-
-.goal-title.emergency {
   color: #60a5fa;
-}
-
-.goal-completion {
-  font-size: 0.75rem;
-}
-
-.goal-completion.vacation {
-  color: #4ade80;
-}
-
-.goal-completion.emergency {
-  color: #60a5fa;
-}
-
-.goal-progress {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.goal-amounts {
-  display: flex;
-  justify-content: space-between;
+  margin-bottom: 0.5rem;
   font-size: 0.875rem;
 }
 
-.goal-saved {
-  font-weight: bold;
+.goal-progress-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
-.goal-saved.vacation {
-  color: #4ade80;
-}
-
-.goal-progress-bar {
+.goal-bar {
   width: 100%;
-  background: #4b5563;
+  background: #374151;
   border-radius: 9999px;
-  height: 0.75rem;
+  height: 0.5rem;
 }
 
-.goal-progress-fill.vacation {
-  background: #4ade80;
-  height: 0.75rem;
-  border-radius: 9999px;
-}
-
-.goal-progress-fill.emergency {
+.goal-fill {
   background: #60a5fa;
-  height: 0.75rem;
+  height: 0.5rem;
   border-radius: 9999px;
+  transition: width 0.3s;
 }
 
-.goal-meta {
+.goal-fill.emergency {
+  background: #22c55e;
+}
+
+.goal-percentage {
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: #d1d5db;
 }
 
-.mockup-investment {
+/* Investment Simulator Advanced Mockup */
+.mockup-investment-advanced {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.portfolio-card {
-  background: rgba(139, 92, 246, 0.2);
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  border-radius: 0.5rem;
-  padding: 1rem;
-}
-
-.portfolio-title {
-  font-weight: bold;
-  color: #a78bfa;
-  margin-bottom: 0.75rem;
-}
-
-.portfolio-stats {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.portfolio-stat {
+.stock-portfolio-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-.portfolio-stat-label {
+.portfolio-value {
+  text-align: left;
+}
+
+.portfolio-value h4 {
   font-size: 0.875rem;
+  color: #9ca3af;
+  margin-bottom: 0.25rem;
 }
 
-.portfolio-stat-value {
-  font-size: 0.875rem;
-}
-
-.portfolio-current {
-  color: #4ade80;
+.value-display {
+  font-size: 1.5rem;
   font-weight: bold;
+  color: #a78bfa;
+  margin-bottom: 0.25rem;
 }
 
-.portfolio-return {
+.portfolio-change {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.portfolio-change.positive {
   color: #4ade80;
-  font-weight: bold;
 }
 
-.holdings-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+.portfolio-change.negative {
+  color: #ef4444;
+}
+
+.market-status {
+  display: flex;
+  align-items: center;
   gap: 0.5rem;
   font-size: 0.75rem;
 }
 
-.holding-item {
-  background: #374151;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
+.market-indicator {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
 }
 
-.holding-label {
+.market-indicator.active {
+  background: #4ade80;
+}
+
+.stock-holdings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.holding-stock {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #374151;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.stock-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stock-symbol {
+  font-weight: bold;
+  font-size: 0.875rem;
+  color: #fbbf24;
+}
+
+.shares {
+  font-size: 0.75rem;
   color: #9ca3af;
 }
 
-.holding-return {
+.stock-performance {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.current-price {
+  font-weight: bold;
+  font-size: 0.875rem;
+}
+
+.change {
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.change.positive {
   color: #4ade80;
+}
+
+.change.negative {
+  color: #ef4444;
+}
+
+.portfolio-chart-mini {
+  background: #1f2937;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  position: relative;
+}
+
+.chart-placeholder {
+  height: 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, #6366f1, #8b5cf6, #a78bfa);
+  transform: translateY(-50%);
+}
+
+.chart-points {
+  position: relative;
+  height: 100%;
+}
+
+.point {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #a78bfa;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s;
+}
+
+.point.active {
+  width: 8px;
+  height: 8px;
+  background: #fbbf24;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+.chart-label {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.5rem;
 }
 
 .default-mockup {
