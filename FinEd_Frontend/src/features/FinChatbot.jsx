@@ -4,6 +4,9 @@ import './FinChatbot.css';
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useNavigate } from "react-router-dom";
+import { doc, updateDoc, arrayUnion, addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db, auth } from "../firebase.js";
+import { fetchChatHistory } from '../FetchChatHistory.js';
 
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
@@ -27,9 +30,41 @@ const FinancialChatbot = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [chatHistoryId, setChatHistoryId] = useState(null);
+  const [chatHistory, setChatHistory] = useState(null);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const navigate = useNavigate();
+
+  const user = auth.currentUser;
+
+  useEffect(() => {
+  const createChatHistory = async () => {
+    try {
+      const docRef = await addDoc(collection(db, "chatHistory"), {
+        userId: "CURRENT_USER_ID", // replace with actual user ID
+        createdAt: serverTimestamp(),
+        messages: [] // optional, start with empty messages
+      });
+      setChatHistoryId(docRef.id.toString());
+      console.log("Chat history created with ID: ", docRef.id);
+    } catch (error) {
+      console.error("Error creating chat history: ", error);
+    }
+  };
+
+
+  createChatHistory();
+}, []);
+
+useEffect(() => {
+      const loadPosts = async () => {
+        const data = await fetchChatHistory();
+        setChatHistory(data);
+      };
+      loadPosts();
+    }, []);
+
 
 
   useEffect(() => {
@@ -69,6 +104,12 @@ const FinancialChatbot = () => {
       timestamp: new Date(),
       mode: advisoryMode
     };
+    
+    const chatDocRef = doc(db, "chatHistory", chatHistoryId);
+
+    await updateDoc(chatDocRef, {
+      messages: arrayUnion(userMessage) // adds message to the array
+    });
 
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
@@ -97,6 +138,12 @@ const FinancialChatbot = () => {
         timestamp: new Date(),
         mode: advisoryMode
       };
+
+      const chatDocRef = doc(db, "chatHistory", chatHistoryId);
+
+    await updateDoc(chatDocRef, {
+      messages: arrayUnion(botMessage) // adds message to the array
+    });
 
       setMessages(prev => [...prev, botMessage]);
     } catch (err) {
@@ -339,7 +386,7 @@ const FinancialChatbot = () => {
                       <User className="profile-icon" />
                     </div>
                     <div className="profile-text">
-                      <div className="profile-name">John Doe</div>
+                      <div className="profile-name">{user.displayName}</div>
                     </div>
                   </div>
                   <ChevronDown className={`profile-arrow ${showProfile ? 'rotated' : ''}`} />
@@ -553,6 +600,9 @@ const FinancialChatbot = () => {
                 <div className="placeholder-icon">
                   <MessageCircle className="placeholder-msg-icon" />
                 </div>
+                {/* {chatHistory.length!=0 ? ():(
+
+                )} */}
                 <h3 className="placeholder-title">No Chat History Yet</h3>
                 <p className="placeholder-text">
                   Your previous conversations will appear here. This feature will be enhanced in future updates to include:
