@@ -81,7 +81,6 @@ const FeaturesPage = () => {
         'Plain-language explanations for any financial topic',
         'Personalized money tips based on your goals',
         'Available 24/7 to answer your questions',
-        'Learns your preferences and adapts advice'
       ],
       color: 'ai-mentor',
       demo: 'Chat with AI about budgeting basics',
@@ -111,7 +110,6 @@ const FeaturesPage = () => {
       description: 'Get curated financial news and personalized alerts to build awareness of market trends and opportunities.',
       benefits: [
         'Personalized news feed based on interests',
-        'Real-time alerts for important changes',
         'Simplified explanations of complex topics',
         'Track trends that affect your finances'
       ],
@@ -285,34 +283,6 @@ const FeaturesPage = () => {
             <Zap className="hero-badge-icon" />
             <span className="hero-badge-text">Discover Our Features</span>
           </div>
-          
-          <h1 className="hero-title">
-            Master Money<br />
-            <span className="hero-title-gradient">
-              Through Play
-            </span>
-          </h1>
-          
-          <p className="hero-description">
-            Explore how FinEd transforms financial education through gamification, 
-            AI mentorship, and community-driven learning. Every feature is designed 
-            to make money management simple, engaging, and practical.
-          </p>
-
-          {/* Stats */}
-          <div className="stats-grid">
-            {stats.map((stat, index) => (
-              <div key={index} className="stat-item">
-                <div className="stat-icon-container">
-                  <div className="stat-icon">
-                    {stat.icon}
-                  </div>
-                </div>
-                <div className="stat-number">{stat.number}</div>
-                <div className="stat-label">{stat.label}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -324,10 +294,12 @@ const FeaturesPage = () => {
               Every Feature Designed for 
               <span className="features-title-gradient"> Your Success</span>
             </h2>
-            <p className="features-description">
-              Dive deep into each feature and discover how FinEd makes financial literacy 
+            <p className="hero-description">
+            Explore how FinEd transforms financial education through gamification, 
+            AI mentorship, and community-driven learning. Every feature is designed 
+            to make money management simple, engaging, and practical.Dive deep into each feature and discover how FinEd makes financial literacy 
               accessible, interactive, and habit-forming.
-            </p>
+          </p>
           </div>
 
           <div className="features-list-m">
@@ -442,9 +414,6 @@ const FeaturesPage = () => {
               Join thousands of young people who are already building better financial habits through FinEd's innovative platform.
             </p>
             <div className="cta-buttons">
-              <button className="cta-primary-button">
-                Start Learning Free
-              </button>
             </div>
           </div>
         </div>
@@ -462,8 +431,8 @@ const FeaturesPage = () => {
           </p>
           <div className="footer-links">
             <a href="#" className="footer-link">About</a>
-            <a href="#" className="footer-link">Features</a>
-            <a href="#" className="footer-link">Community</a>
+            <a href="/features" className="footer-link">Features</a>
+            <a href="/signup" className="footer-link">Community</a>
             <a href="#" className="footer-link">Support</a>
           </div>
           <p className="footer-copyright">© 2025 FinEd. All rights reserved.</p>

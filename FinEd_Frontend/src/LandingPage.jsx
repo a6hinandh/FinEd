@@ -363,9 +363,6 @@ const Header = ({handleNav}) => (
         <span className="logo-ed">Ed</span>
       </div>
       <div className="nav-links">
-        <a href="#features" className="nav-link">Features</a>
-        <a href="#about" className="nav-link">About</a>
-        <a href="#community" className="nav-link">Community</a>
         <button onClick={()=>handleNav("/signup")} className="nav-cta">Get Started</button>
       </div>
     </nav>
@@ -438,16 +435,12 @@ const Footer = () => (
         <div className="footer-links-section">
           <div className="footer-column">
             <h4 className="footer-heading">Platform</h4>
-            <a href="#" className="footer-link">Features</a>
-            <a href="#" className="footer-link">Simulations</a>
-            <a href="#" className="footer-link">Community</a>
-            <a href="#" className="footer-link">Resources</a>
+            <a href="/features" className="footer-link">Features</a>
+            <a href="/signup" className="footer-link">Community</a>
           </div>
           <div className="footer-column">
             <h4 className="footer-heading">Company</h4>
             <a href="#" className="footer-link">About Us</a>
-            <a href="#" className="footer-link">Careers</a>
-            <a href="#" className="footer-link">Blog</a>
             <a href="#" className="footer-link">Contact</a>
           </div>
           <div className="footer-column">
@@ -455,7 +448,6 @@ const Footer = () => (
             <a href="#" className="footer-link">Help Center</a>
             <a href="#" className="footer-link">Privacy Policy</a>
             <a href="#" className="footer-link">Terms of Service</a>
-            <a href="#" className="footer-link">Cookie Policy</a>
           </div>
         </div>
       </div>
@@ -496,7 +488,7 @@ const FinEdLanding = () => {
     };
 
   const handleJoinCommunity = () => {
-    alert("This would open the community signup form!");
+    navigate("/signup");
   };
 
   return (

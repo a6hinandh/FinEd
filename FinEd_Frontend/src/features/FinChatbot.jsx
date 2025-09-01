@@ -3,6 +3,8 @@ import { Send, Trash2, MessageCircle, DollarSign, TrendingUp, PieChart, Calculat
 import './FinChatbot.css';
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useNavigate } from "react-router-dom";
+
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
 
@@ -27,6 +29,8 @@ const FinancialChatbot = () => {
   const [isMobile, setIsMobile] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const checkMobile = () => {
@@ -237,7 +241,7 @@ const FinancialChatbot = () => {
     
     switch (action) {
       case 'home':
-        clearChat();
+        navigate('/features');
         break;
       case 'history':
         setShowHistoryModal(true);
@@ -336,7 +340,6 @@ const FinancialChatbot = () => {
                     </div>
                     <div className="profile-text">
                       <div className="profile-name">John Doe</div>
-                      <div className="profile-status">Premium User</div>
                     </div>
                   </div>
                   <ChevronDown className={`profile-arrow ${showProfile ? 'rotated' : ''}`} />
@@ -399,13 +402,7 @@ const FinancialChatbot = () => {
             </div>
           </div>
           <div className="header-actions">
-            <button 
-              className="action-btn" 
-              onClick={() => setShowSettings(!showSettings)}
-              title="Settings"
-            >
-              <Settings className="action-icon" />
-            </button>
+            
             <button 
               className="action-btn" 
               onClick={clearChat} 
@@ -413,47 +410,10 @@ const FinancialChatbot = () => {
             >
               <Trash2 className="action-icon" />
             </button>
-            <button 
-              className="action-btn" 
-              onClick={() => setIsMinimized(true)}
-              title="Minimize"
-            >
-              <ChevronDown className="action-icon" />
-            </button>
           </div>
         </div>
 
-        {/* Settings Panel */}
-        {showSettings && (
-          <div className="settings-panel">
-            <div className="settings-header">
-              <span className="settings-title">Preferences</span>
-              <button 
-                className="settings-close"
-                onClick={() => setShowSettings(false)}
-              >
-                <X className="settings-close-icon" />
-              </button>
-            </div>
-            <div className="settings-content">
-              <div className="setting-item">
-                <span className="setting-label">Currency</span>
-                <select className="setting-select">
-                  <option value="INR">Indian Rupee (₹)</option>
-                  <option value="USD">US Dollar ($)</option>
-                </select>
-              </div>
-              <div className="setting-item">
-                <span className="setting-label">Risk Profile</span>
-                <select className="setting-select">
-                  <option value="conservative">Conservative</option>
-                  <option value="moderate">Moderate</option>
-                  <option value="aggressive">Aggressive</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        )}
+        
 
         {/* Messages Area */}
         <div className="messages-container">

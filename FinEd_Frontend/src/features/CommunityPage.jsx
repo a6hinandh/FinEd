@@ -465,7 +465,7 @@ const CommunityPage = () => {
             WebkitTextFillColor: 'transparent',
             marginBottom: '12px'
           }}>
-            💰 FinanceHub Community
+            💰 FinEd Community
           </h1>
           <p style={{ fontSize: '1.2rem', color: '#C9B037', margin: '0 0 20px 0' }}>
             Connect, Learn, and Grow Together
