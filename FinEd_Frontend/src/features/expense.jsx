@@ -190,7 +190,7 @@ export default function Expense() {
             />
           </div>
           
-          <div className="input-group">
+          <div className="input-group category">
             <label>Category</label>
             <select
               value={newExpense.category}
