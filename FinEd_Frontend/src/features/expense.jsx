@@ -1,38 +1,16 @@
 // Enhanced expense.jsx
 import React, { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
+import { db } from "../firebase.js";
+import { collection, addDoc, serverTimestamp, updateDoc, doc, increment, arrayUnion, deleteDoc, query, where, getDocs } from "firebase/firestore";
+import { auth } from "../firebase.js";
 import "./expense.css";
+import { fetchExpenses } from "../fetchTracker.js";
+import { onAuthStateChanged } from "firebase/auth";
 
 export default function Expense() {
-  const [expenses, setExpenses] = useState(() => {
-    const saved = localStorage.getItem("expenses");
-    return saved
-      ? JSON.parse(saved)
-      : [
-          { 
-            id: 1,
-            amount: 200, 
-            category: "Groceries", 
-            description: "Weekly groceries",
-            date: new Date().toISOString().split('T')[0]
-          },
-          { 
-            id: 2,
-            amount: 500, 
-            category: "Rent", 
-            description: "Monthly rent",
-            date: new Date().toISOString().split('T')[0]
-          },
-          { 
-            id: 3,
-            amount: 60, 
-            category: "Transport", 
-            description: "Bus pass",
-            date: new Date().toISOString().split('T')[0]
-          },
-        ];
-  });
 
+  const [expenses,setExpenses] = useState([]);
   const [newExpense, setNewExpense] = useState({
     amount: "",
     category: "Groceries",
@@ -47,11 +25,28 @@ export default function Expense() {
   const categories = ["Groceries", "Rent", "Transport", "Utilities", "Entertainment", "Healthcare", "Other"];
   const COLORS = ["#FFD700", "#FFA500", "#FF6347", "#32CD32", "#1E90FF", "#DA70D6", "#F0E68C"];
 
-  useEffect(() => {
-    localStorage.setItem("expenses", JSON.stringify(expenses));
-  }, [expenses]);
+   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async(currentUser) => {
+      if (currentUser) {
+        // User is signed in
+        
+        const data = await fetchExpenses(currentUser.uid);
+        
+         setExpenses(data)
+     // save name
+        // pass uid here
+      } else {
+        // No user signed in, maybe redirect to login
+        console.log("No user signed in");
+      }
+    });
+  
+    return () => unsubscribe();
+  }, []);
 
-  const addExpense = () => {
+   
+
+  const addExpense = async() => {
     if (!newExpense.amount || isNaN(newExpense.amount) || parseFloat(newExpense.amount) <= 0) {
       alert("Please enter a valid amount");
       return;
@@ -64,11 +59,14 @@ export default function Expense() {
 
     const expense = {
       id: Date.now(),
+      userId : auth.currentUser.uid,
       amount: parseFloat(newExpense.amount),
       category: newExpense.category,
       description: newExpense.description.trim(),
       date: newExpense.date
     };
+
+     await addDoc(collection(db, "expenses"),expense);
 
     setExpenses([expense, ...expenses]);
     setNewExpense({ 
@@ -79,8 +77,20 @@ export default function Expense() {
     });
   };
 
-  const deleteExpense = (id) => {
+  const deleteExpense = async(id) => {
     if (window.confirm("Are you sure you want to delete this expense?")) {
+      try {
+    const q = query(collection(db, "expenses"), where("id", "==", id));
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach(async (document) => {
+      await deleteDoc(doc(db, "expenses", document.id));
+      console.log("Expense deleted:", document.id);
+    });
+  } catch (error) {
+    console.error("Error deleting expense:", error);
+  }
+
       setExpenses(expenses.filter(exp => exp.id !== id));
     }
   };

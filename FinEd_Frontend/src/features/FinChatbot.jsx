@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { doc, updateDoc, arrayUnion, addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db, auth } from "../firebase.js";
 import { fetchChatHistory } from '../FetchChatHistory.js';
+import { onAuthStateChanged } from "firebase/auth";
 
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
@@ -32,38 +33,57 @@ const FinancialChatbot = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [chatHistoryId, setChatHistoryId] = useState(null);
   const [chatHistory, setChatHistory] = useState(null);
+  const [userName, setUserName] = useState('');
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
-  const user = auth.currentUser;
 
   useEffect(() => {
-  const createChatHistory = async () => {
-    try {
-      const docRef = await addDoc(collection(db, "chatHistory"), {
-        userId: "CURRENT_USER_ID", // replace with actual user ID
-        createdAt: serverTimestamp(),
-        messages: [] // optional, start with empty messages
-      });
-      setChatHistoryId(docRef.id.toString());
-      console.log("Chat history created with ID: ", docRef.id);
-    } catch (error) {
-      console.error("Error creating chat history: ", error);
+  const unsubscribe = onAuthStateChanged(auth, async(currentUser) => {
+    if (currentUser) {
+      // User is signed in
+      
+      const data = await fetchChatHistory(currentUser.uid);
+        console.log(data)
+        setChatHistory(data);
+      setUserName(currentUser.displayName); // save name
+      createChatHistory(currentUser.uid); // pass uid here
+    } else {
+      // No user signed in, maybe redirect to login
+      console.log("No user signed in");
     }
-  };
+  });
 
-
-  createChatHistory();
+  return () => unsubscribe();
 }, []);
 
-useEffect(() => {
-      const loadPosts = async () => {
-        const data = await fetchChatHistory();
-        setChatHistory(data);
-      };
-      loadPosts();
-    }, []);
+  const createChatHistory = async (uid) => {
+  try {
+    const docRef = await addDoc(collection(db, "chatHistory"), {
+      userId: uid,
+      createdAt: serverTimestamp(),
+      messages: []
+    });
+    const chatDocRef = doc(db, "chatHistory", docRef.id);
+    await updateDoc(chatDocRef, {
+      messages: arrayUnion(
+        {
+      id: 1,
+      type: 'bot',
+      content: "Welcome to your Personal Financial Assistant! I'm here to help you navigate investments, budgeting, SIPs, debt management, and wealth building strategies. Let's secure your financial future together.",
+      timestamp: new Date(),
+    }
+      ) // adds message to the array
+    });
+    setChatHistoryId(docRef.id);
+    console.log("Chat history created with ID:", docRef.id);
+  } catch (error) {
+    console.error("Error creating chat history:", error);
+  }
+};
+
+
 
 
 
@@ -162,6 +182,11 @@ useEffect(() => {
     }
   };
 
+  const onSelectChat = (index) => {
+    setMessages(chatHistory[index].messages);
+    setShowHistoryModal(false)
+  }
+
   const generateMockResponse = (message, mode) => {
     const responses = {
       general: [
@@ -236,6 +261,7 @@ useEffect(() => {
   };
 
   const formatTime = (timestamp) => {
+    timestamp = new Date(timestamp.seconds * 1000);
     return timestamp.toLocaleTimeString('en-US', { 
       hour: '2-digit', 
       minute: '2-digit' 
@@ -386,7 +412,7 @@ useEffect(() => {
                       <User className="profile-icon" />
                     </div>
                     <div className="profile-text">
-                      <div className="profile-name">{user.displayName}</div>
+                      <div className="profile-name">{userName}</div>
                     </div>
                   </div>
                   <ChevronDown className={`profile-arrow ${showProfile ? 'rotated' : ''}`} />
@@ -600,10 +626,37 @@ useEffect(() => {
                 <div className="placeholder-icon">
                   <MessageCircle className="placeholder-msg-icon" />
                 </div>
-                {/* {chatHistory.length!=0 ? ():(
+                {chatHistory.length!=0 ? (
+                   <div className="chat-history-list">
+      {chatHistory.map((chat,index) => {
+        // Take first message as title or fallback
+        
 
-                )} */}
-                <h3 className="placeholder-title">No Chat History Yet</h3>
+        return (
+          <div
+            key={chat.id}
+            className="chat-history-item"
+            onClick={() => onSelectChat(index)}
+            style={{
+              padding: "10px",
+              borderBottom: "1px solid #ddd",
+              borderBottomWidth:"100%",
+              cursor: "pointer",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <span className="chat-title">{new Date(chat.createdAt.seconds * 1000).toLocaleString()}</span>
+            
+          </div>
+        );
+      })}
+    </div>
+                ):(
+                  <div>
+                    <h3 className="placeholder-title">No Chat History Yet</h3>
                 <p className="placeholder-text">
                   Your previous conversations will appear here. This feature will be enhanced in future updates to include:
                 </p>
@@ -613,6 +666,9 @@ useEffect(() => {
                   <li>Bookmark important financial advice</li>
                   <li>Category-wise conversation filtering</li>
                 </ul>
+                  </div>
+                )}
+                
               </div>
             </div>
           </div>
