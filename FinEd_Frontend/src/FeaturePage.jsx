@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, Bot, TrendingDown, Newspaper, Users, Target, PiggyBank, BarChart3, Shield, Award, BookOpen, Zap, ArrowRight, Check, Star, PlayCircle, Calculator, Gamepad2, Heart } from 'lucide-react';
+import { ChevronDown, Bot, TrendingDown, Newspaper, Users, Target, PiggyBank, BarChart3, Shield, Award, BookOpen, Zap, ArrowRight, Check, Star, PlayCircle, Calculator, Gamepad2, Heart, Wallet, TrendingUp } from 'lucide-react';
 import './FeaturePage.css';
 
 const FeaturesPage = () => {
@@ -51,6 +51,9 @@ const FeaturesPage = () => {
         break;
       case 'stock':
         navigate('/stock');
+        break;
+      case 'expense-tracker':
+        navigate('/tracker');
         break;
       default:
         // For features without existing routes, do nothing for now
@@ -124,51 +127,35 @@ const FeaturesPage = () => {
       hasRoute: true
     },
     {
-      id: 'budgeting-challenges',
-      icon: <Target className="icon-size-large" />,
-      title: 'Budgeting Challenges',
-      subtitle: 'Fun Tasks, Real Results',
-      description: 'Complete engaging short-term challenges that build better spending habits through rewards and gamification.',
+      id: 'expense-tracker',
+      icon: <Wallet className="icon-size-large" />,
+      title: 'Smart Expense & Savings Tracker',
+      subtitle: 'Track Spending, Achieve Goals',
+      description: 'Monitor your daily expenses and track savings goals in one unified dashboard with intelligent insights and spending patterns.',
       benefits: [
-        'Weekly and monthly spending challenges',
-        'Earn points and unlock achievements',
-        'Track progress with visual dashboards',
-        'Build lasting financial habits'
+        'Categorize and track all your expenses',
+        'Set and monitor multiple savings goals',
+        'Get spending insights and budget alerts',
+        'Visual progress tracking with milestones'
       ],
-      color: 'budgeting-challenges',
-      demo: 'Challenge: Save $50 on dining out this week',
-      hasRoute: false
-    },
-    {
-      id: 'savings-goals',
-      icon: <PiggyBank className="icon-size-large" />,
-      title: 'Savings Goals Tracker',
-      subtitle: 'Visualize Your Dreams',
-      description: 'Set meaningful savings targets and track progress with motivating visualizations and milestone celebrations.',
-      benefits: [
-        'Set multiple savings goals simultaneously',
-        'Visual progress tracking',
-        'Automatic savings recommendations',
-        'Celebrate milestones with rewards'
-      ],
-      color: 'savings-goals',
-      demo: 'Goal: Save $2,000 for vacation in 8 months',
-      hasRoute: false
+      color: 'expense-tracker',
+      demo: 'Track expenses & save for vacation goal',
+      hasRoute: true
     },
     {
       id: 'stock',
       icon: <BarChart3 className="icon-size-large" />,
       title: 'Investment Simulator',
       subtitle: 'Learn Investing Risk-Free',
-      description: 'Experiment with virtual investments to understand risk, returns, and the power of compound growth over time.',
+      description: 'Experiment with virtual investments using real market data to understand risk, returns, and portfolio management strategies.',
       benefits: [
-        'Practice with virtual $10,000 portfolio',
-        'Learn about stocks, bonds, and ETFs',
-        'Understand risk vs. return relationships',
-        'See compound growth in action'
+        'Practice with virtual ₹1,00,000 portfolio',
+        'Trade Indian stocks with real-time data',
+        'Learn about diversification and risk management',
+        'Track performance with detailed analytics'
       ],
       color: 'investment-simulator',
-      demo: 'Invest $1,000 in tech stocks simulation',
+      demo: 'Invest in top Indian stocks simulation',
       hasRoute: true
     }
   ];
@@ -482,10 +469,10 @@ const FeatureMockup = ({ feature }) => {
               <div className="post-avatar avatar-purple">A</div>
               <div className="post-body">
                 <p className="post-author">Alex_22</p>
-                <p className="post-text">Just saved my first $1,000! 🎉</p>
+                <p className="post-text">Just saved my first $1,000!</p>
                 <div className="post-stats">
-                  <span>❤️ 24</span>
-                  <span>💬 8 replies</span>
+                  <span>24 likes</span>
+                  <span>8 replies</span>
                 </div>
               </div>
             </div>
@@ -497,8 +484,8 @@ const FeatureMockup = ({ feature }) => {
                 <p className="post-author">MoneyMaven</p>
                 <p className="post-text">Tips for first apartment budgeting?</p>
                 <div className="post-stats">
-                  <span>❤️ 12</span>
-                  <span>💬 15 replies</span>
+                  <span>12 likes</span>
+                  <span>15 replies</span>
                 </div>
               </div>
             </div>
@@ -506,89 +493,114 @@ const FeatureMockup = ({ feature }) => {
         </div>
       );
     
-    case 'budgeting-challenges':
+    case 'expense-tracker':
       return (
-        <div className="mockup-challenge">
-          <div className="challenge-card">
-            <div className="challenge-header">
-              <h4 className="challenge-title">Weekly Challenge</h4>
-              <span className="challenge-status">ACTIVE</span>
+        <div className="mockup-expense-tracker">
+          <div className="expense-summary">
+            <div className="expense-card">
+              <h4 className="expense-card-title">This Month's Spending</h4>
+              <div className="expense-amount">₹12,450</div>
+              <div className="expense-breakdown">
+                <div className="expense-category">
+                  <span className="category-dot food"></span>
+                  <span>Food: ₹4,200</span>
+                </div>
+                <div className="expense-category">
+                  <span className="category-dot transport"></span>
+                  <span>Transport: ₹2,800</span>
+                </div>
+                <div className="expense-category">
+                  <span className="category-dot entertainment"></span>
+                  <span>Entertainment: ₹3,150</span>
+                </div>
+              </div>
             </div>
-            <p className="challenge-description">Save $50 on dining out this week</p>
-            <div className="challenge-progress">
-              <div className="progress-info">
-                <span>Progress:</span>
-                <span className="progress-value">$32 / $50</span>
+          </div>
+          <div className="savings-goals-mini">
+            <div className="goal-card">
+              <h4 className="goal-title">Vacation Fund</h4>
+              <div className="goal-progress-mini">
+                <div className="goal-bar">
+                  <div className="goal-fill" style={{ width: '65%' }}></div>
+                </div>
+                <span className="goal-percentage">65% - ₹13,000/₹20,000</span>
               </div>
-              <div className="progress-bar">
-                <div className="progress-fill" style={{ width: '64%' }}></div>
+            </div>
+            <div className="goal-card">
+              <h4 className="goal-title">Emergency Fund</h4>
+              <div className="goal-progress-mini">
+                <div className="goal-bar">
+                  <div className="goal-fill emergency" style={{ width: '40%' }}></div>
+                </div>
+                <span className="goal-percentage">40% - ₹20,000/₹50,000</span>
               </div>
-              <p className="progress-meta">2 days left • +150 points reward</p>
             </div>
           </div>
         </div>
       );
     
-    case 'savings-goals':
+    case 'stock':
       return (
-        <div className="mockup-savings">
-          <div className="savings-goal vacation">
-            <div className="goal-header">
-              <h4 className="goal-title vacation">Vacation Fund</h4>
-              <span className="goal-completion vacation">75% Complete</span>
+        <div className="mockup-investment-advanced">
+          <div className="stock-portfolio-header">
+            <div className="portfolio-value">
+              <h4>Portfolio Value</h4>
+              <div className="value-display">₹1,24,500</div>
+              <div className="portfolio-change positive">+₹24,500 (+24.5%)</div>
             </div>
-            <div className="goal-progress">
-              <div className="goal-amounts">
-                <span>Saved:</span>
-                <span className="goal-saved vacation">$1,500 / $2,000</span>
-              </div>
-              <div className="goal-progress-bar">
-                <div className="goal-progress-fill vacation" style={{ width: '75%' }}></div>
-              </div>
-              <p className="goal-meta">Target: June 2025 • $125/month needed</p>
+            <div className="market-status">
+              <div className="market-indicator active"></div>
+              <span>Market Open</span>
             </div>
           </div>
-          <div className="savings-goal emergency">
-            <div className="goal-header">
-              <h4 className="goal-title emergency">Emergency Fund</h4>
-              <span className="goal-completion emergency">25% Complete</span>
-            </div>
-            <div className="goal-progress-bar">
-              <div className="goal-progress-fill emergency" style={{ width: '25%' }}></div>
-            </div>
-          </div>
-        </div>
-      );
-    
-    case 'investment-simulator':
-      return (
-        <div className="mockup-investment">
-          <div className="portfolio-card">
-            <h4 className="portfolio-title">Portfolio Performance</h4>
-            <div className="portfolio-stats">
-              <div className="portfolio-stat">
-                <span className="portfolio-stat-label">Starting Value:</span>
-                <span className="portfolio-stat-value">$10,000</span>
+          
+          <div className="stock-holdings">
+            <div className="holding-stock">
+              <div className="stock-info">
+                <span className="stock-symbol">RELIANCE</span>
+                <span className="shares">25 shares</span>
               </div>
-              <div className="portfolio-stat">
-                <span className="portfolio-stat-label">Current Value:</span>
-                <span className="portfolio-stat-value portfolio-current">$12,450</span>
+              <div className="stock-performance">
+                <span className="current-price">₹2,450</span>
+                <span className="change positive">+2.3%</span>
               </div>
-              <div className="portfolio-stat">
-                <span className="portfolio-stat-label">Total Return:</span>
-                <span className="portfolio-stat-value portfolio-return">+24.5%</span>
+            </div>
+            
+            <div className="holding-stock">
+              <div className="stock-info">
+                <span className="stock-symbol">TCS</span>
+                <span className="shares">15 shares</span>
+              </div>
+              <div className="stock-performance">
+                <span className="current-price">₹3,850</span>
+                <span className="change negative">-1.2%</span>
+              </div>
+            </div>
+            
+            <div className="holding-stock">
+              <div className="stock-info">
+                <span className="stock-symbol">HDFCBANK</span>
+                <span className="shares">10 shares</span>
+              </div>
+              <div className="stock-performance">
+                <span className="current-price">₹1,650</span>
+                <span className="change positive">+0.8%</span>
               </div>
             </div>
           </div>
-          <div className="holdings-grid">
-            <div className="holding-item">
-              <span className="holding-label">TECH</span>
-              <div className="holding-return">+15.2%</div>
+          
+          <div className="portfolio-chart-mini">
+            <div className="chart-placeholder">
+              <div className="chart-line"></div>
+              <div className="chart-points">
+                <div className="point" style={{ left: '10%', bottom: '20%' }}></div>
+                <div className="point" style={{ left: '30%', bottom: '45%' }}></div>
+                <div className="point" style={{ left: '50%', bottom: '35%' }}></div>
+                <div className="point" style={{ left: '70%', bottom: '60%' }}></div>
+                <div className="point active" style={{ left: '90%', bottom: '75%' }}></div>
+              </div>
             </div>
-            <div className="holding-item">
-              <span className="holding-label">BONDS</span>
-              <div className="holding-return">+3.1%</div>
-            </div>
+            <div className="chart-label">7-Day Performance</div>
           </div>
         </div>
       );

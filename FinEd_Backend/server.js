@@ -487,9 +487,11 @@ app.post("/api/finnews/search", async (req, res) => {
     };
 
     // Use the existing finnews endpoint logic
-    const response = await axios.get(`http://localhost:${process.env.PORT || 8000}/api/finnews`, {
+    const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT || 8000}`;
+    const response = await axios.get(`${baseUrl}/api/finnews`, {
       params: searchParams
     });
+
 
     res.json({
       ...response.data,
