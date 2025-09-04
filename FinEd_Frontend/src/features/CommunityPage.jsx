@@ -333,6 +333,21 @@ const CommunityPage = () => {
     setUserStats(prev => ({ ...prev, points: prev.points + increment }));
   };
 
+  function useWindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+
+    window.addEventListener("resize", handleResize);
+
+    // cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return width;
+}
+
   const filteredForumTopics = searchQuery 
     ? forumTopics.filter(topic => 
         topic.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -362,13 +377,16 @@ const CommunityPage = () => {
     return () => clearInterval(interval);
   }, [joinedChallenges]);
 
+  const width = useWindowWidth();
+  const isMobile = width < 600;
+
   return (
     <div style={{
       fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       background: 'linear-gradient(135deg, #000000, #1a1a1a, #0f0f0f)',
       minHeight: '100vh',
       color: '#FFD700',
-      position: 'relative'
+      position: 'relative',
     }}>
       {/* Background Effects */}
       <div style={{
@@ -412,27 +430,28 @@ const CommunityPage = () => {
         </div>
       )}
 
-      <div style={{ maxWidth: '100%', margin: '0 auto', paddingLeft:"70px",paddingRight:"70px", paddingTop:"20px", position: 'relative', zIndex: 1 }}>
+      <div style={{ maxWidth: '100%', margin: '0 auto', paddingLeft:isMobile? "20px":"70px", paddingRight:isMobile? "20px":"70px", paddingTop:"20px", position: 'relative', zIndex: 1, }}>
         {/* Header with User Stats */}
         <div style={{ textAlign: '', marginBottom: '40px',display: 'flex', justifyContent: 'space-between', alignItems: 'center'  }}>
           <div >
-          <div style={{display:"flex", gap:"10px" }} >
+          <div style={{display:"flex", gap:"10px",flexWrap:"wrap" }} >
             <div>
           <span style={{
-            fontSize: '3rem',
+            fontSize: isMobile?'2rem': '3rem',
             fontWeight: '800',}} className="logo-fin">Fin</span>
         <span style={{
-            fontSize: '3rem',
+            fontSize: isMobile?'2rem': '3rem',
             fontWeight: '800',}} className="logo-ed">Ed</span> 
             </div>
           <h1 style={{
-            fontSize: '3rem',
+            fontSize: isMobile? '2rem' : '3rem',
             fontWeight: '800',
             background: 'linear-gradient(135deg, #FFD700, #FFA500)',
             WebkitBackgroundClip: 'text',
             backgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            marginBottom: '12px'
+            marginBottom: '12px',
+            display: 'inline-block',
           }}>
             Community
           </h1>
@@ -448,7 +467,8 @@ const CommunityPage = () => {
           marginBottom: '30px',
           display: 'flex',
           justifyContent: 'center',
-          width: '40%'
+          width: '40%',
+          display: isMobile? 'none' : 'flex'
         }}>
           <div style={{
             position: 'relative',
@@ -505,7 +525,7 @@ const CommunityPage = () => {
             justifyContent: 'center',
             zIndex: 1000,
             paddingTop: '20px',
-            overflow: 'auto'
+            overflow: 'auto',
           }}>
             <div style={{
               backgroundColor: 'rgba(0, 0, 0, 0.95)',
@@ -516,7 +536,7 @@ const CommunityPage = () => {
               width: '90%',
               maxHeight: '90vh',
               overflow: 'auto',
-              margin: '20px'
+              margin: '20px',
             }}>
               {/* Topic Header */}
               <div style={{ 
@@ -533,7 +553,8 @@ const CommunityPage = () => {
                         color: '#FFD700', 
                         margin: '0 0 4px 0',
                         fontSize: '1.5rem',
-                        fontWeight: '700'
+                        fontWeight: '700',
+                        flexShrink: 1
                       }}>
                         {selectedTopic.title}
                       </h2>
@@ -1038,7 +1059,7 @@ const CommunityPage = () => {
               border: '1px solid rgba(255, 215, 0, 0.3)',
               flexShrink: 1
             }}>
-              <div style={{display:"flex", justifyContent:"space-between"}}>
+              <div style={{display:"flex", justifyContent:"space-between", flexWrap:"wrap"}}>
               <h2 style={{ 
                 fontSize: '1.5rem', 
                 fontWeight: '700', 
@@ -1088,7 +1109,7 @@ const CommunityPage = () => {
               
               {filteredForumTopics.map(topic => (
                 
-                <div style={{ padding: '16px', maxWidth: '100%', margin: '0 auto' }}>
+                <div style={{ padding: isMobile ? '0px' : '16px', maxWidth: '100%', margin: '0 auto' }}>
       <div key={topic.id} style={{
                   padding: window.innerWidth >= 768 ? '20px' : '16px',
                   marginBottom: '16px',
