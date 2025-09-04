@@ -143,9 +143,9 @@ const styles = {
     transform: 'scale(1)',
   },
   startButtonHover: {
-    transform: 'scale(1.05)',
+    transform: 'scale(1.02)',
     backgroundColor: '#FFA500',
-    boxShadow: '0 8px 25px rgba(255, 215, 0, 0.4), 0 0 0 2px rgba(255, 215, 0, 0.3)',
+    
   },
   startButtonActive: {
     transform: 'scale(0.98)',
@@ -487,7 +487,7 @@ const styles = {
     transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
     background: 'linear-gradient(90deg, #FF6B6B, #FFD700, #4ECDC4)',
     boxShadow: '0 0 10px rgba(255, 215, 0, 0.5)',
-    animation: 'pulse 2s infinite',
+    
   },
   creditScoreLabels: {
     display: 'flex',
@@ -583,8 +583,8 @@ const styles = {
 }
 
 const CreditCardSimulator = () => {
-  const [creditLimit, setCreditLimit] = useState('');
-  const [interestRate, setInterestRate] = useState('');
+  const [creditLimit, setCreditLimit] = useState('50000');
+  const [interestRate, setInterestRate] = useState('36');
   const [minimumPaymentPercent, setMinimumPaymentPercent] = useState('5');
   const [isSimulationStarted, setIsSimulationStarted] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(1);
@@ -703,8 +703,8 @@ const CreditCardSimulator = () => {
 
   const resetSimulation = () => {
     setIsSimulationStarted(false);
-    setCreditLimit('');
-    setInterestRate('');
+    setCreditLimit('50000');
+    setInterestRate('36');
     setMinimumPaymentPercent('5');
     setCurrentMonth(1);
     setCurrentBalance(0);
@@ -762,62 +762,6 @@ const CreditCardSimulator = () => {
     setNotification(`Bill generated for Month ${currentMonth}! Total Due: ₹${Math.round(totalBill)}${interestCharge > 0 ? `, Interest: ₹${Math.round(interestCharge)}` : ''}`);
   };
 
-  // const makePayment = (paymentAmount, paymentType) => {
-  //   if (!billGenerated || currentBillAmount <= 0) {
-  //     setNotification('No bill to pay! Generate bill first.');
-  //     return;
-  //   }
-
-  //   saveCurrentState();
-    
-  //   const actualPayment = Math.min(paymentAmount, currentBillAmount);
-  //   setTotalInterestPaid(prev => Math.min(prev + interestDue,prev+actualPayment));
-  //   const remainingBalance = currentBillAmount - actualPayment;   
-  //   setInterestDue(remainingBalance*monthlyInterestRate);    
-  
-  //   console.log(actualPayment, interestDue,)
-  //   setCurrentBalance(remainingBalance);
-  //   setCurrentSpending(0);
-  //   setCurrentBillAmount(0);
-  //   setTotalPaymentsMade(prev => prev + actualPayment);
-  //   setBillGenerated(false);
-  //   setPhase('spending');
-    
-  //   if (paymentType === 'full') {
-  //     setCreditScore(prev => Math.min(850, prev + 5));
-  //   } else if (paymentType === 'minimum') {
-  //     setCreditScore(prev => Math.max(300, prev - 2));
-  //   } else {
-  //     setCreditScore(prev => Math.min(850, prev + 2));
-  //   }
-    
-  //   const newCreditScore = paymentType === 'full' ? Math.min(850, creditScore + 5) : 
-  //                          paymentType === 'minimum' ? Math.max(300, creditScore - 2) : 
-  //                          Math.min(850, creditScore + 2);
-    
-  //   const newHistoryPoint = { 
-  //     month: currentMonth, 
-  //     balance: remainingBalance, 
-  //     creditScore: newCreditScore
-  //   };
-  //   setBalanceHistory(prev => [...prev, newHistoryPoint]);
-    
-  //   setPaymentHistory(prev => [...prev, { 
-  //     month: currentMonth, 
-  //     action: `${paymentType} Payment`, 
-  //     amount: actualPayment,
-  //     balance: remainingBalance 
-  //   }]);
-    
-  //   const nextMonth = currentMonth + 1;
-  //   setCurrentMonth(nextMonth);
-    
-  //   if (remainingBalance > 0) {
-  //     setNotification(`Payment of ₹${Math.round(actualPayment)} made! Remaining balance: ₹${Math.round(remainingBalance)}. Now in Month ${nextMonth} spending phase. Interest will accrue on unpaid balance.`);
-  //   } else {
-  //     setNotification(`Payment of ₹${Math.round(actualPayment)} made! Balance cleared! Now in Month ${nextMonth} spending phase.`);
-  //   }
-  // };
 
   const makePayment = (paymentAmount, paymentType) => {
   if (!billGenerated || currentBillAmount <= 0) {
@@ -924,47 +868,6 @@ const CreditCardSimulator = () => {
     setNotification(`Purchase of ₹${Math.round(chargeAmount)} made! Current spending: ₹${Math.round(newSpending)}, Total outstanding: ₹${Math.round(newTotalOutstanding)}`);
   };
 
-  // const skipPayment = () => {
-  //   if (!billGenerated || currentBillAmount <= 0) {
-  //     setNotification('No bill to skip payment on! Generate bill first.');
-  //     return;
-  //   }
-
-  //   saveCurrentState();
-
-  //   const latePenalty = 500;
-  //   const newBalance = currentBillAmount + latePenalty;
-  //   const interestOnBill = newBalance * monthlyInterestRate;
-  //   setCurrentBalance( newBalance + interestOnBill);
-  //   setInterestDue(prev=>prev+interestOnBill);
-  //   setCurrentBalance(newBalance);
-  //   setCurrentSpending(0);
-  //   setCurrentBillAmount(0);
-  //   setTotalPenalties(prev => prev + latePenalty);
-  //   setBillGenerated(false);
-  //   setPhase('spending');
-    
-  //   const newCreditScore = Math.max(300, creditScore - 25);
-  //   setCreditScore(newCreditScore);
-    
-  //   const newHistoryPoint = { 
-  //     month: currentMonth, 
-  //     balance: newBalance, 
-  //     creditScore: newCreditScore
-  //   };
-  //   setBalanceHistory(prev => [...prev, newHistoryPoint]);
-  //   setPaymentHistory(prev => [...prev, { 
-  //     month: currentMonth, 
-  //     action: 'Payment Missed (Penalty + Interest)', 
-  //     amount: -(latePenalty + interestOnBill),
-  //     balance: newBalance 
-  //   }]);
-    
-  //   const nextMonth = currentMonth + 1;
-  //   setCurrentMonth(nextMonth);
-    
-  //   setNotification(`Payment missed! Penalty: ₹${Math.round(latePenalty)}, Additional interest: ₹${Math.round(interestOnBill)}. New balance: ₹${Math.round(newBalance)}. Now in Month ${nextMonth}.`);
-  // };
 
   const skipPayment = () => {
   if (!billGenerated || currentBillAmount <= 0) {
@@ -1064,7 +967,7 @@ const CreditCardSimulator = () => {
                     onChange={(e) => setCreditLimit(e.target.value)}
                     style={{...styles.input, ...styles.inputWithLeftIcon}}
                     placeholder="50000"
-                    onFocus={(e) => e.target.style.borderColor = '#DC2626'}
+                    onFocus={(e) => e.target.style.borderColor = '#FFA500'}
                     onBlur={(e) => e.target.style.borderColor = '#D1D5DB'}
                   />
                 </div>
@@ -1080,7 +983,7 @@ const CreditCardSimulator = () => {
                     onChange={(e) => setInterestRate(e.target.value)}
                     style={{...styles.input, ...styles.inputWithRightIcon}}
                     placeholder="18"
-                    onFocus={(e) => e.target.style.borderColor = '#DC2626'}
+                    onFocus={(e) => e.target.style.borderColor = '#FFA500'}
                     onBlur={(e) => e.target.style.borderColor = '#D1D5DB'}
                   />
                   <span style={styles.percentSymbol}>%</span>
@@ -1097,7 +1000,7 @@ const CreditCardSimulator = () => {
                     onChange={(e) => setMinimumPaymentPercent(e.target.value)}
                     style={{...styles.input, ...styles.inputWithRightIcon}}
                     placeholder="5"
-                    onFocus={(e) => e.target.style.borderColor = '#DC2626'}
+                    onFocus={(e) => e.target.style.borderColor = '#FFA500'}
                     onBlur={(e) => e.target.style.borderColor = '#D1D5DB'}
                   />
                   <span style={styles.percentSymbol}>%</span>
@@ -1107,8 +1010,8 @@ const CreditCardSimulator = () => {
               <button
                 onClick={startSimulation}
                 style={styles.startButton}
-                onMouseOver={(e) => e.target.style.backgroundColor = '#B91C1C'}
-                onMouseOut={(e) => e.target.style.backgroundColor = '#DC2626'}
+                onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.startButtonHover)}
+                onMouseLeave={(e) => Object.assign(e.currentTarget.style, styles.startButton)}
               >
                 Start Simulation
               </button>
@@ -1216,8 +1119,8 @@ const CreditCardSimulator = () => {
                     <button
                       onClick={() => setShowChargeModal(true)}
                       style={{...styles.actionButton, ...styles.makeChargeButton}}
-                      onMouseOver={(e) => e.target.style.backgroundColor = '#B91C1C'}
-                      onMouseOut={(e) => e.target.style.backgroundColor = '#DC2626'}
+                      onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                     >
                       <span>💳</span>
                       <span>Make Purchase</span>
@@ -1227,8 +1130,8 @@ const CreditCardSimulator = () => {
                       <button
                         onClick={generateBill}
                         style={{...styles.actionButton, backgroundColor: '#7C3AED', color: 'white'}}
-                        onMouseOver={(e) => e.target.style.backgroundColor = '#6D28D9'}
-                        onMouseOut={(e) => e.target.style.backgroundColor = '#7C3AED'}
+                        onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                       >
                         <span>📋</span>
                         <span>Generate Bill</span>
@@ -1242,8 +1145,8 @@ const CreditCardSimulator = () => {
                     <button
                       onClick={() => makePayment(minimumPayment, 'minimum')}
                       style={{...styles.actionButton, ...styles.payMinimumButton}}
-                      onMouseOver={(e) => e.target.style.backgroundColor = '#D97706'}
-                      onMouseOut={(e) => e.target.style.backgroundColor = '#F59E0B'}
+                      onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                     >
                       <span>💰</span>
                       <span>Pay Minimum (₹{Math.round(minimumPayment)})</span>
@@ -1252,8 +1155,8 @@ const CreditCardSimulator = () => {
                     <button
                       onClick={() => makePayment(currentBillAmount, 'full')}
                       style={{...styles.actionButton, ...styles.payFullButton}}
-                      onMouseOver={(e) => e.target.style.backgroundColor = '#059669'}
-                      onMouseOut={(e) => e.target.style.backgroundColor = '#10B981'}
+                      onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                     >
                       <span>✅</span>
                       <span>Pay Full (₹{Math.round(currentBillAmount)})</span>
@@ -1262,8 +1165,8 @@ const CreditCardSimulator = () => {
                     <button
                       onClick={() => setShowCustomPaymentModal(true)}
                       style={{...styles.actionButton, ...styles.payCustomButton}}
-                      onMouseOver={(e) => e.target.style.backgroundColor = '#6D28D9'}
-                      onMouseOut={(e) => e.target.style.backgroundColor = '#7C3AED'}
+                      onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                     >
                       <span>💵</span>
                       <span>Pay Custom Amount</span>
@@ -1272,8 +1175,8 @@ const CreditCardSimulator = () => {
                     <button
                       onClick={skipPayment}
                       style={{...styles.actionButton, backgroundColor: '#EF4444', color: 'white'}}
-                      onMouseOver={(e) => e.target.style.backgroundColor = '#DC2626'}
-                      onMouseOut={(e) => e.target.style.backgroundColor = '#EF4444'}
+                      onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                     >
                       <span>⚠️</span>
                       <span>Skip Payment</span>
@@ -1285,8 +1188,8 @@ const CreditCardSimulator = () => {
                   <button
                     onClick={undoLastAction}
                     style={{...styles.actionButton, ...styles.undoButton}}
-                    onMouseOver={(e) => e.target.style.backgroundColor = '#EA580C'}
-                    onMouseOut={(e) => e.target.style.backgroundColor = '#F97316'}
+                    onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                   >
                     <span>↩️</span>
                     <span>Undo Last Action</span>
@@ -1328,8 +1231,9 @@ const CreditCardSimulator = () => {
                           }
                         }}
                         style={styles.confirmButton}
-                        onMouseOver={(e) => e.target.style.backgroundColor = '#6D28D9'}
-                        onMouseOut={(e) => e.target.style.backgroundColor = '#7C3AED'}
+                        onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                        
                       >
                         Make Payment
                       </button>
@@ -1339,8 +1243,8 @@ const CreditCardSimulator = () => {
                           setCustomAmount('');
                         }}
                         style={styles.cancelButton}
-                        onMouseOver={(e) => e.target.style.backgroundColor = '#6B7280'}
-                        onMouseOut={(e) => e.target.style.backgroundColor = '#9CA3AF'}
+                        onMouseOver={(e) => e.target.style.backgroundColor = 'black'}
+                        onMouseOut={(e) => Object.assign(e.currentTarget.style, styles.cancelButton)}
                       >
                         Cancel
                       </button>
@@ -1373,9 +1277,8 @@ const CreditCardSimulator = () => {
                     <div style={styles.modalButtons}>
                       <button
                         onClick={makeCharge}
-                        style={{...styles.confirmButton, backgroundColor: '#DC2626'}}
-                        onMouseOver={(e) => e.target.style.backgroundColor = '#B91C1C'}
-                        onMouseOut={(e) => e.target.style.backgroundColor = '#DC2626'}
+                        style={{...styles.confirmButton, }}
+                        
                       >
                         Make Purchase
                       </button>
@@ -1385,8 +1288,8 @@ const CreditCardSimulator = () => {
                           setCustomAmount('');
                         }}
                         style={styles.cancelButton}
-                        onMouseOver={(e) => e.target.style.backgroundColor = '#6B7280'}
-                        onMouseOut={(e) => e.target.style.backgroundColor = '#9CA3AF'}
+                        onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                       >
                         Cancel
                       </button>
@@ -1519,8 +1422,8 @@ const CreditCardSimulator = () => {
               <button
                 onClick={resetSimulation}
                 style={styles.resetButton}
-                onMouseOver={(e) => e.target.style.backgroundColor = '#4B5563'}
-                onMouseOut={(e) => e.target.style.backgroundColor = '#6B7280'}
+                onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
               >
                 Reset Simulation
               </button>

@@ -20,9 +20,7 @@ const FinancialSimulatorLanding = () => {
       setCurrentFeature((prev) => (prev + 1) % features.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
-
-  
+  }, []); 
 
   
 
@@ -150,45 +148,7 @@ const FinancialSimulatorLanding = () => {
           </div>
         </div>
 
-        {/* Learn More Section */}
-        {/* <div style={styles.learnMoreSection}>
-          <div style={styles.learnMoreCard}>
-            <div style={styles.learnMoreIcon}>🧠</div>
-            <h3 style={styles.learnMoreTitle}>How Do These Simulations Work?</h3>
-            <p style={styles.learnMoreDescription}>
-              Discover the educational methodology, calculation logic, and learning objectives 
-              behind our financial simulators. Perfect for educators and curious learners.
-            </p>
-            
-            <div style={styles.benefitsGrid}>
-              <div style={styles.benefit}>
-                <span style={styles.benefitIcon}>🎯</span>
-                <span>Interactive Learning</span>
-              </div>
-              <div style={styles.benefit}>
-                <span style={styles.benefitIcon}>🔍</span>
-                <span>Real-world Mechanics</span>
-              </div>
-              <div style={styles.benefit}>
-                <span style={styles.benefitIcon}>📚</span>
-                <span>Educational Design</span>
-              </div>
-              <div style={styles.benefit}>
-                <span style={styles.benefitIcon}>⚡</span>
-                <span>Immediate Feedback</span>
-              </div>
-            </div>
-            
-            <button 
-              style={styles.learnMoreButton}
-              onClick={handleLearnMore}
-            >
-              <span style={styles.buttonIcon}>📖</span>
-              Learn How It Works
-              <span style={styles.buttonArrow}>→</span>
-            </button>
-          </div>
-        </div> */}
+      
 
         {/* Stats Section */}
         <div style={styles.statsSection}>
@@ -223,6 +183,8 @@ const FinancialSimulatorLanding = () => {
     </div>
   );
 };
+
+const isMobile = window.innerWidth <= 768;
 
 const styles = {
   container: {
@@ -284,15 +246,16 @@ const styles = {
   content: {
     position: 'relative',
     zIndex: 1,
-    padding: '40px 20px',
     maxWidth: '1200px',
     margin: '0 auto',
+    padding: isMobile ? '30px' : "10px",
+    paddingTop:"30px"
   },
 
   hero: {
     textAlign: 'center',
-    marginBottom: '80px',
-    paddingTop: '60px',
+    marginBottom: '20px',
+    
   },
 
   heroContent: {
@@ -301,7 +264,7 @@ const styles = {
   },
 
   mainTitle: {
-    fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
+    fontSize: '3rem',
     fontWeight: '900',
     marginBottom: '24px',
     lineHeight: 1.1,
@@ -321,7 +284,7 @@ const styles = {
     fontSize: '1.4rem',
     color: '#D4AF37',
     fontWeight: '400',
-    marginBottom: '32px',
+    marginBottom: '15px',
     lineHeight: 1.5,
   },
 
@@ -329,7 +292,7 @@ const styles = {
     fontSize: '1.1rem',
     color: '#B8860B',
     fontWeight: '500',
-    marginBottom: '40px',
+    marginBottom: '20px',
   },
 
   featurePrefix: {
@@ -345,6 +308,10 @@ const styles = {
 
   simulatorSection: {
     marginBottom: '80px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
   },
 
   sectionTitle: {
@@ -358,17 +325,18 @@ const styles = {
 
   simulatorGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+    gridTemplateColumns: isMobile ? 'repeat(auto-fit, minmax(auto, 1fr))' : 'repeat(auto-fit, minmax(400px, 1fr))',
     gap: '32px',
     maxWidth: '1000px',
-    margin: '0 auto',
+    
   },
 
   simulatorCard: {
     backgroundColor: '#1A1A1A',
     backgroundImage: 'linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(255, 165, 0, 0.04) 100%)',
     borderRadius: '20px',
-    padding: '40px',
+    padding: '30px',
+    paddingTop:'15px',
     border: '2px solid rgba(255, 215, 0, 0.2)',
     boxShadow: '0 10px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 215, 0, 0.1)',
     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',

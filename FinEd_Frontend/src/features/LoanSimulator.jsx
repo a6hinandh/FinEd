@@ -1,656 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-
-// const styles = {
-//   container: {
-//     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-//     background: 'linear-gradient(135deg, #000000, #1a1a1a, #0f0f0f)',
-//     minHeight: '100vh',
-//     padding: '20px',
-//     position: 'relative',
-//     overflow: 'hidden',
-//   },
-//   // Animated background particles
-//   backgroundOverlay: {
-//     position: 'fixed',
-//     top: 0,
-//     left: 0,
-//     width: '100%',
-//     height: '100%',
-//     background: 'radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 193, 7, 0.08) 0%, transparent 50%)',
-//     zIndex: -1,
-//     animation: 'pulse 4s ease-in-out infinite alternate',
-//   },
-//   maxWidth: {
-//     maxWidth: '1200px',
-//     margin: '0 auto',
-//     position: 'relative',
-//     zIndex: 1,
-//   },
-//   header: {
-//     textAlign: 'center',
-//     marginBottom: '40px',
-//     transform: 'translateY(0)',
-//     transition: 'all 0.6s ease',
-//   },
-//   title: {
-//     fontSize: '3rem',
-//     fontWeight: '800',
-//     color: '#FFD700',
-//     marginBottom: '12px',
-//     background: 'linear-gradient(135deg, #FFD700, #FFA500, #FF8C00)',
-//     WebkitBackgroundClip: 'text',
-//     backgroundClip: 'text',
-//     WebkitTextFillColor: 'transparent',
-//     textShadow: '0 0 30px rgba(255, 215, 0, 0.3)',
-//     letterSpacing: '-0.02em',
-//     position: 'relative',
-//     display: 'inline-block',
-//     animation: 'shimmer 3s ease-in-out infinite',
-//   },
-//   subtitle: {
-//     fontSize: '1.2rem',
-//     color: '#C9B037',
-//     fontWeight: '300',
-//     letterSpacing: '0.5px',
-//     textShadow: '0 0 10px rgba(201, 176, 55, 0.3)',
-//   },
-//   setupCard: {
-//     backgroundColor: 'rgba(0, 0, 0, 0.8)',
-//     borderRadius: '20px',
-//     padding: '40px',
-//     boxShadow: '0 25px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 215, 0, 0.2)',
-//     border: '2px solid transparent',
-//     backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), linear-gradient(135deg, #FFD700, #FFA500)',
-//     backgroundOrigin: 'border-box',
-//     backgroundClip: 'padding-box, border-box',
-//     transform: 'scale(1)',
-//     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-//     position: 'relative',
-//     overflow: 'hidden',
-//   },
-//   setupCardHover: {
-//     transform: 'scale(1.02) translateY(-5px)',
-//     boxShadow: '0 35px 70px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 215, 0, 0.4)',
-//   },
-//   setupTitle: {
-//     fontSize: '1.8rem',
-//     fontWeight: '700',
-//     color: '#FFD700',
-//     marginBottom: '30px',
-//     textAlign: 'center',
-//     textShadow: '0 0 20px rgba(255, 215, 0, 0.4)',
-//   },
-//   formSpace: {
-//     display: 'flex',
-//     flexDirection: 'column',
-//     gap: '24px',
-//   },
-//   label: {
-//     display: 'block',
-//     fontSize: '0.95rem',
-//     fontWeight: '600',
-//     color: '#C9B037',
-//     marginBottom: '8px',
-//     letterSpacing: '0.3px',
-//     textTransform: 'uppercase',
-//   },
-//   inputContainer: {
-//     position: 'relative',
-//     display: 'flex',
-//     alignItems: 'center',
-//     transform: 'scale(1)',
-//     transition: 'transform 0.2s ease',
-//   },
-//   inputContainerHover: {
-//     transform: 'scale(1.02)',
-//   },
-//   input: {
-//     width: '100%',
-//     padding: '16px 20px',
-//     fontSize: '1.1rem',
-//     border: '2px solid rgba(255, 215, 0, 0.3)',
-//     borderRadius: '12px',
-//     transition: 'all 0.3s ease',
-//     backgroundColor: 'rgba(0, 0, 0, 0.6)',
-//     color: '#FFD700',
-//     backdropFilter: 'blur(10px)',
-//     outline: 'none',
-//   },
-//   inputFocus: {
-//     borderColor: '#FFD700',
-//     boxShadow: '0 0 20px rgba(255, 215, 0, 0.3), inset 0 0 20px rgba(255, 215, 0, 0.1)',
-//     backgroundColor: 'rgba(0, 0, 0, 0.8)',
-//   },
-//   inputWithLeftIcon: {
-//     paddingLeft: '48px',
-//   },
-//   inputWithRightIcon: {
-//     paddingRight: '48px',
-//   },
-//   inputWithRightText: {
-//     paddingRight: '80px',
-//   },
-//   currencySymbol: {
-//     position: 'absolute',
-//     left: '16px',
-//     color: '#FFD700',
-//     fontWeight: '700',
-//     fontSize: '1.1rem',
-//     pointerEvents: 'none',
-//     textShadow: '0 0 10px rgba(255, 215, 0, 0.5)',
-//   },
-//   percentSymbol: {
-//     position: 'absolute',
-//     right: '16px',
-//     color: '#FFD700',
-//     fontWeight: '700',
-//     fontSize: '1.1rem',
-//     pointerEvents: 'none',
-//     textShadow: '0 0 10px rgba(255, 215, 0, 0.5)',
-//   },
-//   monthsSymbol: {
-//     position: 'absolute',
-//     right: '16px',
-//     color: '#C9B037',
-//     fontSize: '0.95rem',
-//     fontWeight: '600',
-//     pointerEvents: 'none',
-//   },
-//   startButton: {
-//     width: '100%',
-//     padding: '18px',
-//     fontSize: '1.1rem',
-//     fontWeight: '700',
-//     color: '#000000',
-//     background: 'linear-gradient(135deg, #FFD700, #FFA500)',
-//     border: 'none',
-//     borderRadius: '12px',
-//     cursor: 'pointer',
-//     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-//     marginTop: '20px',
-//     boxShadow: '0 10px 30px rgba(255, 215, 0, 0.3)',
-//     position: 'relative',
-//     overflow: 'hidden',
-//     textTransform: 'uppercase',
-//     letterSpacing: '1px',
-//     transform: 'scale(1)',
-//   },
-//   startButtonHover: {
-//     transform: 'scale(1.05) translateY(-2px)',
-//     boxShadow: '0 20px 40px rgba(255, 215, 0, 0.5)',
-//     background: 'linear-gradient(135deg, #FFA500, #FFD700)',
-//   },
-//   dashboard: {
-//     display: 'flex',
-//     flexDirection: 'column',
-//     gap: '32px',
-//     animation: 'fadeInUp 0.8s ease',
-//   },
-//   cardsGrid: {
-//     display: 'grid',
-//     gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-//     gap: '20px',
-//     className: 'cards-grid',
-//   },
-//   summaryCard: {
-//     backgroundColor: 'rgba(0, 0, 0, 0.85)',
-//     padding: '28px',
-//     borderRadius: '16px',
-//     boxShadow: '0 15px 35px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 215, 0, 0.2)',
-//     border: '1px solid rgba(255, 215, 0, 0.3)',
-//     backdropFilter: 'blur(20px)',
-//     transform: 'scale(1) translateY(0)',
-//     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-//     position: 'relative',
-//     overflow: 'hidden',
-//   },
-//   summaryCardHover: {
-//     transform: 'scale(1.05) translateY(-8px)',
-//     boxShadow: '0 25px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 215, 0, 0.5)',
-//     backgroundColor: 'rgba(0, 0, 0, 0.9)',
-//   },
-//   cardTitle: {
-//     fontSize: '0.9rem',
-//     fontWeight: '600',
-//     color: '#C9B037',
-//     marginBottom: '12px',
-//     textTransform: 'uppercase',
-//     letterSpacing: '1px',
-//   },
-//   cardValue: {
-//     fontSize: '1.8rem',
-//     fontWeight: '800',
-//     margin: '0',
-//     textShadow: '0 0 15px currentColor',
-//   },
-//   blueValue: { 
-//     background: 'linear-gradient(135deg, #FFD700, #FFA500)',
-//     WebkitBackgroundClip: 'text',
-//     backgroundClip: 'text',
-//     WebkitTextFillColor: 'transparent',
-//   },
-//   redValue: { 
-//     background: 'linear-gradient(135deg, #FF6B6B, #FFD700)',
-//     WebkitBackgroundClip: 'text',
-//     backgroundClip: 'text',
-//     WebkitTextFillColor: 'transparent',
-//   },
-//   greenValue: { 
-//     background: 'linear-gradient(135deg, #51CF66, #FFD700)',
-//     WebkitBackgroundClip: 'text',
-//     backgroundClip: 'text',
-//     WebkitTextFillColor: 'transparent',
-//   },
-//   orangeValue: { 
-//     background: 'linear-gradient(135deg, #FF922B, #FFD700)',
-//     WebkitBackgroundClip: 'text',
-//     backgroundClip: 'text',
-//     WebkitTextFillColor: 'transparent',
-//   },
-//   purpleValue: { 
-//     background: 'linear-gradient(135deg, #9775FA, #FFD700)',
-//     WebkitBackgroundClip: 'text',
-//     backgroundClip: 'text',
-//     WebkitTextFillColor: 'transparent',
-//   },
-//   smallText: {
-//     fontSize: '0.8rem',
-//     color: '#8B7355',
-//     marginTop: '8px',
-//   },
-//   timelineCard: {
-//     backgroundColor: 'rgba(0, 0, 0, 0.85)',
-//     padding: '32px',
-//     borderRadius: '16px',
-//     boxShadow: '0 15px 35px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 215, 0, 0.2)',
-//     border: '1px solid rgba(255, 215, 0, 0.3)',
-//     backdropFilter: 'blur(20px)',
-//     transform: 'scale(1)',
-//     transition: 'all 0.4s ease',
-//   },
-//   timelineCardHover: {
-//     transform: 'scale(1.02) translateY(-5px)',
-//     boxShadow: '0 25px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 215, 0, 0.4)',
-//   },
-//   timelineTitle: {
-//     fontSize: '1.3rem',
-//     fontWeight: '700',
-//     color: '#FFD700',
-//     marginBottom: '24px',
-//     textShadow: '0 0 15px rgba(255, 215, 0, 0.4)',
-//   },
-//   timeline: {
-//     display: 'flex',
-//     overflowX: 'auto',
-//     gap: '16px',
-//     paddingBottom: '15px',
-//   },
-//   timelineItem: {
-//     display: 'flex',
-//     flexDirection: 'column',
-//     alignItems: 'center',
-//     minWidth: '70px',
-//     transform: 'scale(1)',
-//     transition: 'transform 0.3s ease',
-//   },
-//   timelineItemHover: {
-//     transform: 'scale(1.1)',
-//   },
-//   timelineCircle: {
-//     width: '40px',
-//     height: '40px',
-//     borderRadius: '50%',
-//     display: 'flex',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     fontSize: '0.8rem',
-//     fontWeight: '700',
-//     marginBottom: '8px',
-//     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-//     position: 'relative',
-//   },
-//   timelineCircleCompleted: {
-//     background: 'linear-gradient(135deg, #FFD700, #FFA500)',
-//     color: '#000000',
-//     boxShadow: '0 8px 25px rgba(255, 215, 0, 0.4), 0 0 0 3px rgba(255, 215, 0, 0.2)',
-//   },
-//   timelineCircleDelayed: {
-//     background: 'linear-gradient(135deg, #FFA500, #FF8C00)',
-//     color: '#000000',
-//     boxShadow: '0 8px 25px rgba(255, 165, 0, 0.4), 0 0 0 3px rgba(255, 165, 0, 0.2)',
-//   },
-//   timelineCircleCurrent: {
-//     background: 'linear-gradient(135deg, #FFD700, #C9B037)',
-//     color: '#000000',
-//     boxShadow: '0 8px 25px rgba(255, 215, 0, 0.6), 0 0 0 3px rgba(255, 215, 0, 0.3)',
-//     animation: 'glow 2s ease-in-out infinite alternate',
-//   },
-//   timelineCircleFuture: {
-//     backgroundColor: 'rgba(30, 30, 30, 0.8)',
-//     color: '#8B7355',
-//     border: '3px solid rgba(139, 115, 85, 0.5)',
-//     boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
-//   },
-//   timelineLabel: {
-//     fontSize: '0.8rem',
-//     color: '#C9B037',
-//     textAlign: 'center',
-//     fontWeight: '500',
-//   },
-//   currentMonth: {
-//     marginTop: '20px',
-//     fontSize: '0.95rem',
-//     color: '#FFD700',
-//     textAlign: 'center',
-//     fontWeight: '600',
-//   },
-//   actionsCard: {
-//     backgroundColor: 'rgba(0, 0, 0, 0.85)',
-//     padding: '32px',
-//     borderRadius: '16px',
-//     boxShadow: '0 15px 35px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 215, 0, 0.2)',
-//     border: '1px solid rgba(255, 215, 0, 0.3)',
-//     backdropFilter: 'blur(20px)',
-//     transform: 'scale(1)',
-//     transition: 'all 0.4s ease',
-//   },
-//   actionsCardHover: {
-//     transform: 'scale(1.02) translateY(-5px)',
-//     boxShadow: '0 25px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 215, 0, 0.4)',
-//   },
-//   actionsTitle: {
-//     fontSize: '1.3rem',
-//     fontWeight: '700',
-//     color: '#FFD700',
-//     marginBottom: '24px',
-//     textAlign: 'center',
-//     textShadow: '0 0 15px rgba(255, 215, 0, 0.4)',
-//   },
-//   actionsGrid: {
-//     display: 'grid',
-//     gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-//     gap: '16px',
-//     className: 'actions-grid',
-//   },
-//   actionButton: {
-//     display: 'flex',
-//     flexDirection: 'column',
-//     alignItems: 'center',
-//     gap: '10px',
-//     padding: '20px 16px',
-//     fontSize: '0.95rem',
-//     fontWeight: '700',
-//     border: 'none',
-//     borderRadius: '12px',
-//     cursor: 'pointer',
-//     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-//     textAlign: 'center',
-//     position: 'relative',
-//     overflow: 'hidden',
-//     transform: 'scale(1) translateY(0)',
-//     boxShadow: '0 8px 25px rgba(0, 0, 0, 0.3)',
-//   },
-//   actionButtonHover: {
-//     transform: 'scale(1.1) translateY(-5px)',
-//     boxShadow: '0 15px 40px rgba(0, 0, 0, 0.5)',
-//   },
-//   payButton: {
-//     background: 'linear-gradient(135deg, #32D74B, #FFD700)',
-//     color: '#000000',
-//   },
-//   delayButton: {
-//     background: 'linear-gradient(135deg, #FF9F0A, #FFD700)',
-//     color: '#000000',
-//   },
-//   extraButton: {
-//     background: 'linear-gradient(135deg, #BF5AF2, #FFD700)',
-//     color: '#000000',
-//   },
-//   undoButton: {
-//     background: 'linear-gradient(135deg, #FF6B35, #FFD700)',
-//     color: '#000000',
-//   },
-//   extraPaymentModal: {
-//     marginTop: '24px',
-//     padding: '28px',
-//     backgroundColor: 'rgba(0, 0, 0, 0.9)',
-//     borderRadius: '16px',
-//     border: '2px solid #FFD700',
-//     boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.3)',
-//     backdropFilter: 'blur(20px)',
-//     transform: 'scale(1)',
-//     transition: 'all 0.4s ease',
-//   },
-//   extraPaymentModalHover: {
-//     transform: 'scale(1.02)',
-//     boxShadow: '0 25px 50px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.4)',
-//   },
-//   extraPaymentTitle: {
-//     fontSize: '1.2rem',
-//     fontWeight: '700',
-//     color: '#FFD700',
-//     marginBottom: '12px',
-//     textShadow: '0 0 15px rgba(255, 215, 0, 0.4)',
-//   },
-//   extraPaymentInfo: {
-//     fontSize: '0.95rem',
-//     color: '#C9B037',
-//     marginBottom: '20px',
-//   },
-//   extraPaymentActions: {
-//     display: 'flex',
-//     flexDirection: 'column',
-//     gap: '20px',
-//   },
-//   extraPaymentInputContainer: {
-//     flex: 1,
-//   },
-//   extraPaymentDetails: {
-//     fontSize: '0.9rem',
-//     color: '#FFD700',
-//     marginTop: '12px',
-//     fontWeight: '600',
-//   },
-//   extraPaymentButtons: {
-//     display: 'flex',
-//     gap: '16px',
-//   },
-//   confirmButton: {
-//     flex: 1,
-//     padding: '14px 20px',
-//     fontSize: '0.95rem',
-//     fontWeight: '700',
-//     color: '#000000',
-//     background: 'linear-gradient(135deg, #FFD700, #FFA500)',
-//     border: 'none',
-//     borderRadius: '10px',
-//     cursor: 'pointer',
-//     transition: 'all 0.3s ease',
-//     transform: 'scale(1)',
-//     boxShadow: '0 8px 20px rgba(255, 215, 0, 0.3)',
-//   },
-//   confirmButtonHover: {
-//     transform: 'scale(1.05)',
-//     boxShadow: '0 12px 30px rgba(255, 215, 0, 0.5)',
-//   },
-//   cancelButton: {
-//     flex: 1,
-//     padding: '14px 20px',
-//     fontSize: '0.95rem',
-//     fontWeight: '700',
-//     color: '#FFD700',
-//     backgroundColor: 'transparent',
-//     border: '2px solid rgba(255, 215, 0, 0.5)',
-//     borderRadius: '10px',
-//     cursor: 'pointer',
-//     transition: 'all 0.3s ease',
-//     transform: 'scale(1)',
-//   },
-//   cancelButtonHover: {
-//     transform: 'scale(1.05)',
-//     backgroundColor: 'rgba(255, 215, 0, 0.1)',
-//     borderColor: '#FFD700',
-//   },
-//   chartsGrid: {
-//     display: 'grid',
-//     gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-//     gap: '24px',
-//     className: 'charts-grid',
-//   },
-//   chartCard: {
-//     backgroundColor: 'rgba(0, 0, 0, 0.85)',
-//     padding: '32px',
-//     borderRadius: '16px',
-//     boxShadow: '0 15px 35px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 215, 0, 0.2)',
-//     border: '1px solid rgba(255, 215, 0, 0.3)',
-//     backdropFilter: 'blur(20px)',
-//     transform: 'scale(1)',
-//     transition: 'all 0.4s ease',
-//   },
-//   chartCardHover: {
-//     transform: 'scale(1.02) translateY(-5px)',
-//     boxShadow: '0 25px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 215, 0, 0.4)',
-//   },
-//   chartTitle: {
-//     fontSize: '1.3rem',
-//     fontWeight: '700',
-//     color: '#FFD700',
-//     marginBottom: '24px',
-//     textShadow: '0 0 15px rgba(255, 215, 0, 0.4)',
-//   },
-//   chartContainer: {
-//     height: '320px',
-//     position: 'relative',
-//   },
-//   creditScoreContainer: {
-//     display: 'flex',
-//     flexDirection: 'column',
-//     gap: '24px',
-//   },
-//   creditScoreBar: {
-//     width: '100%',
-//   },
-//   creditScoreTrack: {
-//     width: '100%',
-//     height: '12px',
-//     backgroundColor: 'rgba(30, 30, 30, 0.8)',
-//     borderRadius: '6px',
-//     overflow: 'hidden',
-//     border: '1px solid rgba(255, 215, 0, 0.2)',
-//   },
-//   creditScoreProgress: {
-//     height: '100%',
-//     background: 'linear-gradient(90deg, #FFD700, #FFA500, #FF8C00)',
-//     transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-//     boxShadow: '0 0 20px rgba(255, 215, 0, 0.5)',
-//   },
-//   creditScoreLabels: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     marginTop: '12px',
-//     fontSize: '0.8rem',
-//     color: '#8B7355',
-//     fontWeight: '500',
-//   },
-//   creditScoreValue: {
-//     textAlign: 'center',
-//   },
-//   creditScoreNumber: {
-//     fontSize: '2.5rem',
-//     fontWeight: '800',
-//     lineHeight: 1,
-//     background: 'linear-gradient(135deg, #FFD700, #FFA500)',
-//     WebkitBackgroundClip: 'text',
-//     backgroundClip: 'text',
-//     WebkitTextFillColor: 'transparent',
-//     textShadow: '0 0 30px rgba(255, 215, 0, 0.5)',
-//   },
-//   creditScoreLabel: {
-//     fontSize: '0.95rem',
-//     color: '#C9B037',
-//     marginTop: '8px',
-//     fontWeight: '600',
-//   },
-//   creditTip: {
-//     marginTop: '20px',
-//     padding: '16px',
-//     backgroundColor: 'rgba(255, 215, 0, 0.1)',
-//     borderRadius: '12px',
-//     fontSize: '0.9rem',
-//     color: '#FFD700',
-//     border: '1px solid rgba(255, 215, 0, 0.3)',
-//     backdropFilter: 'blur(10px)',
-//   },
-//   resetContainer: {
-//     textAlign: 'center',
-//   },
-//   resetButton: {
-//     padding: '16px 32px',
-//     fontSize: '0.95rem',
-//     fontWeight: '700',
-//     color: '#FFD700',
-//     backgroundColor: 'transparent',
-//     border: '2px solid rgba(139, 115, 85, 0.5)',
-//     borderRadius: '12px',
-//     cursor: 'pointer',
-//     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-//     transform: 'scale(1)',
-//     textTransform: 'uppercase',
-//     letterSpacing: '0.5px',
-//   },
-//   resetButtonHover: {
-//     transform: 'scale(1.05)',
-//     borderColor: '#C9B037',
-//     backgroundColor: 'rgba(201, 176, 55, 0.1)',
-//     boxShadow: '0 8px 25px rgba(139, 115, 85, 0.3)',
-//   },
-//   notification: {
-//     position: 'fixed',
-//     bottom: '30px',
-//     right: '30px',
-//     maxWidth: '420px',
-//     padding: '20px 24px',
-//     background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(30, 30, 30, 0.95))',
-//     color: '#FFD700',
-//     borderRadius: '12px',
-//     boxShadow: '0 25px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 215, 0, 0.3)',
-//     border: '1px solid rgba(255, 215, 0, 0.3)',
-//     backdropFilter: 'blur(20px)',
-//     zIndex: 1000,
-//     transform: 'scale(1) translateY(0)',
-//     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-//     animation: 'slideInRight 0.5s ease',
-//   },
-//   notificationHover: {
-//     transform: 'scale(1.02) translateY(-2px)',
-//     boxShadow: '0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 215, 0, 0.5)',
-//   },
-//   notificationText: {
-//     margin: 0,
-//     fontSize: '0.95rem',
-//     lineHeight: 1.6,
-//     fontWeight: '500',
-//   },
-  
-//   // Additional interactive elements
-//   glowEffect: {
-//     position: 'absolute',
-//     top: 0,
-//     left: 0,
-//     right: 0,
-//     bottom: 0,
-//     background: 'radial-gradient(circle at center, rgba(255, 215, 0, 0.1) 0%, transparent 70%)',
-//     opacity: 0,
-//     transition: 'opacity 0.3s ease',
-//     pointerEvents: 'none',
-//   },
-//   glowEffectActive: {
-//     opacity: 1,
-//   },
-// };
-
 const styles = {
   container: {
     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
@@ -826,9 +176,9 @@ const styles = {
     transform: 'scale(1)',
   },
   startButtonHover: {
-    transform: 'scale(1.05)',
+    transform: 'scale(1.02)',
     backgroundColor: '#FFA500',
-    boxShadow: '0 8px 25px rgba(255, 215, 0, 0.4), 0 0 0 2px rgba(255, 215, 0, 0.3)',
+    
   },
   dashboard: {
     display: 'flex',
@@ -1197,7 +547,7 @@ const styles = {
     transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
     background: 'linear-gradient(90deg, #FF6B6B, #FFD700, #4ECDC4)',
     boxShadow: '0 0 10px rgba(255, 215, 0, 0.5)',
-    animation: 'pulse 2s infinite',
+   
   },
   creditScoreLabels: {
     display: 'flex',
@@ -1309,9 +659,9 @@ const styles = {
 };
 
 const LoanSimulator = () => {
-  const [loanAmount, setLoanAmount] = useState('');
-  const [interestRate, setInterestRate] = useState('');
-  const [duration, setDuration] = useState('');
+  const [loanAmount, setLoanAmount] = useState('10000');
+  const [interestRate, setInterestRate] = useState('12');
+  const [duration, setDuration] = useState('12');
   const [originalDuration,setOriginalDuration] = useState('');
   const [isSimulationStarted, setIsSimulationStarted] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(1);
@@ -1671,7 +1021,7 @@ const LoanSimulator = () => {
                     onChange={(e) => setLoanAmount(e.target.value)}
                     style={{...styles.input, ...styles.inputWithLeftIcon}}
                     placeholder="10000"
-                    onFocus={(e) => e.target.style.borderColor = '#2563EB'}
+                    onFocus={(e) => e.target.style.borderColor = '#FFA500'}
                     onBlur={(e) => e.target.style.borderColor = '#D1D5DB'}
                   />
                 </div>
@@ -1687,7 +1037,7 @@ const LoanSimulator = () => {
                     onChange={(e) => setInterestRate(e.target.value)}
                     style={{...styles.input, ...styles.inputWithRightIcon}}
                     placeholder="12"
-                    onFocus={(e) => e.target.style.borderColor = '#2563EB'}
+                    onFocus={(e) => e.target.style.borderColor = '#FFA500'}
                     onBlur={(e) => e.target.style.borderColor = '#D1D5DB'}
                   />
                   <span style={styles.percentSymbol}>%</span>
@@ -1707,7 +1057,7 @@ const LoanSimulator = () => {
                     }
                     style={{...styles.input, ...styles.inputWithRightText}}
                     placeholder="12"
-                    onFocus={(e) => e.target.style.borderColor = '#2563EB'}
+                    onFocus={(e) => e.target.style.borderColor = '#FFA500'}
                     onBlur={(e) => e.target.style.borderColor = '#D1D5DB'}
                   />
                   <span style={styles.monthsSymbol}>months</span>
@@ -1717,8 +1067,8 @@ const LoanSimulator = () => {
               <button
                 onClick={startSimulation}
                 style={styles.startButton}
-                onMouseOver={(e) => e.target.style.backgroundColor = '#1D4ED8'}
-                onMouseOut={(e) => e.target.style.backgroundColor = '#2563EB'}
+                onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.startButtonHover)}
+                onMouseLeave={(e) => Object.assign(e.currentTarget.style, styles.startButton)}
               >
                 Start Simulation
               </button>
@@ -1813,8 +1163,8 @@ const LoanSimulator = () => {
                   <button
                     onClick={payEMI}
                     style={{...styles.actionButton, ...styles.payButton}}
-                    onMouseOver={(e) => e.target.style.backgroundColor = '#059669'}
-                    onMouseOut={(e) => e.target.style.backgroundColor = '#10B981'}
+                    onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                   >
                     <span>✅</span>
                     <span>
@@ -1834,8 +1184,8 @@ const LoanSimulator = () => {
                   <button
                     onClick={delayPayment}
                     style={{...styles.actionButton, ...styles.delayButton}}
-                    onMouseOver={(e) => e.target.style.backgroundColor = '#D97706'}
-                    onMouseOut={(e) => e.target.style.backgroundColor = '#F59E0B'}
+                    onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                   >
                     <span>⏳</span>
                     <span>Delay Payment</span>
@@ -1844,8 +1194,8 @@ const LoanSimulator = () => {
                   <button
                     onClick={() => setShowExtraPaymentInput(true)}
                     style={{...styles.actionButton, ...styles.extraButton}}
-                    onMouseOver={(e) => e.target.style.backgroundColor = '#6D28D9'}
-                    onMouseOut={(e) => e.target.style.backgroundColor = '#7C3AED'}
+                    onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                   >
                     <span>💰</span>
                     <span>Pay Custom</span>
@@ -1855,8 +1205,8 @@ const LoanSimulator = () => {
                     <button
                       onClick={undoLastAction}
                       style={{...styles.actionButton, ...styles.undoButton}}
-                      onMouseOver={(e) => e.target.style.backgroundColor = '#EA580C'}
-                      onMouseOut={(e) => e.target.style.backgroundColor = '#F97316'}
+                      onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                     >
                       <span>↩️</span>
                       <span>Undo Last Action</span>
@@ -1902,8 +1252,8 @@ const LoanSimulator = () => {
                         <button
                           onClick={payExtra}
                           style={styles.confirmButton}
-                          onMouseOver={(e) => e.target.style.backgroundColor = '#6D28D9'}
-                          onMouseOut={(e) => e.target.style.backgroundColor = '#7C3AED'}
+                          onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                         >
                           Confirm Payment
                         </button>
@@ -1913,8 +1263,8 @@ const LoanSimulator = () => {
                             setExtraPaymentAmount('');
                           }}
                           style={styles.cancelButton}
-                          onMouseOver={(e) => e.target.style.backgroundColor = '#6B7280'}
-                          onMouseOut={(e) => e.target.style.backgroundColor = '#9CA3AF'}
+                          onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                         >
                           Cancel
                         </button>
@@ -1993,8 +1343,8 @@ const LoanSimulator = () => {
               <button
                 onClick={resetSimulation}
                 style={styles.resetButton}
-                onMouseOver={(e) => e.target.style.backgroundColor = '#4B5563'}
-                onMouseOut={(e) => e.target.style.backgroundColor = '#6B7280'}
+                onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
               >
                 Reset Simulation
               </button>
