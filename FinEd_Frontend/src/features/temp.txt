@@ -1,0 +1,131 @@
+<div style={{ padding: '16px', maxWidth: '1200px', margin: '0 auto' }}>
+      <div key={topic.id} style={{
+                  padding: window.innerWidth >= 768 ? '20px' : '16px',
+                  marginBottom: '16px',
+                  backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                  borderRadius: '12px',
+                  border: '1px solid rgba(255, 215, 0, 0.2)',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                  position: 'relative',
+                  
+                }}
+                onClick={() => openTopicDetail(topic)}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = window.innerWidth >= 768 ? 'scale(1.02) translateY(-3px)' : 'scale(1.01)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 215, 0, 0.5)';
+                  e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 215, 0, 0.2)';
+                  e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+                }}>
+                  
+                  
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'flex-start', 
+                    gap: window.innerWidth >= 768 ? '16px' : '12px',
+                    flexDirection: window.innerWidth >= 640 ? 'row' : 'column'
+                  }}>
+                    <div style={{ 
+                      fontSize: window.innerWidth >= 768 ? '1.5rem' : '1.25rem',
+                      alignSelf: window.innerWidth >= 640 ? 'flex-start' : 'flex-start',
+                      marginBottom: window.innerWidth >= 640 ? '0' : '8px'
+                    }}>{topic.avatar}</div>
+                    <div style={{ 
+                      flex: 1, 
+                      minWidth: 0,
+                      width: '100%'
+                    }}>
+                      <h3 style={{ 
+                        fontSize: window.innerWidth >= 1024 ? '1.25rem' : window.innerWidth >= 768 ? '1.1rem' : '1rem', 
+                        fontWeight: '600', 
+                        color: '#FFD700', 
+                        margin: '0 0 8px 0', 
+                        lineHeight: '1.4',
+                        wordWrap: 'break-word',
+                        overflowWrap: 'break-word'
+                      }}>
+                        {topic.title}
+                      </h3>
+                      <div style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: window.innerWidth >= 768 ? '16px' : '8px', 
+                        fontSize: window.innerWidth >= 768 ? '0.8rem' : '0.75rem', 
+                        color: '#8B7355',
+                        flexWrap: window.innerWidth >= 640 ? 'nowrap' : 'wrap',
+                        marginBottom: '8px'
+                      }}>
+                        <span style={{ whiteSpace: 'nowrap' }}>By {topic.author}</span>
+                        <span style={{ display: window.innerWidth >= 480 ? 'inline' : 'none' }}>•</span>
+                        <span style={{ whiteSpace: 'nowrap' }}>{topic.replies} replies</span>
+                        <span style={{ display: window.innerWidth >= 640 ? 'inline' : 'none' }}>•</span>
+                        <span style={{ 
+                          whiteSpace: 'nowrap',
+                          display: window.innerWidth >= 640 ? 'inline' : 'none'
+                        }}>{topic.views} views</span>
+                        <span style={{ display: window.innerWidth >= 768 ? 'inline' : 'none' }}>•</span>
+                        <span style={{ 
+                          whiteSpace: 'nowrap',
+                          display: window.innerWidth >= 768 ? 'inline' : 'none'
+                        }}>{topic.likes} likes</span>
+                        <span style={{ display: window.innerWidth >= 480 ? 'inline' : 'none' }}>•</span>
+                        <span style={{ 
+                          color: '#C9B037', 
+                          whiteSpace: 'nowrap',
+                          marginLeft: window.innerWidth >= 640 ? '0' : 'auto'
+                        }}>{timeAgo(topic.createdAt.toDate())}</span>
+                      </div>
+                      <div style={{
+                        display: 'inline-block',
+                        marginTop: '8px',
+                        padding: window.innerWidth >= 768 ? '4px 12px' : '3px 8px',
+                        backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                        borderRadius: '16px',
+                        fontSize: window.innerWidth >= 768 ? '0.7rem' : '0.65rem',
+                        color: '#FFD700',
+                        border: '1px solid rgba(255, 215, 0, 0.3)'
+                      }}>
+                        {topic.category}
+                      </div>
+                    </div>
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '12px',
+                      alignSelf: window.innerWidth >= 640 ? 'flex-start' : 'flex-end',
+                      marginTop: window.innerWidth >= 640 ? '0' : '-40px'
+                    }}>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLikePost(topic.id);
+                        }}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: likedPosts.has(topic.id) ? '#FFD700' : '#8B7355',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          padding: window.innerWidth >= 768 ? '8px' : '6px',
+                          borderRadius: '50%'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                          e.target.style.transform = 'scale(1.2)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.backgroundColor = 'transparent';
+                          e.target.style.transform = 'scale(1)';
+                        }}
+                      >
+                        <Heart size={window.innerWidth >= 768 ? 18 : 16} fill={likedPosts.has(topic.id) ? 'currentColor' : 'none'} />
+                      </button>
+                      <ChevronRight size={window.innerWidth >= 768 ? 18 : 16} color="#C9B037" />
+                    </div>
+                  </div>
+                </div>
+    </div>

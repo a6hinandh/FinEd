@@ -3,7 +3,6 @@ import { MessageCircle, Users, Trophy, BookOpen, DollarSign, TrendingUp, Star, C
 import { db } from "../firebase.js";
 import { collection, addDoc, serverTimestamp, updateDoc, doc, increment, arrayUnion } from "firebase/firestore";
 import { auth } from "../firebase.js";
-import { format } from "timeago.js";
 import {  fetchPosts } from '../FetchPosts.js';
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -28,6 +27,7 @@ const CommunityPage = () => {
     helpfulAnswers: 8,
     challengesCompleted: 3
   });
+  console.log(new Date().toDateString());
 
   function useCurrentUser() {
   const [user, setUser] = useState(null);
@@ -138,14 +138,7 @@ const CommunityPage = () => {
     }
   ]);
 
-  const topContributors = [
-    { name: "FinanceWiz_Maya", points: 12450, badge: "Gold Expert", avatar: "👑" },
-    { name: "BudgetBoss_Mike", points: 8930, badge: "Silver Guide", avatar: "🎖️" },
-    { name: "InvestmentIvy", points: 7650, badge: "Bronze Mentor", avatar: "🏆" },
-    { name: "DebtDestroyer_Dan", points: 6420, badge: "Rising Star", avatar: "⭐" },
-    { name: "SavingsQueen_Sam", points: 5890, badge: "Community Helper", avatar: "💎" },
-    { name: "You", points: userStats.points, badge: "Active Member", avatar: "🌟" }
-  ].sort((a, b) => b.points - a.points);
+ 
 
   const categories = ["General", "Investing", "Budgeting", "Debt Management", "Income", "Crypto", "Emergency Planning"];
 
@@ -153,26 +146,7 @@ const CommunityPage = () => {
     setNotifications(prev => [...prev, { id: Date.now(), message }]);
   };
 
-  const handleJoinGroup = (groupId) => {
-    const newJoined = new Set(joinedGroups);
-    const group = studyGroups.find(g => g.id === groupId);
-    
-    if (newJoined.has(groupId)) {
-      newJoined.delete(groupId);
-      showNotification(`Left ${group?.name}`);
-      setStudyGroups(prev => prev.map(g => 
-        g.id === groupId ? { ...g, members: g.members - 1 } : g
-      ));
-    } else {
-      newJoined.add(groupId);
-      showNotification(`Joined ${group?.name}! +50 points`);
-      setUserStats(prev => ({ ...prev, points: prev.points + 50 }));
-      setStudyGroups(prev => prev.map(g => 
-        g.id === groupId ? { ...g, members: g.members + 1 } : g
-      ));
-    }
-    setJoinedGroups(newJoined);
-  };
+ 
 
   const handleLikePost = (postId) => {
     const newLiked = new Set(likedPosts);
@@ -192,38 +166,30 @@ const CommunityPage = () => {
     setLikedPosts(newLiked);
   };
 
-  const handleJoinChallenge = (challengeId) => {
-    const newJoined = new Set(joinedChallenges);
-    const challenge = challenges.find(c => c.id === challengeId);
-    
-    if (newJoined.has(challengeId)) {
-      newJoined.delete(challengeId);
-      showNotification(`Left challenge: ${challenge?.title}`);
-      setChallenges(prev => prev.map(c => 
-        c.id === challengeId ? { 
-          ...c, 
-          participants: c.participants - 1,
-          isJoined: false 
-        } : c
-      ));
-    } else {
-      newJoined.add(challengeId);
-      showNotification(`Joined ${challenge?.title}! Good luck! +25 points`);
-      setUserStats(prev => ({ 
-        ...prev, 
-        points: prev.points + 25,
-        challengesCompleted: prev.challengesCompleted + (challenge?.progress === 100 ? 1 : 0)
-      }));
-      setChallenges(prev => prev.map(c => 
-        c.id === challengeId ? { 
-          ...c, 
-          participants: c.participants + 1,
-          isJoined: true 
-        } : c
-      ));
-    }
-    setJoinedChallenges(newJoined);
-  };
+ 
+
+  function timeAgo(date) {
+  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+
+  let interval = Math.floor(seconds / 31536000);
+  if (interval >= 1) return interval === 1 ? "1 year ago" : `${interval} years ago`;
+
+  interval = Math.floor(seconds / 2592000);
+  if (interval >= 1) return interval === 1 ? "1 month ago" : `${interval} months ago`;
+
+  interval = Math.floor(seconds / 86400);
+  if (interval >= 1) return interval === 1 ? "1 day ago" : `${interval} days ago`;
+
+  interval = Math.floor(seconds / 3600);
+  if (interval >= 1) return interval === 1 ? "1 hour ago" : `${interval} hours ago`;
+
+  interval = Math.floor(seconds / 60);
+  if (interval >= 1) return interval === 1 ? "1 minute ago" : `${interval} minutes ago`;
+
+  return "just now";
+}
+
+
 
   const handleCreatePost = async () => {
     if (newPost.title.trim() && newPost.content.trim()) {
@@ -288,18 +254,11 @@ const CommunityPage = () => {
       await updateDoc(docRef, {
         repliesData: arrayUnion(newReplyData),
         replies: increment(1),
+        createdAt: serverTimestamp(),
       });
 
-      setForumTopics(prev => prev.map(topic => 
-        topic.id === topicId 
-          ? { 
-              ...topic, 
-              repliesData: [...topic.repliesData, newReplyData],
-              replies: topic.replies + 1,
-              lastActivity: "Just now"
-            } 
-          : topic
-      ));
+      const data = await fetchPosts();
+      setForumTopics(data);
 
       // Update the selectedTopic state to reflect the new reply
       if (selectedTopic && selectedTopic.id === topicId) {
@@ -316,8 +275,8 @@ const CommunityPage = () => {
         points: prev.points + 25,
         helpfulAnswers: prev.helpfulAnswers + 1
       }));
-      
-      showNotification("Reply posted! +25 points");
+      setSelectedTopic(null);
+      showNotification("Reply posted!");
       setNewReply('');
     }
   };
@@ -453,9 +412,19 @@ const CommunityPage = () => {
         </div>
       )}
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px', position: 'relative', zIndex: 1 }}>
+      <div style={{ maxWidth: '100%', margin: '0 auto', paddingLeft:"70px",paddingRight:"70px", paddingTop:"20px", position: 'relative', zIndex: 1 }}>
         {/* Header with User Stats */}
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <div style={{ textAlign: '', marginBottom: '40px',display: 'flex', justifyContent: 'space-between', alignItems: 'center'  }}>
+          <div >
+          <div style={{display:"flex", gap:"10px" }} >
+            <div>
+          <span style={{
+            fontSize: '3rem',
+            fontWeight: '800',}} className="logo-fin">Fin</span>
+        <span style={{
+            fontSize: '3rem',
+            fontWeight: '800',}} className="logo-ed">Ed</span> 
+            </div>
           <h1 style={{
             fontSize: '3rem',
             fontWeight: '800',
@@ -465,54 +434,26 @@ const CommunityPage = () => {
             WebkitTextFillColor: 'transparent',
             marginBottom: '12px'
           }}>
-            💰 FinEd Community
+            Community
           </h1>
-          <p style={{ fontSize: '1.2rem', color: '#C9B037', margin: '0 0 20px 0' }}>
+          </div>
+          <p style={{ fontSize: '1.2rem', color: '#C9B037', margin: '0 0 0px 0' }}>
             Connect, Learn, and Grow Together
           </p>
-          
-          {/* User Quick Stats */}
-          <div style={{
-            display: 'inline-flex',
-            gap: '20px',
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            padding: '12px 24px',
-            borderRadius: '20px',
-            border: '1px solid rgba(255, 215, 0, 0.3)'
-          }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.2rem', fontWeight: '700', color: '#FFD700' }}>
-                {userStats.points.toLocaleString()}
-              </div>
-              <div style={{ fontSize: '0.7rem', color: '#8B7355' }}>Points</div>
-            </div>
-            <div style={{ width: '1px', backgroundColor: 'rgba(255, 215, 0, 0.3)' }} />
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.2rem', fontWeight: '700', color: '#FFA500' }}>
-                #{userStats.rank}
-              </div>
-              <div style={{ fontSize: '0.7rem', color: '#8B7355' }}>Rank</div>
-            </div>
-            <div style={{ width: '1px', backgroundColor: 'rgba(255, 215, 0, 0.3)' }} />
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.2rem', fontWeight: '700', color: '#C9B037' }}>
-                {userStats.challengesCompleted}
-              </div>
-              <div style={{ fontSize: '0.7rem', color: '#8B7355' }}>Completed</div>
-            </div>
           </div>
-        </div>
+        
 
-        {/* Search Bar */}
-        <div style={{
+           {/* Search Bar */}
+          <div style={{
           marginBottom: '30px',
           display: 'flex',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          width: '40%'
         }}>
           <div style={{
             position: 'relative',
             width: '100%',
-            maxWidth: '500px'
+     
           }}>
             <Search size={20} style={{
               position: 'absolute',
@@ -523,7 +464,7 @@ const CommunityPage = () => {
             }} />
             <input
               type="text"
-              placeholder="Search discussions, groups, or challenges..."
+              placeholder="Search discussions, questions, and more..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
@@ -548,63 +489,6 @@ const CommunityPage = () => {
             />
           </div>
         </div>
-
-        {/* Navigation Tabs */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          marginBottom: '40px',
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          borderRadius: '16px',
-          padding: '8px',
-          border: '1px solid rgba(255, 215, 0, 0.3)'
-        }}>
-          {[
-            { id: 'forums', label: 'Discussion Forums', icon: MessageCircle },
-            { id: 'groups', label: 'Study Groups', icon: Users },
-            { id: 'challenges', label: 'Challenges', icon: Trophy },
-            { id: 'leaderboard', label: 'Leaderboard', icon: Award }
-          ].map(tab => {
-            const Icon = tab.icon;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '12px 24px',
-                  border: 'none',
-                  borderRadius: '12px',
-                  fontSize: '0.95rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  backgroundColor: activeTab === tab.id ? '#FFD700' : 'transparent',
-                  color: activeTab === tab.id ? '#000000' : '#C9B037',
-                  transform: activeTab === tab.id ? 'scale(1.05)' : 'scale(1)'
-                }}
-                onMouseEnter={(e) => {
-                  if (activeTab !== tab.id) {
-                    e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
-                    e.target.style.color = '#FFD700';
-                    e.target.style.transform = 'scale(1.02)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (activeTab !== tab.id) {
-                    e.target.style.backgroundColor = 'transparent';
-                    e.target.style.color = '#C9B037';
-                    e.target.style.transform = 'scale(1)';
-                  }
-                }}
-              >
-                <Icon size={18} />
-                {tab.label}
-              </button>
-            );
-          })}
         </div>
 
         {/* Topic Detail Modal */}
@@ -683,7 +567,7 @@ const CommunityPage = () => {
                     <span>•</span>
                     <span>{selectedTopic.likes} likes</span>
                     <span>•</span>
-                    <span style={{ color: '#C9B037' }}>{selectedTopic.lastActivity}</span>
+                    <span style={{ color: '#C9B037' }}>{timeAgo(selectedTopic.createdAt.toDate())}</span>
                   </div>
                 </div>
                 
@@ -953,7 +837,8 @@ const CommunityPage = () => {
                 />
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <button
-                    onClick={() => handleReply(selectedTopic.id)}
+                    onClick={() => {
+                      handleReply(selectedTopic.id)}}
                     disabled={!newReply.trim()}
                     style={{
                       padding: '10px 20px',
@@ -983,7 +868,7 @@ const CommunityPage = () => {
                     }}
                   >
                     <Send size={16} />
-                    Post Reply (+25 points)
+                    Post Reply
                   </button>
                 </div>
               </div>
@@ -1143,48 +1028,36 @@ const CommunityPage = () => {
         {/* Forums Tab */}
         {activeTab === 'forums' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            {/* Quick Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
-              {[
-                { label: 'Active Members', value: '12,847', icon: '👥' },
-                { label: 'Posts Today', value: '234', icon: '💬' },
-                { label: 'Questions Answered', value: '89%', icon: '✅' },
-                { label: 'Your Posts', value: userStats.postsCreated.toString(), icon: '📝' }
-              ].map((stat, index) => (
-                <div key={index} style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                  padding: '20px',
-                  borderRadius: '12px',
-                  border: '1px solid rgba(255, 215, 0, 0.3)',
-                  textAlign: 'center',
-                  transition: 'all 0.3s ease',
-                  cursor: 'pointer'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.05) translateY(-5px)';
-                  e.currentTarget.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.5)';
-                  e.currentTarget.style.borderColor = '#FFD700';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'scale(1) translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.borderColor = 'rgba(255, 215, 0, 0.3)';
-                }}>
-                  <div style={{ fontSize: '1.5rem', marginBottom: '8px' }}>{stat.icon}</div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#FFD700', marginBottom: '4px' }}>
-                    {stat.value}
-                  </div>
-                  <div style={{ fontSize: '0.8rem', color: '#C9B037' }}>{stat.label}</div>
-                </div>
-              ))}
-            </div>
+             
 
-            {/* Create New Post Button */}
+            {/* Forum Topics */}
+            <div style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              borderRadius: '16px',
+              padding: '32px',
+              border: '1px solid rgba(255, 215, 0, 0.3)',
+              flexShrink: 1
+            }}>
+              <div style={{display:"flex", justifyContent:"space-between"}}>
+              <h2 style={{ 
+                fontSize: '1.5rem', 
+                fontWeight: '700', 
+                color: '#FFD700', 
+                marginBottom: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}>
+                <MessageCircle size={24} />
+                Latest Discussions
+                {searchQuery && <span style={{ fontSize: '1rem', color: '#C9B037' }}>({filteredForumTopics.length} results)</span>}
+              </h2>
+              {/* Create New Post Button */}
             <div style={{ textAlign: 'center', marginBottom: '20px' }}>
               <button
                 onClick={() => setShowNewPostModal(true)}
                 style={{
-                  padding: '14px 28px',
+                  padding: '14px 10px',
                   background: 'linear-gradient(135deg, #FFD700, #FFA500)',
                   color: '#000',
                   border: 'none',
@@ -1211,42 +1084,25 @@ const CommunityPage = () => {
                 Create New Discussion
               </button>
             </div>
-
-            {/* Forum Topics */}
-            <div style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              borderRadius: '16px',
-              padding: '32px',
-              border: '1px solid rgba(255, 215, 0, 0.3)'
-            }}>
-              <h2 style={{ 
-                fontSize: '1.5rem', 
-                fontWeight: '700', 
-                color: '#FFD700', 
-                marginBottom: '24px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px'
-              }}>
-                <MessageCircle size={24} />
-                Latest Discussions
-                {searchQuery && <span style={{ fontSize: '1rem', color: '#C9B037' }}>({filteredForumTopics.length} results)</span>}
-              </h2>
+              </div>
               
               {filteredForumTopics.map(topic => (
-                <div key={topic.id} style={{
-                  padding: '20px',
+                
+                <div style={{ padding: '16px', maxWidth: '100%', margin: '0 auto' }}>
+      <div key={topic.id} style={{
+                  padding: window.innerWidth >= 768 ? '20px' : '16px',
                   marginBottom: '16px',
                   backgroundColor: 'rgba(0, 0, 0, 0.6)',
                   borderRadius: '12px',
                   border: '1px solid rgba(255, 215, 0, 0.2)',
                   transition: 'all 0.3s ease',
                   cursor: 'pointer',
-                  position: 'relative'
+                  position: 'relative',
+                  
                 }}
                 onClick={() => openTopicDetail(topic)}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.02) translateY(-3px)';
+                  e.currentTarget.style.transform = window.innerWidth >= 768 ? 'scale(1.02) translateY(-3px)' : 'scale(1.01)';
                   e.currentTarget.style.borderColor = 'rgba(255, 215, 0, 0.5)';
                   e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
                 }}
@@ -1255,64 +1111,84 @@ const CommunityPage = () => {
                   e.currentTarget.style.borderColor = 'rgba(255, 215, 0, 0.2)';
                   e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
                 }}>
-                  {topic.isHot && (
-                    <div style={{
-                      position: 'absolute',
-                      top: '8px',
-                      right: '8px',
-                      background: 'linear-gradient(135deg, #FF6B6B, #FFD700)',
-                      color: '#000',
-                      padding: '4px 8px',
-                      borderRadius: '12px',
-                      fontSize: '0.7rem',
-                      fontWeight: '700'
-                    }}>
-                      🔥 HOT
-                    </div>
-                  )}
                   
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-                    <div style={{ fontSize: '1.5rem' }}>{topic.avatar}</div>
-                    <div style={{ flex: 1 }}>
+                  
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'flex-start', 
+                    gap: window.innerWidth >= 768 ? '16px' : '12px',
+                    flexDirection: window.innerWidth >= 640 ? 'row' : 'column'
+                  }}>
+                    <div style={{ 
+                      fontSize: window.innerWidth >= 768 ? '1.5rem' : '1.25rem',
+                      alignSelf: window.innerWidth >= 640 ? 'flex-start' : 'flex-start',
+                      marginBottom: window.innerWidth >= 640 ? '0' : '8px'
+                    }}>{topic.avatar}</div>
+                    <div style={{ 
+                      flex: 1, 
+                      minWidth: 0,
+                      width: '100%'
+                    }}>
                       <h3 style={{ 
-                        fontSize: '1.1rem', 
+                        fontSize: window.innerWidth >= 1024 ? '1.25rem' : window.innerWidth >= 768 ? '1.1rem' : '1rem', 
                         fontWeight: '600', 
                         color: '#FFD700', 
-                        margin: '0 0 8px 0' 
+                        margin: '0 0 8px 0', 
+                        lineHeight: '1.4',
+                        wordWrap: 'break-word',
+                        overflowWrap: 'break-word'
                       }}>
                         {topic.title}
                       </h3>
                       <div style={{ 
                         display: 'flex', 
                         alignItems: 'center', 
-                        gap: '16px', 
-                        fontSize: '0.8rem', 
-                        color: '#8B7355' 
+                        gap: window.innerWidth >= 768 ? '16px' : '8px', 
+                        fontSize: window.innerWidth >= 768 ? '0.8rem' : '0.75rem', 
+                        color: '#8B7355',
+                        flexWrap: window.innerWidth >= 640 ? 'nowrap' : 'wrap',
+                        marginBottom: '8px'
                       }}>
-                        <span>By {topic.author}</span>
-                        <span>•</span>
-                        <span>{topic.replies} replies</span>
-                        <span>•</span>
-                        <span>{topic.views} views</span>
-                        <span>•</span>
-                        <span>{topic.likes} likes</span>
-                        <span>•</span>
-                        <span style={{ color: '#C9B037' }}>{topic.lastActivity}</span>
+                        <span style={{ whiteSpace: 'nowrap' }}>By {topic.author}</span>
+                        <span style={{ display: window.innerWidth >= 480 ? 'inline' : 'none' }}>•</span>
+                        <span style={{ whiteSpace: 'nowrap' }}>{topic.replies} replies</span>
+                        <span style={{ display: window.innerWidth >= 640 ? 'inline' : 'none' }}>•</span>
+                        <span style={{ 
+                          whiteSpace: 'nowrap',
+                          display: window.innerWidth >= 640 ? 'inline' : 'none'
+                        }}>{topic.views} views</span>
+                        <span style={{ display: window.innerWidth >= 768 ? 'inline' : 'none' }}>•</span>
+                        <span style={{ 
+                          whiteSpace: 'nowrap',
+                          display: window.innerWidth >= 768 ? 'inline' : 'none'
+                        }}>{topic.likes} likes</span>
+                        <span style={{ display: window.innerWidth >= 480 ? 'inline' : 'none' }}>•</span>
+                        <span style={{ 
+                          color: '#C9B037', 
+                          whiteSpace: 'nowrap',
+                          marginLeft: window.innerWidth >= 640 ? '0' : 'auto'
+                        }}>{timeAgo(topic.createdAt.toDate())}</span>
                       </div>
                       <div style={{
                         display: 'inline-block',
                         marginTop: '8px',
-                        padding: '4px 12px',
+                        padding: window.innerWidth >= 768 ? '4px 12px' : '3px 8px',
                         backgroundColor: 'rgba(255, 215, 0, 0.1)',
                         borderRadius: '16px',
-                        fontSize: '0.7rem',
+                        fontSize: window.innerWidth >= 768 ? '0.7rem' : '0.65rem',
                         color: '#FFD700',
                         border: '1px solid rgba(255, 215, 0, 0.3)'
                       }}>
                         {topic.category}
                       </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '12px',
+                      alignSelf: window.innerWidth >= 640 ? 'flex-start' : 'flex-end',
+                      marginTop: window.innerWidth >= 640 ? '0' : '-40px'
+                    }}>
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -1324,7 +1200,7 @@ const CommunityPage = () => {
                           color: likedPosts.has(topic.id) ? '#FFD700' : '#8B7355',
                           cursor: 'pointer',
                           transition: 'all 0.2s ease',
-                          padding: '8px',
+                          padding: window.innerWidth >= 768 ? '8px' : '6px',
                           borderRadius: '50%'
                         }}
                         onMouseEnter={(e) => {
@@ -1336,481 +1212,19 @@ const CommunityPage = () => {
                           e.target.style.transform = 'scale(1)';
                         }}
                       >
-                        <Heart size={18} fill={likedPosts.has(topic.id) ? 'currentColor' : 'none'} />
+                        <Heart size={window.innerWidth >= 768 ? 18 : 16} fill={likedPosts.has(topic.id) ? 'currentColor' : 'none'} />
                       </button>
-                      <ChevronRight size={18} color="#C9B037" />
+                      <ChevronRight size={window.innerWidth >= 768 ? 18 : 16} color="#C9B037" />
                     </div>
                   </div>
                 </div>
+    </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* Study Groups Tab */}
-        {activeTab === 'groups' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '24px' }}>
-            {studyGroups.map(group => (
-              <div key={group.id} style={{
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                borderRadius: '16px',
-                padding: '28px',
-                border: joinedGroups.has(group.id) ? '2px solid #FFD700' : '1px solid rgba(255, 215, 0, 0.3)',
-                transition: 'all 0.4s ease',
-                cursor: 'pointer',
-                position: 'relative',
-                transform: joinedGroups.has(group.id) ? 'scale(1.02)' : 'scale(1)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.05) translateY(-8px)';
-                e.currentTarget.style.boxShadow = '0 25px 50px rgba(0, 0, 0, 0.7)';
-                e.currentTarget.style.borderColor = '#FFD700';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = joinedGroups.has(group.id) ? 'scale(1.02) translateY(0)' : 'scale(1) translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
-                e.currentTarget.style.borderColor = joinedGroups.has(group.id) ? '#FFD700' : 'rgba(255, 215, 0, 0.3)';
-              }}>
-                {joinedGroups.has(group.id) && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '12px',
-                    right: '12px',
-                    background: 'linear-gradient(135deg, #FFD700, #FFA500)',
-                    color: '#000',
-                    padding: '4px 8px',
-                    borderRadius: '12px',
-                    fontSize: '0.7rem',
-                    fontWeight: '700'
-                  }}>
-                    ✓ JOINED
-                  </div>
-                )}
-                
-                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-                  <div style={{ fontSize: '3rem', marginBottom: '12px' }}>{group.icon}</div>
-                  <h3 style={{ 
-                    fontSize: '1.3rem', 
-                    fontWeight: '700', 
-                    color: '#FFD700', 
-                    margin: '0 0 8px 0' 
-                  }}>
-                    {group.name}
-                  </h3>
-                  <div style={{
-                    display: 'inline-block',
-                    padding: '4px 12px',
-                    backgroundColor: 'rgba(255, 215, 0, 0.1)',
-                    borderRadius: '16px',
-                    fontSize: '0.7rem',
-                    color: '#FFD700',
-                    border: '1px solid rgba(255, 215, 0, 0.3)',
-                    marginBottom: '8px'
-                  }}>
-                    {group.level}
-                  </div>
-                </div>
-
-                <p style={{ 
-                  color: '#C9B037', 
-                  fontSize: '0.9rem', 
-                  marginBottom: '20px',
-                  textAlign: 'center',
-                  lineHeight: '1.5'
-                }}>
-                  {group.description}
-                </p>
-
-                <div style={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center',
-                  marginBottom: '20px',
-                  fontSize: '0.8rem',
-                  color: '#8B7355'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <Users size={14} />
-                    {group.members.toLocaleString()} members
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <Calendar size={14} />
-                    {group.nextMeeting}
-                  </div>
-                </div>
-
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleJoinGroup(group.id);
-                  }}
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontSize: '0.9rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    background: joinedGroups.has(group.id) 
-                      ? 'linear-gradient(135deg, #8B7355, #6B5B45)' 
-                      : 'linear-gradient(135deg, #FFD700, #FFA500)',
-                    color: joinedGroups.has(group.id) ? '#FFD700' : '#000'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = 'scale(1.05)';
-                    e.target.style.boxShadow = '0 8px 20px rgba(255, 215, 0, 0.3)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = 'scale(1)';
-                    e.target.style.boxShadow = 'none';
-                  }}
-                >
-                  {joinedGroups.has(group.id) ? 'Leave Group' : 'Join Group'}
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Challenges Tab */}
-        {activeTab === 'challenges' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
-            {challenges.map(challenge => (
-              <div key={challenge.id} style={{
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                borderRadius: '16px',
-                padding: '28px',
-                border: joinedChallenges.has(challenge.id) ? '2px solid #FFD700' : '1px solid rgba(255, 215, 0, 0.3)',
-                transition: 'all 0.4s ease',
-                position: 'relative',
-                transform: joinedChallenges.has(challenge.id) ? 'scale(1.02)' : 'scale(1)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.05) translateY(-8px)';
-                e.currentTarget.style.boxShadow = '0 25px 50px rgba(0, 0, 0, 0.7)';
-                e.currentTarget.style.borderColor = '#FFD700';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = joinedChallenges.has(challenge.id) ? 'scale(1.02) translateY(0)' : 'scale(1) translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
-                e.currentTarget.style.borderColor = joinedChallenges.has(challenge.id) ? '#FFD700' : 'rgba(255, 215, 0, 0.3)';
-              }}>
-                {joinedChallenges.has(challenge.id) && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '12px',
-                    right: '12px',
-                    background: 'linear-gradient(135deg, #FFD700, #FFA500)',
-                    color: '#000',
-                    padding: '4px 8px',
-                    borderRadius: '12px',
-                    fontSize: '0.7rem',
-                    fontWeight: '700'
-                  }}>
-                    ✓ JOINED
-                  </div>
-                )}
-
-                <div style={{ marginBottom: '20px' }}>
-                  <h3 style={{ 
-                    fontSize: '1.3rem', 
-                    fontWeight: '700', 
-                    color: '#FFD700', 
-                    margin: '0 0 12px 0' 
-                  }}>
-                    {challenge.title}
-                  </h3>
-                  
-                  <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-                    <div style={{
-                      padding: '4px 12px',
-                      backgroundColor: challenge.difficulty === 'Easy' ? 'rgba(40, 167, 69, 0.2)' : 
-                                       challenge.difficulty === 'Medium' ? 'rgba(255, 193, 7, 0.2)' : 
-                                       'rgba(220, 53, 69, 0.2)',
-                      borderRadius: '16px',
-                      fontSize: '0.7rem',
-                      color: challenge.difficulty === 'Easy' ? '#28A745' : 
-                             challenge.difficulty === 'Medium' ? '#FFD700' : '#DC3545',
-                      border: `1px solid ${challenge.difficulty === 'Easy' ? '#28A745' : 
-                                           challenge.difficulty === 'Medium' ? '#FFC107' : '#DC3545'}`
-                    }}>
-                      {challenge.difficulty}
-                    </div>
-                    <div style={{
-                      padding: '4px 12px',
-                      backgroundColor: 'rgba(255, 215, 0, 0.1)',
-                      borderRadius: '16px',
-                      fontSize: '0.7rem',
-                      color: '#FFD700',
-                      border: '1px solid rgba(255, 215, 0, 0.3)'
-                    }}>
-                      {challenge.participants.toLocaleString()} participants
-                    </div>
-                  </div>
-
-                  <p style={{ 
-                    color: '#C9B037', 
-                    fontSize: '0.9rem', 
-                    marginBottom: '16px',
-                    lineHeight: '1.5'
-                  }}>
-                    {challenge.description}
-                  </p>
-
-                  {/* Progress Bar */}
-                  {joinedChallenges.has(challenge.id) && (
-                    <div style={{ marginBottom: '16px' }}>
-                      <div style={{ 
-                        display: 'flex', 
-                        justifyContent: 'space-between', 
-                        alignItems: 'center',
-                        marginBottom: '8px',
-                        fontSize: '0.8rem'
-                      }}>
-                        <span style={{ color: '#C9B037' }}>Progress</span>
-                        <span style={{ color: '#FFD700', fontWeight: '600' }}>{challenge.progress}%</span>
-                      </div>
-                      <div style={{
-                        width: '100%',
-                        height: '8px',
-                        backgroundColor: 'rgba(255, 215, 0, 0.2)',
-                        borderRadius: '4px',
-                        overflow: 'hidden'
-                      }}>
-                        <div style={{
-                          width: `${challenge.progress}%`,
-                          height: '100%',
-                          background: 'linear-gradient(90deg, #FFD700, #FFA500)',
-                          borderRadius: '4px',
-                          transition: 'width 0.5s ease'
-                        }} />
-                      </div>
-                    </div>
-                  )}
-
-                  <div style={{ 
-                    display: 'flex', 
-                    justifyContent: 'space-between', 
-                    alignItems: 'center',
-                    marginBottom: '20px',
-                    fontSize: '0.8rem',
-                    color: '#8B7355'
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Clock size={14} />
-                      {challenge.daysLeft} days left
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Trophy size={14} />
-                      {challenge.reward}
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleJoinChallenge(challenge.id);
-                  }}
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontSize: '0.9rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    background: joinedChallenges.has(challenge.id) 
-                      ? 'linear-gradient(135deg, #8B7355, #6B5B45)' 
-                      : 'linear-gradient(135deg, #FFD700, #FFA500)',
-                    color: joinedChallenges.has(challenge.id) ? '#FFD700' : '#000'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = 'scale(1.05)';
-                    e.target.style.boxShadow = '0 8px 20px rgba(255, 215, 0, 0.3)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = 'scale(1)';
-                    e.target.style.boxShadow = 'none';
-                  }}
-                >
-                  {joinedChallenges.has(challenge.id) ? 'Leave Challenge' : 'Join Challenge'}
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Leaderboard Tab */}
-        {activeTab === 'leaderboard' && (
-          <div style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            borderRadius: '16px',
-            padding: '32px',
-            border: '1px solid rgba(255, 215, 0, 0.3)'
-          }}>
-            <h2 style={{ 
-              fontSize: '1.5rem', 
-              fontWeight: '700', 
-              color: '#FFD700', 
-              marginBottom: '24px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              textAlign: 'center',
-              justifyContent: 'center'
-            }}>
-              <Award size={24} />
-              Community Leaderboard
-            </h2>
-
-            <div style={{ display: 'grid', gap: '16px' }}>
-              {topContributors.map((contributor, index) => (
-                <div key={contributor.name} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '20px',
-                  padding: '20px',
-                  backgroundColor: index < 3 ? 'rgba(255, 215, 0, 0.1)' : 'rgba(0, 0, 0, 0.6)',
-                  borderRadius: '12px',
-                  border: index < 3 ? '2px solid #FFD700' : '1px solid rgba(255, 215, 0, 0.2)',
-                  transition: 'all 0.3s ease',
-                  position: 'relative'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.02) translateY(-3px)';
-                  e.currentTarget.style.borderColor = '#FFD700';
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 215, 0, 0.15)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'scale(1) translateY(0)';
-                  e.currentTarget.style.borderColor = index < 3 ? '#FFD700' : 'rgba(255, 215, 0, 0.2)';
-                  e.currentTarget.style.backgroundColor = index < 3 ? 'rgba(255, 215, 0, 0.1)' : 'rgba(0, 0, 0, 0.6)';
-                }}>
-                  
-                  {index < 3 && (
-                    <div style={{
-                      position: 'absolute',
-                      top: '-8px',
-                      left: '16px',
-                      background: index === 0 ? 'linear-gradient(135deg, #FFD700, #FFA500)' :
-                                  index === 1 ? 'linear-gradient(135deg, #C0C0C0, #A8A8A8)' :
-                                  'linear-gradient(135deg, #CD7F32, #B87333)',
-                      color: '#000',
-                      padding: '4px 12px',
-                      borderRadius: '12px',
-                      fontSize: '0.7rem',
-                      fontWeight: '700'
-                    }}>
-                      #{index + 1}
-                    </div>
-                  )}
-
-                  <div style={{
-                    fontSize: '2rem',
-                    minWidth: '50px',
-                    textAlign: 'center'
-                  }}>
-                    {contributor.avatar}
-                  </div>
-
-                  <div style={{ flex: 1 }}>
-                    <h4 style={{ 
-                      fontSize: '1.1rem', 
-                      fontWeight: '600', 
-                      color: contributor.name === 'You' ? '#FFD700' : '#C9B037', 
-                      margin: '0 0 4px 0' 
-                    }}>
-                      {contributor.name}
-                      {contributor.name === 'You' && <span style={{ marginLeft: '8px', fontSize: '0.8rem' }}>👈</span>}
-                    </h4>
-                    <div style={{
-                      display: 'inline-block',
-                      padding: '2px 8px',
-                      backgroundColor: 'rgba(255, 215, 0, 0.1)',
-                      borderRadius: '12px',
-                      fontSize: '0.7rem',
-                      color: '#FFD700',
-                      border: '1px solid rgba(255, 215, 0, 0.3)'
-                    }}>
-                      {contributor.badge}
-                    </div>
-                  </div>
-
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ 
-                      fontSize: '1.2rem', 
-                      fontWeight: '700', 
-                      color: '#FFD700' 
-                    }}>
-                      {contributor.points.toLocaleString()}
-                    </div>
-                    <div style={{ fontSize: '0.8rem', color: '#8B7355' }}>
-                      points
-                    </div>
-                  </div>
-
-                  {index < 10 && (
-                    <div style={{
-                      fontSize: '1.5rem',
-                      fontWeight: '700',
-                      color: '#8B7355',
-                      minWidth: '40px',
-                      textAlign: 'center'
-                    }}>
-                      #{index + 1}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Personal Stats */}
-            <div style={{
-              marginTop: '32px',
-              padding: '24px',
-              backgroundColor: 'rgba(255, 215, 0, 0.1)',
-              borderRadius: '12px',
-              border: '2px solid #FFD700'
-            }}>
-              <h3 style={{ 
-                color: '#FFD700', 
-                marginBottom: '16px',
-                fontSize: '1.2rem',
-                fontWeight: '600',
-                textAlign: 'center'
-              }}>
-                Your Community Stats
-              </h3>
-              
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', 
-                gap: '16px',
-                textAlign: 'center'
-              }}>
-                {[
-                  { label: 'Total Points', value: userStats.points.toLocaleString(), icon: '⭐' },
-                  { label: 'Current Rank', value: `#${userStats.rank}`, icon: '🏆' },
-                  { label: 'Posts Created', value: userStats.postsCreated.toString(), icon: '📝' },
-                  { label: 'Helpful Answers', value: userStats.helpfulAnswers.toString(), icon: '✅' },
-                  { label: 'Challenges Won', value: userStats.challengesCompleted.toString(), icon: '🎯' }
-                ].map((stat, index) => (
-                  <div key={index}>
-                    <div style={{ fontSize: '1.5rem', marginBottom: '4px' }}>{stat.icon}</div>
-                    <div style={{ fontSize: '1.3rem', fontWeight: '700', color: '#FFD700' }}>
-                      {stat.value}
-                    </div>
-                    <div style={{ fontSize: '0.8rem', color: '#C9B037' }}>{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+        
       </div>
 
       {/* CSS Animations */}

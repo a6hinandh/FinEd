@@ -5,7 +5,7 @@ import { db } from "./firebase"; // your firebase.js config file
 export const fetchPosts = async () => {
   try {
     const postsRef = collection(db, "posts");
-    const q = query(postsRef, orderBy("lastActivity", "desc"));
+    const q = query(postsRef, orderBy("createdAt", "desc"));
     const querySnapshot = await getDocs(q);
     
     const posts = querySnapshot.docs.map((doc) => ({
