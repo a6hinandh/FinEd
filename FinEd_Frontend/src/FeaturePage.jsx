@@ -429,12 +429,6 @@ const FeaturesPage = () => {
           <p className="footer-description">
             Empowering the next generation with financial wisdom through innovative education.
           </p>
-          <div className="footer-links">
-            <a href="#" className="footer-link">About</a>
-            <a href="/features" className="footer-link">Features</a>
-            <a href="/signup" className="footer-link">Community</a>
-            <a href="#" className="footer-link">Support</a>
-          </div>
           <p className="footer-copyright">© 2025 FinEd. All rights reserved.</p>
         </div>
       </footer>

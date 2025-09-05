@@ -84,6 +84,7 @@
 .hero-container {
   max-width: 80rem;
   margin: 0 auto;
+  padding-bottom: 0px;
   text-align: center;
 }
 

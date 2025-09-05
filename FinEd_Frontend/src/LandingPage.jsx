@@ -7,7 +7,6 @@ import { degToRad } from "three/src/math/MathUtils.js";
 import './LandingPage.css';
 import { useNavigate } from "react-router-dom";
 
-
 // Utility function for extending materials
 function extendMaterial(BaseMaterial, cfg) {
   const physical = THREE.ShaderLib.physical;
@@ -354,8 +353,49 @@ const DirLight = ({ position, color }) => {
   );
 };
 
+// Popup Modal Component
+const PopupModal = ({ isOpen, onClose, title, children }) => {
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="popup-overlay" onClick={onClose}>
+      <div className="popup-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="popup-header">
+          <h3 className="popup-title">{title}</h3>
+          <button className="popup-close" onClick={onClose}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div className="popup-content">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Header Component
-const Header = ({handleNav}) => (
+const Header = ({ handleNav }) => (
   <header className="header">
     <nav className="nav">
       <div className="nav-brand">
@@ -363,7 +403,7 @@ const Header = ({handleNav}) => (
         <span className="logo-ed">Ed</span>
       </div>
       <div className="nav-links">
-        <button onClick={()=>handleNav("/signup")} className="nav-cta">Get Started</button>
+        <button onClick={() => handleNav("/signup")} className="nav-cta">Get Started</button>
       </div>
     </nav>
   </header>
@@ -417,61 +457,234 @@ const HeroSection = ({ isLoaded, onLearnMore, onJoinCommunity }) => (
     </div>
   </main>
 );
-// Footer Component
-const Footer = () => (
-  <footer className="footer">
-    <div className="footer-content">
-      <div className="footer-main">
-        <div className="footer-brand">
-          <div className="footer-logo">
-            <span className="logo-fin">Fin</span>
-            <span className="logo-ed">Ed</span>
+
+// Footer Component with Popup functionality
+const Footer = () => {
+  const [activePopup, setActivePopup] = useState(null);
+  const navigate = useNavigate();
+
+  const openPopup = (popupName) => {
+    setActivePopup(popupName);
+  };
+
+  const closePopup = () => {
+    setActivePopup(null);
+  };
+
+  const handleFeaturesClick = () => {
+    navigate("/features");
+  };
+
+  const handleCommunityClick = () => {
+    navigate("/signup");
+  };
+
+  return (
+    <footer className="footer">
+      <div className="footer-content">
+        <div className="footer-main">
+          <div className="footer-brand">
+            <div className="footer-logo">
+              <span className="logo-fin">Fin</span>
+              <span className="logo-ed">Ed</span>
+            </div>
+            <p className="footer-description">
+              Empowering the next generation with financial wisdom through 
+              innovative education and gamified learning experiences.
+            </p>
           </div>
-          <p className="footer-description">
-            Empowering the next generation with financial wisdom through 
-            innovative education and gamified learning experiences.
+          <div className="footer-links-section">
+            <div className="footer-column">
+              <h4 className="footer-heading">Platform</h4>
+              <button onClick={handleFeaturesClick} className="footer-link footer-button">Features</button>
+              <button onClick={handleCommunityClick} className="footer-link footer-button">Community</button>
+            </div>
+            <div className="footer-column">
+              <h4 className="footer-heading">Company</h4>
+              <button onClick={() => openPopup('about')} className="footer-link footer-button">About Us</button>
+              <button onClick={() => openPopup('contact')} className="footer-link footer-button">Contact</button>
+            </div>
+            <div className="footer-column">
+              <h4 className="footer-heading">Support</h4>
+              <button onClick={() => openPopup('help')} className="footer-link footer-button">Help Center</button>
+              <button onClick={() => openPopup('privacy')} className="footer-link footer-button">Privacy Policy</button>
+              <button onClick={() => openPopup('terms')} className="footer-link footer-button">Terms of Service</button>
+            </div>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p className="footer-copyright">
+            © 2025 FinEd. All rights reserved.
           </p>
-        </div>
-        <div className="footer-links-section">
-          <div className="footer-column">
-            <h4 className="footer-heading">Platform</h4>
-            <a href="/features" className="footer-link">Features</a>
-            <a href="/signup" className="footer-link">Community</a>
+          <div className="footer-social">
+            <a 
+              href="https://youtu.be/dQw4w9WgXcQ" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="social-link" 
+              aria-label="Demo Video"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23.498 6.186a2.95 2.95 0 00-2.079-2.094C19.544 3.5 12 3.5 12 3.5s-7.544 0-9.419.592A2.95 2.95 0 00.502 6.186C0 8.071 0 12 0 12s0 3.929.502 5.814a2.95 2.95 0 002.079 2.094C4.456 20.5 12 20.5 12 20.5s7.544 0 9.419-.592a2.95 2.95 0 002.079-2.094C24 15.929 24 12 24 12s0-3.929-.502-5.814zM9.75 15.568V8.432L15.5 12l-5.75 3.568z"/>
+              </svg>
+            </a>
+            <a 
+              href="https://github.com/a6hinandh/FinEd" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="social-link" 
+              aria-label="GitHub"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </a>
           </div>
-          <div className="footer-column">
-            <h4 className="footer-heading">Company</h4>
-            <a href="#" className="footer-link">About Us</a>
-            <a href="#" className="footer-link">Contact</a>
-          </div>
-          <div className="footer-column">
-            <h4 className="footer-heading">Support</h4>
-            <a href="#" className="footer-link">Help Center</a>
-            <a href="#" className="footer-link">Privacy Policy</a>
-            <a href="#" className="footer-link">Terms of Service</a>
-          </div>
-        </div>
-      </div>
-      <div className="footer-bottom">
-        <p className="footer-copyright">
-          © 2025 FinEd. All rights reserved.
-        </p>
-        <div className="footer-social">
-          <a href="#" className="social-link" aria-label="Twitter">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
-            </svg>
-          </a>
-          <a href="#" className="social-link" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
-              <circle cx="4" cy="4" r="2"/>
-            </svg>
-          </a>
         </div>
       </div>
+
+      {/* Popup Modals */}
+      <PopupModal isOpen={activePopup === 'about'} onClose={closePopup} title="About FinEd">
+        <div className="popup-section">
+          <h4>Our Mission</h4>
+          <p>FinEd is revolutionizing financial education by making it engaging, accessible, and practical. We believe everyone deserves the knowledge and tools to build a secure financial future.</p>
+        </div>
+        <div className="popup-section">
+          <h4>What We Do</h4>
+          <p>We provide gamified financial literacy experiences through:</p>
+          <ul>
+            <li>Interactive simulations and real-world scenarios</li>
+            <li>AI-powered personalized mentorship</li>
+            <li>Community-driven learning experiences</li>
+            <li>Comprehensive curriculum covering all aspects of personal finance</li>
+          </ul>
+        </div>
+        <div className="popup-section">
+          <h4>Our Impact</h4>
+          <p>We’re proud to be leading the change in financial education. Our platform empowers learners to build healthy financial habits and take real steps toward achieving their money goals.</p>
+        </div>
+      </PopupModal>
+
+      <PopupModal isOpen={activePopup === 'contact'} onClose={closePopup} title="Contact Us">
+        <div className="popup-section">
+          <h4>Get In Touch</h4>
+          <p>We'd love to hear from you! Whether you have questions, feedback, or partnership inquiries, our team is here to help.</p>
+        </div>
+        <div className="contact-info">
+          <div className="contact-item">
+            <strong>Email:</strong>
+            <span>vionix37@gmail.com</span>
+          </div>
+          
+        </div>
+      </PopupModal>
+
+      <PopupModal isOpen={activePopup === 'help'} onClose={closePopup} title="Help Center">
+  <div className="popup-section">
+    <h4>Getting Started</h4>
+    <p>New to FinEd? Here’s how to begin your journey toward financial confidence:</p>
+    <ol>
+      <li>Create your free FinEd account</li>
+      <li>Pick a personalized learning path based on your goals</li>
+      <li>Explore our gamified modules, simulations, and real-world scenarios</li>
+      <li>Join the community and learn with others</li>
+    </ol>
+  </div>
+
+  <div className="popup-section">
+    <h4>Frequently Asked Questions</h4>
+    <div className="faq-item">
+      <strong>Q: What makes FinEd different?</strong>
+      <p>A: FinEd combines gamified learning, AI-powered mentorship, and community-driven experiences to make financial education engaging and practical.</p>
     </div>
-  </footer>
-);
+    <div className="faq-item">
+      <strong>Q: Is FinEd free to use?</strong>
+      <p>A: Yes! Our core platform is completely free, giving everyone access to essential financial literacy.</p>
+    </div>
+  </div>
+
+  <div className="popup-section">
+    <h4>Need More Help?</h4>
+    <p>Can’t find the answer here? Our team is happy to help. Reach us anytime at <a href="mailto:vionix37@gmail.com">vionix37@gmail.com</a>.</p>
+  </div>
+</PopupModal>
+
+
+      <PopupModal isOpen={activePopup === 'privacy'} onClose={closePopup} title="Privacy Policy">
+        <div className="popup-section">
+          <h4>Your Privacy Matters</h4>
+          <p>At FinEd, we take your privacy seriously. This policy explains how we collect, use, and protect your information.</p>
+        </div>
+        <div className="popup-section">
+          <h4>Information We Collect</h4>
+          <ul>
+            <li>Account information (name, email, preferences)</li>
+            <li>Usage analytics to improve our platform</li>
+            <li>Community interactions and forum posts</li>
+          </ul>
+        </div>
+        <div className="popup-section">
+          <h4>How We Use Your Data</h4>
+          <ul>
+            <li>Personalize your learning experience</li>
+            <li>Track your progress and achievements</li>
+            <li>Improve our platform and features</li>
+            <li>Facilitate community interactions</li>
+          </ul>
+        </div>
+        <div className="popup-section">
+          <h4>Data Security</h4>
+          <p>We use industry-standard encryption and security measures to protect your data. We never sell your personal information to third parties.</p>
+        </div>
+        <div className="popup-section">
+          <h4>Your Rights</h4>
+          <p>You have the right to access, update, or delete your personal data at any time. Contact us at vionix37@gmail.com for data requests.</p>
+          <p><small>Last updated: September 2025</small></p>
+        </div>
+      </PopupModal>
+
+      <PopupModal isOpen={activePopup === 'terms'} onClose={closePopup} title="Terms of Service">
+        <div className="popup-section">
+          <h4>Terms of Use</h4>
+          <p>By using FinEd, you agree to these terms of service. Please read them carefully.</p>
+        </div>
+        <div className="popup-section">
+          <h4>User Responsibilities</h4>
+          <ul>
+            <li>Provide accurate information during registration</li>
+            <li>Keep your account credentials secure</li>
+            <li>Use the platform for educational purposes</li>
+            <li>Respect other community members</li>
+            <li>Follow community guidelines in forums</li>
+          </ul>
+        </div>
+        <div className="popup-section">
+          <h4>Platform Usage</h4>
+          <ul>
+            <li>Our content is for educational purposes only</li>
+            <li>Not professional financial advice</li>
+            <li>You're responsible for your financial decisions</li>
+            <li>We may update content and features regularly</li>
+          </ul>
+        </div>
+        <div className="popup-section">
+          <h4>Community Guidelines</h4>
+          <ul>
+            <li>Be respectful and constructive</li>
+            <li>No spam, harassment, or inappropriate content</li>
+            <li>Share knowledge and help others learn</li>
+            <li>Report any issues to our moderators</li>
+          </ul>
+        </div>
+        <div className="popup-section">
+          <h4>Service Availability</h4>
+          <p>We strive for 99.9% uptime but cannot guarantee uninterrupted service. We may perform maintenance and updates as needed.</p>
+          <p><small>Last updated: September 2025</small></p>
+        </div>
+      </PopupModal>
+    </footer>
+  );
+};
 
 // Main Landing Page Component
 const FinEdLanding = () => {
@@ -484,8 +697,8 @@ const FinEdLanding = () => {
   }, []);
 
   const handleLearnMore = () => {
-      navigate("/features");
-    };
+    navigate("/features");
+  };
 
   const handleJoinCommunity = () => {
     navigate("/signup");
