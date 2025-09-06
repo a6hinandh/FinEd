@@ -18,7 +18,7 @@ const definitionCache = new Map();
 const insightCache = new Map();
 
 // WealthWise AI System Prompt
-const SYSTEM_PROMPT = `You are WealthWise AI, a financial literacy assistant created by the Vionix team.
+const SYSTEM_PROMPT = `You are FinEd AI, a financial literacy assistant created by the Vionix team.
 
 Your mission is to help young adults understand financial concepts without collecting sensitive financial data.
 
