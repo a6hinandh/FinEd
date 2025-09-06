@@ -70,7 +70,9 @@ const styles = {
     transform: 'translateY(0) scale(1)',
     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
     position: 'relative',
+    left:'32.5%',
     overflow: 'hidden',
+    width:'400px'
   },
   setupCardHover: {
     transform: 'translateY(-8px) scale(1.02)',

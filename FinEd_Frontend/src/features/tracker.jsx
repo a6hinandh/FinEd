@@ -14,7 +14,10 @@ export function Tracker() {
   return (
     <div className="tracker-container">
       <header className="tracker-header">
-        <h1>FinEd Tracker</h1>
+        <h1>
+          <span className="logo-fin">Fin</span>
+        <span className="logo-ed">Ed</span>
+        <span> Tracker</span></h1>
         <div className="tab-buttons">
           <button
             className={activeTab === "expense" ? "active" : ""}

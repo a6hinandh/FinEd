@@ -700,12 +700,6 @@ const StockSimulator = () => {
             >
               <h3>{term}</h3>
               <p>{definition}</p>
-              {showTooltip === term && (
-                <div className="sstooltip">
-                  <Info size={16} />
-                  Click to learn more about {term}
-                </div>
-              )}
             </div>
           ))}
         </div>

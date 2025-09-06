@@ -94,8 +94,7 @@
   background: rgba(251, 191, 36, 0.1);
   border: 1px solid rgba(251, 191, 36, 0.2);
   border-radius: 9999px;
-  padding: 0.5rem 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 0.1rem;
 }
 
 .hero-badge-icon {
@@ -127,9 +126,10 @@
 .hero-description {
   font-size: 1.25rem;
   color: #d1d5db;
-  max-width: 48rem;
+  max-width: 65rem;
   margin: 0 auto 3rem;
   line-height: 1.6;
+  margin-bottom: 90px;
 }
 
 .stats-grid {
@@ -178,7 +178,7 @@
 .features {
   width: 100%;
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 1rem;
 }
 
 .features-section {
@@ -191,6 +191,7 @@
   flex-direction: column;
   align-items: center;
   padding: 40px;
+  padding-top: 1px;
 }
 
 .features-header {
@@ -201,7 +202,7 @@
 .features-title {
   font-size: 2.25rem;
   font-weight: bold;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.1rem;
 }
 
 .features-title-gradient {

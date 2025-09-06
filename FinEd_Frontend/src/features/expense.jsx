@@ -148,18 +148,8 @@ export default function Expense() {
   };
 
   const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="custom-tooltip">
-          <p className="tooltip-label">{`${label}: $${payload[0].value.toFixed(2)}`}</p>
-          <p className="tooltip-percentage">
-            {`${((payload[0].value / totalAmount) * 100).toFixed(1)}% of total`}
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
+  return null;
+};
 
   return (
     <div className="expense-container">

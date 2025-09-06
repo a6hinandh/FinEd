@@ -623,9 +623,6 @@ const FinancialChatbot = () => {
             </div>
             <div className="history-content">
               <div className="history-placeholder">
-                <div className="placeholder-icon">
-                  <MessageCircle className="placeholder-msg-icon" />
-                </div>
                 {chatHistory.length!=0 ? (
                    <div className="chat-history-list">
       {chatHistory.map((chat,index) => {
@@ -634,23 +631,18 @@ const FinancialChatbot = () => {
 
         return (
           <div
-            key={chat.id}
-            className="chat-history-item"
-            onClick={() => onSelectChat(index)}
-            style={{
-              padding: "10px",
-              borderBottom: "1px solid #ddd",
-              borderBottomWidth:"100%",
-              cursor: "pointer",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-            }}
-          >
-            <span className="chat-title">{new Date(chat.createdAt.seconds * 1000).toLocaleString()}</span>
-            
-          </div>
+  key={chat.id}
+  className="chat-history-item"
+  onClick={() => onSelectChat(index)}
+>
+  <span className="chat-title">
+    {new Date(chat.createdAt.seconds * 1000).toLocaleDateString()} at{' '}
+    {new Date(chat.createdAt.seconds * 1000).toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    })}
+  </span>
+</div>
         );
       })}
     </div>
