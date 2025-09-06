@@ -160,12 +160,14 @@ const FinNews = () => {
   return (
     <div className="fin-news-container">
       <header className="fin-news-header">
+        <div class="header-left">
         <h1>
           <span className="logo-wealth">Wealth</span>
           <span className="logo-wise">Wise</span>
           <span className="logo-news"> News</span>
         </h1>
-        <p className="subtitle">AI-powered financial news with educational insights</p>
+        <div class="subtitle">AI-powered financial news with educational insights</div>
+        </div>
         <div className="last-updated">
           <span>Last updated: {lastUpdated || 'Never'}</span>
           <button className="refresh-btn" onClick={fetchNews} disabled={loading}>

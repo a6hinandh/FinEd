@@ -23,11 +23,14 @@ body {
 .fin-news-header {
   background: linear-gradient(135deg, #0a0a0a 0%, #1c1c1c 30%, #2a2a2a 70%, #1a1a1a 100%);
   color: #ffd700;
-  text-align: center;
-  padding: 50px 32px 40px;
+  text-align: left;
+  padding: 10px 40px;
   position: relative;
   border-bottom: 1px solid rgba(255, 215, 0, 0.3);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 .fin-news-header::before {
@@ -42,15 +45,19 @@ body {
   pointer-events: none;
 }
 
+.header-left {
+  display: flex;
+  flex-direction: column;
+}
+
 .fin-news-header h1 {
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: 800;
   letter-spacing: -0.03em;
-  position: relative;
-  z-index: 1;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
+
 .logo-wealth {
   background: linear-gradient(45deg, #ffd700, #ffed4e);
   -webkit-background-clip: text;
@@ -69,42 +76,35 @@ body {
   color: #ffffff;
 }
 
-.fin-news-header .subtitle {
-  font-size: 1.3rem;
+.subtitle {
+  font-size: 1.2rem;
   opacity: 0.9;
-  margin-bottom: 20px;
   font-weight: 400;
-  position: relative;
-  z-index: 1;
   color: #e6e6e6;
 }
 
 .last-updated {
   display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   justify-content: center;
-  align-items: center;
-  gap: 24px;
+  gap: 12px;
   font-size: 0.95rem;
   opacity: 0.9;
-  position: relative;
-  z-index: 1;
-  color: #e0e0e0;
   background: rgba(255, 215, 0, 0.05);
   padding: 16px 28px;
   border-radius: 12px;
   border: 1px solid rgba(255, 215, 0, 0.2);
-  margin-top: 20px;
   backdrop-filter: blur(10px);
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 200px;
+  text-align: right;
 }
 
 .refresh-btn {
   background: linear-gradient(135deg, #90ee90 0%, #7fd67f 100%);
   color: #000000;
   border: none;
-  padding: 14px 28px;
+  padding: 10px 20px;
   border-radius: 10px;
   cursor: pointer;
   font-size: 0.9rem;
@@ -112,11 +112,13 @@ body {
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   box-shadow: 0 4px 15px rgba(144, 238, 144, 0.2);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+
+
 
 .refresh-btn:hover:not(:disabled) {
   background: #7fd67f;
