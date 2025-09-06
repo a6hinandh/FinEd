@@ -162,8 +162,8 @@ const FinNews = () => {
       <header className="fin-news-header">
         <div class="header-left">
         <h1>
-          <span className="logo-wealth">Wealth</span>
-          <span className="logo-wise">Wise</span>
+          <span className="logo-fin">Fin</span>
+        <span className="logo-ed">Ed</span>
           <span className="logo-news"> News</span>
         </h1>
         <div class="subtitle">AI-powered financial news with educational insights</div>

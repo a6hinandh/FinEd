@@ -723,7 +723,8 @@ const StockSimulator = () => {
     <div className="ssapp">
       <header className="ssheaderc">
         <div className="ssheader-content">
-          <h1 className="sslogo">FinEd Investment</h1>
+          <h1 className="sslogo"><span className="logo-fin">Fin</span>
+        <span className="logo-ed">Ed</span> Investment</h1>
           <nav className="ssnav">
             <button 
               className={`ssnav-item ${currentView === 'portfolio' ? 'ssactive' : ''}`}

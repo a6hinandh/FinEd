@@ -377,11 +377,11 @@
 }
 
 .title {
-  color: #ffd700;
+  color: white;
   font-size: 24px;
   font-weight: 700;
   margin: 0;
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  background:white;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

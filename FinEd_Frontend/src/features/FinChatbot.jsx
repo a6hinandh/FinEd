@@ -261,12 +261,22 @@ const FinancialChatbot = () => {
   };
 
   const formatTime = (timestamp) => {
-    timestamp = new Date(timestamp.seconds * 1000);
-    return timestamp.toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    });
-  };
+  let date;
+
+  if (timestamp?.seconds !== undefined) {
+    // Firestore Timestamp
+    date = new Date(timestamp.seconds * 1000);
+  } else {
+    // JavaScript Date object
+    date = new Date(timestamp);
+  }
+
+  return date.toLocaleTimeString('en-US', { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+};
+
 
   const quickActions = {
     general: [
@@ -465,7 +475,8 @@ const FinancialChatbot = () => {
             <div className="title-section">
               <div className="title-row">
                 <Wallet className="title-icon" />
-                <h1 className="title">WealthWise AI</h1>
+                <h1 className="title"><span className="logo-fin">Fin</span>
+                        <span className="logo-ed">Ed</span> AI</h1>
               </div>
               <span className="subtitle">Your Personal Financial Intelligence Platform</span>
             </div>
