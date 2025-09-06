@@ -252,6 +252,7 @@ body {
   margin-bottom: var(--spacing-xl);
   letter-spacing: -0.02em;
   font-family: var(--font-display);
+  padding-top: 15px;
 }
 
 .hero-title-gold {
