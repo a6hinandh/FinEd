@@ -2,10 +2,22 @@ import React, { useState, useEffect } from 'react';
 
 const LoanSimulationExplanation = () => {
   const [activeSection, setActiveSection] = useState(null);
+    const [isMobile, setIsMobile] = useState(false);
 
   const toggleSection = (section) => {
     setActiveSection(activeSection === section ? null : section);
   };
+
+
+     useEffect(() => {
+          const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+          };
+          
+          checkMobile();
+          window.addEventListener('resize', checkMobile);
+          return () => window.removeEventListener('resize', checkMobile);
+        }, []);
 
   const sectionData = [
     {
@@ -28,7 +40,7 @@ Where:
 - R = Monthly interest rate (Annual rate ÷ 12)
 - N = Number of months
 
-**Key Learning:** Users see how loan amount, interest rate, and duration affect monthly payments. A higher interest rate or longer duration dramatically changes the total cost of borrowing.
+Key Learning: Users see how loan amount, interest rate, and duration affect monthly payments. A higher interest rate or longer duration dramatically changes the total cost of borrowing.
 
 The EMI remains constant throughout the loan term, but the proportion of interest vs principal changes each month.`
     },
@@ -36,21 +48,21 @@ The EMI remains constant throughout the loan term, but the proportion of interes
       id: 'payment-options',
       title: 'Payment Options & Consequences',
       icon: '💳',
-      content: `**Pay EMI (On-time Payment):**
+      content: `Pay EMI (On-time Payment):
 - Maintains good standing
 - Reduces principal balance
 - Positive credit score impact (+2 points)
 - No penalties or extra charges
 - Follows normal amortization schedule
 
-**Delay Payment:**
+Delay Payment:
 - Adds 10% penalty on EMI amount
 - Adds 50% extra interest on current month
 - Severe credit score damage (-15 points)
 - Creates pending amounts for next month
 - Extends loan duration if balance remains
 
-**Custom Payment:**
+Custom Payment:
 - Allows paying any amount (less than, equal to, or more than EMI)
 - Larger payments reduce principal faster
 - Smaller payments may not cover full interest
@@ -61,19 +73,19 @@ The EMI remains constant throughout the loan term, but the proportion of interes
       id: 'interest-mechanics',
       title: 'Interest & Penalty Mechanics',
       icon: '📊',
-      content: `**Monthly Interest Calculation:**
+      content: `Monthly Interest Calculation:
 Monthly Interest = Remaining Balance × (Annual Rate ÷ 12)
 
-**Interest Priority:** Interest is always paid first before reducing principal balance.
+Interest Priority: Interest is always paid first before reducing principal balance.
 
-**Penalty Structure:**
+Penalty Structure:
 - 10% penalty on EMI amount for delayed payments
 - 50% additional interest for the delayed month
 - Penalties accumulate if not paid immediately
 
-**Pending Amounts:** Unpaid interest and penalties carry forward to next month and must be cleared before new principal reduction.
+Pending Amounts: Unpaid interest and penalties carry forward to next month and must be cleared before new principal reduction.
 
-**Key Insight:** The simulator shows how delays compound costs exponentially and extend loan duration beyond the original term.`
+Key Insight: The simulator shows how delays compound costs exponentially and extend loan duration beyond the original term.`
     },
     {
       id: 'credit-score',
@@ -81,38 +93,38 @@ Monthly Interest = Remaining Balance × (Annual Rate ÷ 12)
       icon: '📈',
       content: `The simulation models realistic credit score factors:
 
-**Payment Behavior:**
+Payment Behavior:
 - On-time EMI payments: +2 points
 - Custom payments above EMI: +5 points
 - Delayed payments: -15 points (severe impact)
 - Payment history is the most critical factor
 
-**Score Ranges:**
+Score Ranges:
 - 750-850: Excellent (Green) - Best loan rates
 - 650-749: Good (Yellow) - Standard rates
 - 300-649: Poor (Red) - High rates or loan rejection
 
-**Recovery:** Credit score improvements are gradual, while damage from missed payments is immediate and severe. This teaches the importance of consistent payment behavior.`
+Recovery: Credit score improvements are gradual, while damage from missed payments is immediate and severe. This teaches the importance of consistent payment behavior.`
     },
     {
       id: 'key-metrics',
       title: 'Key Metrics Explained',
       icon: '📋',
-      content: `**Remaining Balance:** Outstanding principal amount still owed
+      content: `Remaining Balance: Outstanding principal amount still owed
 
-**Principal Paid:** Portion of loan amount repaid (builds equity)
+Principal Paid: Portion of loan amount repaid (builds equity)
 
-**Interest Paid:** Total interest charges paid (cost of borrowing)
+Interest Paid: Total interest charges paid (cost of borrowing)
 
-**Penalty Paid:** Additional charges from delayed payments
+Penalty Paid: Additional charges from delayed payments
 
-**Interest Due This Month:** Current month interest + any pending interest
+Interest Due This Month: Current month interest + any pending interest
 
-**Penalty Due This Month:** Accumulated penalties from delays
+Penalty Due This Month: Accumulated penalties from delays
 
-**Total Due This Month:** All charges that must be paid this month
+Total Due This Month: All charges that must be paid this month
 
-**Extra Paid:** Total of all interest and penalties (true cost beyond principal)
+Extra Paid: Total of all interest and penalties (true cost beyond principal)
 
 The dashboard provides real-time visibility into loan amortization and helps users understand the true cost of borrowing.`
     },
@@ -120,25 +132,25 @@ The dashboard provides real-time visibility into loan amortization and helps use
       id: 'scenarios',
       title: 'Learning Scenarios',
       icon: '🎓',
-      content: `**Scenario 1: Disciplined Borrower**
+      content: `Scenario 1: Disciplined Borrower
 - Pay EMI consistently every month
 - Watch balance reduce systematically
 - Maintain excellent credit score
 - Finish loan exactly on schedule
 
-**Scenario 2: Aggressive Prepayment**
+Scenario 2: Aggressive Prepayment
 - Make larger payments when possible
 - See dramatic interest savings
 - Finish loan early
 - Build excellent credit history
 
-**Scenario 3: Payment Delays**
+Scenario 3: Payment Delays
 - Skip or delay several payments
 - Watch penalties accumulate
 - See loan duration extend beyond original term
 - Experience credit score damage
 
-**Scenario 4: Recovery Strategy**
+Scenario 4: Recovery Strategy
 - Start with poor payment habits
 - Implement consistent payment strategy
 - Watch credit score gradually recover
@@ -150,25 +162,25 @@ Each scenario demonstrates different borrowing behaviors and their long-term fin
       id: 'features',
       title: 'Simulator Features',
       icon: '⚙️',
-      content: `**Interactive Elements:**
+      content: `Interactive Elements:
 - Real-time EMI calculations
 - Dynamic balance tracking
 - Immediate credit score feedback
 - Timeline visualization of payments
 
-**Educational Tools:**
+Educational Tools:
 - Payment history timeline with color coding
 - Balance reduction line chart
 - Credit score progress bar
 - Total cost breakdown
 
-**Safety Features:**
+Safety Features:
 - Undo function for learning from mistakes
 - Reset option to try different scenarios
 - Clear month-by-month progression
 - Detailed payment breakdowns
 
-**Gamification:**
+Gamification:
 - Month-by-month progression tracking
 - Achievement-style credit improvements
 - Visual feedback for payment decisions
@@ -180,23 +192,23 @@ The interface makes loan management concepts tangible while maintaining mathemat
       id: 'educational-value',
       title: 'Educational Value',
       icon: '🧠',
-      content: `**Core Learning Objectives:**
+      content: `Core Learning Objectives:
 
-1. **EMI Understanding:** How monthly payments are calculated and structured
-2. **Interest vs Principal:** How payment allocation changes over time
-3. **Prepayment Benefits:** Impact of paying more than minimum EMI
-4. **Delay Consequences:** Real cost of missed or late payments
-5. **Credit Score Management:** How payment behavior affects creditworthiness
-6. **Total Cost Awareness:** Understanding the true cost of borrowing
+1. EMI Understanding: How monthly payments are calculated and structured
+2. Interest vs Principal: How payment allocation changes over time
+3. Prepayment Benefits: Impact of paying more than minimum EMI
+4. Delay Consequences: Real cost of missed or late payments
+5. Credit Score Management: How payment behavior affects creditworthiness
+6. Total Cost Awareness: Understanding the true cost of borrowing
 
-**Why Simulation Works:**
+Why Simulation Works:
 - Safe environment to experience costly mistakes
 - Immediate feedback on payment decisions
 - Visual representation of abstract financial concepts
 - Hands-on practice with loan management
 - Clear cause-and-effect relationships
 
-**Real-World Application:**
+Real-World Application:
 The simulator helps users develop intuition for loan management before taking actual loans, understand the importance of payment discipline, and make informed decisions about prepayment vs other financial priorities.`
     }
   ];
@@ -217,7 +229,7 @@ The simulator helps users develop intuition for loan management before taking ac
         </div>
 
         {/* Quick Stats */}
-        <div style={styles.statsGrid}>
+        <div style={{...styles.statsGrid,gridTemplateColumns: isMobile? 'repeat(auto-fit, minmax(150px, 1fr))': 'repeat(auto-fit, minmax(200px, 1fr))'}}>
           <div style={styles.statCard}>
             <div style={styles.statIcon}>🏦</div>
             <div style={styles.statValue}>EMI Based</div>
@@ -344,7 +356,7 @@ The simulator helps users develop intuition for loan management before taking ac
         {/* Key Insights */}
         <div style={styles.insightsCard}>
           <h2 style={styles.insightsTitle}>Key Financial Insights</h2>
-          <div style={styles.insightsGrid}>
+          <div style={{...styles.insightsGrid,gridTemplateColumns: isMobile ? 'repeat(auto-fit, minmax(150px, 1fr))' : 'repeat(auto-fit, minmax(200px, 1fr))'}}>
             <div style={styles.insightItem}>
               <div style={styles.insightIcon}>💰</div>
               <h4 style={styles.insightTitle}>EMI Composition</h4>
@@ -389,7 +401,7 @@ The simulator helps users develop intuition for loan management before taking ac
           <div style={styles.exampleContent}>
             <div style={styles.exampleScenario}>
               <h4 style={styles.exampleSubtitle}>Sample Loan: ₹100,000 at 12% for 12 months</h4>
-              <div style={styles.exampleGrid}>
+              <div style={{...styles.exampleGrid,gridTemplateColumns: isMobile? "repeat(1, 1fr)" : "repeat(2, 1fr)"}   }>
                 <div style={styles.exampleItem}>
                   <div style={styles.exampleLabel}>Monthly EMI</div>
                   <div style={styles.exampleValue}>₹8,885</div>

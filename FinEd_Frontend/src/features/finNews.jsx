@@ -160,13 +160,13 @@ const FinNews = () => {
   return (
     <div className="fin-news-container">
       <header className="fin-news-header">
-        <div class="header-left">
+        <div className="header-left">
         <h1>
           <span className="logo-fin">Fin</span>
         <span className="logo-ed">Ed</span>
           <span className="logo-news"> News</span>
         </h1>
-        <div class="subtitle">AI-powered financial news with educational insights</div>
+        <div className="subtitle">AI-powered financial news with educational insights</div>
         </div>
         <div className="last-updated">
           <span>Last updated: {lastUpdated || 'Never'}</span>
@@ -177,8 +177,8 @@ const FinNews = () => {
       </header>
 
       {/* Filter Section */}
-      <div className="filter-section">
-        <div className="category-filter">
+      <div className="filter-section ">
+        <div className="category-filter desktop-only">
           <h3>Categories:</h3>
           <div className="filter-buttons">
             {Object.entries(categories).map(([key, category]) => (
@@ -193,7 +193,21 @@ const FinNews = () => {
           </div>
         </div>
 
-        <div className="sentiment-filter">
+           <div className="filter-dropdown mobile-only">
+      <select
+        className="category-select"
+        value={selectedCategory}
+        onChange={(e) => setSelectedCategory(e.target.value)}
+      >
+        {Object.entries(categories).map(([key, category]) => (
+          <option key={key} value={key}>
+            {category.name}
+          </option>
+        ))}
+      </select>
+    </div>
+
+        <div className="sentiment-filter desktop-only">
           <h3>Sentiment:</h3>
           <div className="filter-buttons">
             {['all', 'positive', 'negative', 'neutral'].map(sentiment => (
@@ -209,6 +223,20 @@ const FinNews = () => {
             ))}
           </div>
         </div>
+
+        {/* Mobile view - dropdown */}
+    <div className="filter-dropdown mobile-only">
+      <select
+        className="sentiment-select"
+        value={sentimentFilter}
+        onChange={(e) => setSentimentFilter(e.target.value)}
+      >
+        <option value="all">All</option>
+        <option value="positive">📈 Positive</option>
+        <option value="negative">📉 Negative</option>
+        <option value="neutral">📊 Neutral</option>
+      </select>
+    </div>
       </div>
 
       {error && (

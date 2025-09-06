@@ -27,7 +27,6 @@ const CommunityPage = () => {
     helpfulAnswers: 8,
     challengesCompleted: 3
   });
-  console.log(new Date().toDateString());
 
   function useCurrentUser() {
   const [user, setUser] = useState(null);
@@ -514,387 +513,476 @@ const CommunityPage = () => {
         {/* Topic Detail Modal */}
         {selectedTopic && (
           <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.9)',
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'center',
-            zIndex: 1000,
-            paddingTop: '20px',
-            overflow: 'auto',
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'center',
+  zIndex: 1000,
+  paddingTop: 'clamp(10px, 2vh, 20px)',
+  overflow: 'auto',
+
+}}>
+  <div style={{
+    backgroundColor: 'rgba(0, 0, 0, 0.95)',
+    border: '2px solid #FFD700',
+    borderRadius: 'clamp(8px, 2vw, 16px)',
+    padding: 'clamp(16px, 4vw, 32px)',
+    maxWidth: '800px',
+    width: 'calc(100% - 20px)',
+    maxHeight: 'calc(100vh - 40px)',
+    overflow: 'auto',
+    margin: '10px',
+    '@media (max-width: 768px)': {
+      width: 'calc(100% - 16px)',
+      margin: '8px',
+      borderRadius: '12px',
+      padding: '20px 16px',
+    }
+  }}>
+    {/* Topic Header */}
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'space-between', 
+      alignItems: 'flex-start',
+      marginBottom: 'clamp(16px, 3vw, 24px)',
+      gap: '12px',
+      flexWrap: 'wrap'
+    }}>
+      <div style={{ flex: 1, minWidth: '0' }}>
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 'clamp(8px, 2vw, 12px)', 
+          marginBottom: 'clamp(8px, 2vw, 12px)',
+          flexWrap: 'wrap'
+        }}>
+          <div style={{ 
+            fontSize: 'clamp(1.5rem, 4vw, 2rem)',
+            flexShrink: 0
           }}>
-            <div style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.95)',
-              border: '2px solid #FFD700',
-              borderRadius: '16px',
-              padding: '32px',
-              maxWidth: '800px',
-              width: '90%',
-              maxHeight: '90vh',
-              overflow: 'auto',
-              margin: '20px',
+            {selectedTopic.avatar}
+          </div>
+          <div style={{ minWidth: '0', flex: 1 }}>
+            <h2 style={{ 
+              color: '#FFD700', 
+              margin: '0 0 4px 0',
+              fontSize: 'clamp(1.2rem, 3.5vw, 1.5rem)',
+              fontWeight: '700',
+              wordBreak: 'break-word',
+              lineHeight: '1.2'
             }}>
-              {/* Topic Header */}
-              <div style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'flex-start',
-                marginBottom: '24px'
-              }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                    <div style={{ fontSize: '2rem' }}>{selectedTopic.avatar}</div>
-                    <div>
-                      <h2 style={{ 
-                        color: '#FFD700', 
-                        margin: '0 0 4px 0',
-                        fontSize: '1.5rem',
-                        fontWeight: '700',
-                        flexShrink: 1
-                      }}>
-                        {selectedTopic.title}
-                      </h2>
-                      <div style={{
-                        display: 'inline-block',
-                        padding: '4px 12px',
-                        backgroundColor: 'rgba(255, 215, 0, 0.1)',
-                        borderRadius: '16px',
-                        fontSize: '0.7rem',
-                        color: '#FFD700',
-                        border: '1px solid rgba(255, 215, 0, 0.3)'
-                      }}>
-                        {selectedTopic.category}
-                      </div>
-                    </div>
-                  </div>
-                  
+              {selectedTopic.title}
+            </h2>
+            <div style={{
+              display: 'inline-block',
+              padding: 'clamp(3px, 1vw, 4px) clamp(8px, 2vw, 12px)',
+              backgroundColor: 'rgba(255, 215, 0, 0.1)',
+              borderRadius: '16px',
+              fontSize: 'clamp(0.6rem, 1.5vw, 0.7rem)',
+              color: '#FFD700',
+              border: '1px solid rgba(255, 215, 0, 0.3)'
+            }}>
+              {selectedTopic.category}
+            </div>
+          </div>
+        </div>
+        
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 'clamp(8px, 2vw, 16px)', 
+          fontSize: 'clamp(0.7rem, 1.8vw, 0.8rem)', 
+          color: '#8B7355',
+          marginBottom: 'clamp(12px, 2.5vw, 16px)',
+          flexWrap: 'wrap'
+        }}>
+          <span>By {selectedTopic.author}</span>
+          <span className="desktop-separator">•</span>
+          <span>{selectedTopic.replies} replies</span>
+          <span className="desktop-separator">•</span>
+          <span>{selectedTopic.views} views</span>
+          <span className="desktop-separator">•</span>
+          <span>{selectedTopic.likes} likes</span>
+          <span className="desktop-separator">•</span>
+          <span style={{ color: '#C9B037' }}>{timeAgo(selectedTopic.createdAt.toDate())}</span>
+        </div>
+      </div>
+      
+      <button
+        onClick={() => setSelectedTopic(null)}
+        style={{
+          background: 'none',
+          border: '2px solid rgba(255, 215, 0, 0.3)',
+          borderRadius: '50%',
+          width: 'clamp(36px, 8vw, 40px)',
+          height: 'clamp(36px, 8vw, 40px)',
+          color: '#C9B037',
+          cursor: 'pointer',
+          fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'all 0.3s ease',
+          flexShrink: 0
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+          e.target.style.borderColor = '#FFD700';
+          e.target.style.color = '#FFD700';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.backgroundColor = 'transparent';
+          e.target.style.borderColor = 'rgba(255, 215, 0, 0.3)';
+          e.target.style.color = '#C9B037';
+        }}
+      >
+        ×
+      </button>
+    </div>
+
+    {/* Original Post Content */}
+    <div style={{
+      backgroundColor: 'rgba(255, 215, 0, 0.05)',
+      padding: 'clamp(16px, 3vw, 20px)',
+      borderRadius: 'clamp(8px, 2vw, 12px)',
+      border: '1px solid rgba(255, 215, 0, 0.2)',
+      marginBottom: 'clamp(16px, 3vw, 24px)'
+    }}>
+      <p style={{ 
+        color: '#C9B037', 
+        lineHeight: '1.6',
+        margin: '0',
+        fontSize: 'clamp(0.9rem, 2.2vw, 1rem)',
+        wordBreak: 'break-word'
+      }}>
+        {selectedTopic.content}
+      </p>
+      
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between',
+        marginTop: 'clamp(12px, 2.5vw, 16px)',
+        paddingTop: 'clamp(12px, 2.5vw, 16px)',
+        borderTop: '1px solid rgba(255, 215, 0, 0.2)',
+        gap: '12px',
+        flexWrap: 'wrap'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(8px, 2vw, 12px)' }}>
+          <button
+            onClick={() => handleLikePost(selectedTopic.id)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: likedPosts.has(selectedTopic.id) ? '#FFD700' : '#8B7355',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              padding: 'clamp(6px, 1.5vw, 8px)',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+              e.target.style.transform = 'scale(1.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = 'transparent';
+              e.target.style.transform = 'scale(1)';
+            }}
+          >
+            <Heart size={window.innerWidth <= 768 ? 16 : 18} fill={likedPosts.has(selectedTopic.id) ? 'currentColor' : 'none'} />
+            <span style={{ fontSize: 'clamp(0.7rem, 1.8vw, 0.8rem)' }}>{selectedTopic.likes}</span>
+          </button>
+          
+          <button
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#8B7355',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              padding: 'clamp(6px, 1.5vw, 8px)',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+              e.target.style.color = '#FFD700';
+              e.target.style.transform = 'scale(1.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = 'transparent';
+              e.target.style.color = '#8B7355';
+              e.target.style.transform = 'scale(1)';
+            }}
+          >
+            <Share2 size={window.innerWidth <= 768 ? 16 : 18} />
+            <span style={{ fontSize: 'clamp(0.7rem, 1.8vw, 0.8rem)' }}>Share</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {/* Replies Section */}
+    <div style={{ marginBottom: 'clamp(16px, 3vw, 24px)' }}>
+      <h3 style={{ 
+        color: '#FFD700', 
+        fontSize: 'clamp(1.1rem, 2.8vw, 1.2rem)',
+        fontWeight: '600',
+        marginBottom: 'clamp(12px, 2.5vw, 16px)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 'clamp(6px, 1.5vw, 8px)'
+      }}>
+        <MessageCircle size={window.innerWidth <= 768 ? 18 : 20} />
+        Replies ({selectedTopic.repliesData.length})
+      </h3>
+
+      {selectedTopic.repliesData.length > 0 ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(12px, 2.5vw, 16px)' }}>
+          {selectedTopic.repliesData.map(reply => (
+            <div key={reply.id} style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+              padding: 'clamp(12px, 3vw, 16px)',
+              borderRadius: 'clamp(8px, 2vw, 12px)',
+              border: '1px solid rgba(255, 215, 0, 0.2)',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+              e.currentTarget.style.borderColor = 'rgba(255, 215, 0, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+              e.currentTarget.style.borderColor = 'rgba(255, 215, 0, 0.2)';
+            }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'clamp(8px, 2vw, 12px)' }}>
+                <div style={{ 
+                  fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
+                  flexShrink: 0
+                }}>
+                  {reply.avatar}
+                </div>
+                <div style={{ flex: 1, minWidth: '0' }}>
                   <div style={{ 
                     display: 'flex', 
                     alignItems: 'center', 
-                    gap: '16px', 
-                    fontSize: '0.8rem', 
-                    color: '#8B7355',
-                    marginBottom: '16px'
+                    gap: 'clamp(8px, 2vw, 12px)', 
+                    marginBottom: 'clamp(6px, 1.5vw, 8px)',
+                    flexWrap: 'wrap'
                   }}>
-                    <span>By {selectedTopic.author}</span>
-                    <span>•</span>
-                    <span>{selectedTopic.replies} replies</span>
-                    <span>•</span>
-                    <span>{selectedTopic.views} views</span>
-                    <span>•</span>
-                    <span>{selectedTopic.likes} likes</span>
-                    <span>•</span>
-                    <span style={{ color: '#C9B037' }}>{timeAgo(selectedTopic.createdAt.toDate())}</span>
-                  </div>
-                </div>
-                
-                <button
-                  onClick={() => setSelectedTopic(null)}
-                  style={{
-                    background: 'none',
-                    border: '2px solid rgba(255, 215, 0, 0.3)',
-                    borderRadius: '50%',
-                    width: '40px',
-                    height: '40px',
-                    color: '#C9B037',
-                    cursor: 'pointer',
-                    fontSize: '1.2rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
-                    e.target.style.borderColor = '#FFD700';
-                    e.target.style.color = '#FFD700';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = 'transparent';
-                    e.target.style.borderColor = 'rgba(255, 215, 0, 0.3)';
-                    e.target.style.color = '#C9B037';
-                  }}
-                >
-                  ×
-                </button>
-              </div>
-
-              {/* Original Post Content */}
-              <div style={{
-                backgroundColor: 'rgba(255, 215, 0, 0.05)',
-                padding: '20px',
-                borderRadius: '12px',
-                border: '1px solid rgba(255, 215, 0, 0.2)',
-                marginBottom: '24px'
-              }}>
-                <p style={{ 
-                  color: '#C9B037', 
-                  lineHeight: '1.6',
-                  margin: '0',
-                  fontSize: '1rem'
-                }}>
-                  {selectedTopic.content}
-                </p>
-                
-                <div style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'space-between',
-                  marginTop: '16px',
-                  paddingTop: '16px',
-                  borderTop: '1px solid rgba(255, 215, 0, 0.2)'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <button
-                      onClick={() => handleLikePost(selectedTopic.id)}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        color: likedPosts.has(selectedTopic.id) ? '#FFD700' : '#8B7355',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                        padding: '8px',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
-                        e.target.style.transform = 'scale(1.1)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.target.style.backgroundColor = 'transparent';
-                        e.target.style.transform = 'scale(1)';
-                      }}
-                    >
-                      <Heart size={18} fill={likedPosts.has(selectedTopic.id) ? 'currentColor' : 'none'} />
-                      <span style={{ fontSize: '0.8rem' }}>{selectedTopic.likes}</span>
-                    </button>
-                    
-                    <button
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        color: '#8B7355',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                        padding: '8px',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
-                        e.target.style.color = '#FFD700';
-                        e.target.style.transform = 'scale(1.1)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.target.style.backgroundColor = 'transparent';
-                        e.target.style.color = '#8B7355';
-                        e.target.style.transform = 'scale(1)';
-                      }}
-                    >
-                      <Share2 size={18} />
-                      <span style={{ fontSize: '0.8rem' }}>Share</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Replies Section */}
-              <div style={{ marginBottom: '24px' }}>
-                <h3 style={{ 
-                  color: '#FFD700', 
-                  fontSize: '1.2rem',
-                  fontWeight: '600',
-                  marginBottom: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}>
-                  <MessageCircle size={20} />
-                  Replies ({selectedTopic.repliesData.length})
-                </h3>
-
-                {selectedTopic.repliesData.length > 0 ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    {selectedTopic.repliesData.map(reply => (
-                      <div key={reply.id} style={{
-                        backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                        padding: '16px',
-                        borderRadius: '12px',
-                        border: '1px solid rgba(255, 215, 0, 0.2)',
-                        transition: 'all 0.3s ease'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-                        e.currentTarget.style.borderColor = 'rgba(255, 215, 0, 0.4)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
-                        e.currentTarget.style.borderColor = 'rgba(255, 215, 0, 0.2)';
-                      }}>
-                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                          <div style={{ fontSize: '1.2rem' }}>{reply.avatar}</div>
-                          <div style={{ flex: 1 }}>
-                            <div style={{ 
-                              display: 'flex', 
-                              alignItems: 'center', 
-                              gap: '12px', 
-                              marginBottom: '8px' 
-                            }}>
-                              <span style={{ 
-                                color: reply.author === 'You' ? '#FFD700' : '#C9B037',
-                                fontWeight: '600',
-                                fontSize: '0.9rem'
-                              }}>
-                                {reply.author}
-                              </span>
-                              <span style={{ color: '#8B7355', fontSize: '0.7rem' }}>
-                                {reply.timestamp}
-                              </span>
-                            </div>
-                            <p style={{ 
-                              color: '#C9B037', 
-                              margin: '0 0 12px 0',
-                              lineHeight: '1.5',
-                              fontSize: '0.9rem'
-                            }}>
-                              {reply.content}
-                            </p>
-                            <button
-                              onClick={() => handleLikeReply(selectedTopic.id, reply.id)}
-                              style={{
-                                background: 'none',
-                                border: 'none',
-                                color: '#8B7355',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s ease',
-                                padding: '4px 8px',
-                                borderRadius: '16px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                                fontSize: '0.8rem'
-                              }}
-                              onMouseEnter={(e) => {
-                                e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
-                                e.target.style.color = '#FFD700';
-                              }}
-                              onMouseLeave={(e) => {
-                                e.target.style.backgroundColor = 'transparent';
-                                e.target.style.color = '#8B7355';
-                              }}
-                            >
-                              <Heart size={14} />
-                              {reply.likes}
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div style={{
-                    textAlign: 'center',
-                    padding: '40px',
-                    color: '#8B7355',
-                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                    borderRadius: '12px',
-                    border: '1px dashed rgba(255, 215, 0, 0.3)'
-                  }}>
-                    <MessageCircle size={32} style={{ marginBottom: '8px' }} />
-                    <p>No replies yet. Be the first to share your thoughts!</p>
-                  </div>
-                )}
-              </div>
-
-              {/* Reply Input */}
-              <div style={{
-                backgroundColor: 'rgba(255, 215, 0, 0.05)',
-                padding: '20px',
-                borderRadius: '12px',
-                border: '1px solid rgba(255, 215, 0, 0.3)'
-              }}>
-                <h4 style={{ 
-                  color: '#FFD700', 
-                  margin: '0 0 12px 0',
-                  fontSize: '1rem',
-                  fontWeight: '600'
-                }}>
-                  Add Your Reply
-                </h4>
-                <textarea
-                  value={newReply}
-                  onChange={(e) => setNewReply(e.target.value)}
-                  placeholder="Share your thoughts, ask follow-up questions, or provide helpful advice..."
-                  rows={4}
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    border: '1px solid rgba(255, 215, 0, 0.3)',
-                    borderRadius: '8px',
-                    color: '#FFD700',
-                    fontSize: '0.9rem',
-                    outline: 'none',
-                    resize: 'vertical',
-                    marginBottom: '12px'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = '#FFD700';
-                    e.target.style.boxShadow = '0 0 10px rgba(255, 215, 0, 0.2)';
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = 'rgba(255, 215, 0, 0.3)';
-                    e.target.style.boxShadow = 'none';
-                  }}
-                />
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <button
-                    onClick={() => {
-                      handleReply(selectedTopic.id)}}
-                    disabled={!newReply.trim()}
-                    style={{
-                      padding: '10px 20px',
-                      background: newReply.trim() ? 'linear-gradient(135deg, #FFD700, #FFA500)' : 'rgba(139, 115, 85, 0.5)',
-                      border: 'none',
-                      borderRadius: '8px',
-                      color: newReply.trim() ? '#000' : '#8B7355',
+                    <span style={{ 
+                      color: reply.author === 'You' ? '#FFD700' : '#C9B037',
                       fontWeight: '600',
-                      cursor: newReply.trim() ? 'pointer' : 'not-allowed',
-                      transition: 'all 0.3s ease',
+                      fontSize: 'clamp(0.8rem, 2vw, 0.9rem)'
+                    }}>
+                      {reply.author}
+                    </span>
+                    <span style={{ 
+                      color: '#8B7355', 
+                      fontSize: 'clamp(0.6rem, 1.5vw, 0.7rem)'
+                    }}>
+                      {reply.timestamp}
+                    </span>
+                  </div>
+                  <p style={{ 
+                    color: '#C9B037', 
+                    margin: '0 0 12px 0',
+                    lineHeight: '1.5',
+                    fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
+                    wordBreak: 'break-word'
+                  }}>
+                    {reply.content}
+                  </p>
+                  <button
+                    onClick={() => handleLikeReply(selectedTopic.id, reply.id)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#8B7355',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      padding: 'clamp(3px, 1vw, 4px) clamp(6px, 1.5vw, 8px)',
+                      borderRadius: '16px',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '8px',
-                      fontSize: '0.9rem'
+                      gap: '4px',
+                      fontSize: 'clamp(0.7rem, 1.8vw, 0.8rem)'
                     }}
                     onMouseEnter={(e) => {
-                      if (newReply.trim()) {
-                        e.target.style.transform = 'scale(1.05)';
-                        e.target.style.boxShadow = '0 5px 15px rgba(255, 215, 0, 0.3)';
-                      }
+                      e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                      e.target.style.color = '#FFD700';
                     }}
                     onMouseLeave={(e) => {
-                      if (newReply.trim()) {
-                        e.target.style.transform = 'scale(1)';
-                        e.target.style.boxShadow = 'none';
-                      }
+                      e.target.style.backgroundColor = 'transparent';
+                      e.target.style.color = '#8B7355';
                     }}
                   >
-                    <Send size={16} />
-                    Post Reply
+                    <Heart size={window.innerWidth <= 768 ? 12 : 14} />
+                    {reply.likes}
                   </button>
                 </div>
               </div>
             </div>
-          </div>
+          ))}
+        </div>
+      ) : (
+        <div style={{
+          textAlign: 'center',
+          padding: 'clamp(24px, 5vw, 40px)',
+          color: '#8B7355',
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          borderRadius: 'clamp(8px, 2vw, 12px)',
+          border: '1px dashed rgba(255, 215, 0, 0.3)'
+        }}>
+          <MessageCircle size={window.innerWidth <= 768 ? 28 : 32} style={{ marginBottom: '8px' }} />
+          <p style={{ 
+            margin: 0,
+            fontSize: 'clamp(0.9rem, 2.2vw, 1rem)'
+          }}>
+            No replies yet. Be the first to share your thoughts!
+          </p>
+        </div>
+      )}
+    </div>
+
+    {/* Reply Input */}
+    <div style={{
+      backgroundColor: 'rgba(255, 215, 0, 0.05)',
+      padding: 'clamp(16px, 3vw, 20px)',
+      borderRadius: 'clamp(8px, 2vw, 12px)',
+      border: '1px solid rgba(255, 215, 0, 0.3)'
+    }}>
+      <h4 style={{ 
+        color: '#FFD700', 
+        margin: '0 0 12px 0',
+        fontSize: 'clamp(0.9rem, 2.2vw, 1rem)',
+        fontWeight: '600'
+      }}>
+        Add Your Reply
+      </h4>
+      <textarea
+        value={newReply}
+        onChange={(e) => setNewReply(e.target.value)}
+        placeholder="Share your thoughts, ask follow-up questions, or provide helpful advice..."
+        rows={window.innerWidth <= 768 ? 3 : 4}
+        style={{
+          width: '100%',
+          padding: 'clamp(10px, 2.5vw, 12px)',
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          border: '1px solid rgba(255, 215, 0, 0.3)',
+          borderRadius: 'clamp(6px, 1.5vw, 8px)',
+          color: '#FFD700',
+          fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
+          outline: 'none',
+          resize: 'vertical',
+          marginBottom: 'clamp(10px, 2.5vw, 12px)',
+          boxSizing: 'border-box'
+        }}
+        onFocus={(e) => {
+          e.target.style.borderColor = '#FFD700';
+          e.target.style.boxShadow = '0 0 10px rgba(255, 215, 0, 0.2)';
+        }}
+        onBlur={(e) => {
+          e.target.style.borderColor = 'rgba(255, 215, 0, 0.3)';
+          e.target.style.boxShadow = 'none';
+        }}
+      />
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <button
+          onClick={() => {
+            handleReply(selectedTopic.id)}}
+          disabled={!newReply.trim()}
+          style={{
+            padding: 'clamp(8px, 2vw, 10px) clamp(16px, 3vw, 20px)',
+            background: newReply.trim() ? 'linear-gradient(135deg, #FFD700, #FFA500)' : 'rgba(139, 115, 85, 0.5)',
+            border: 'none',
+            borderRadius: 'clamp(6px, 1.5vw, 8px)',
+            color: newReply.trim() ? '#000' : '#8B7355',
+            fontWeight: '600',
+            cursor: newReply.trim() ? 'pointer' : 'not-allowed',
+            transition: 'all 0.3s ease',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'clamp(6px, 1.5vw, 8px)',
+            fontSize: 'clamp(0.8rem, 2vw, 0.9rem)'
+          }}
+          onMouseEnter={(e) => {
+            if (newReply.trim()) {
+              e.target.style.transform = 'scale(1.05)';
+              e.target.style.boxShadow = '0 5px 15px rgba(255, 215, 0, 0.3)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (newReply.trim()) {
+              e.target.style.transform = 'scale(1)';
+              e.target.style.boxShadow = 'none';
+            }
+          }}
+        >
+          <Send size={window.innerWidth <= 768 ? 14 : 16} />
+          Post Reply
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    {`
+      /* Custom scrollbar for webkit browsers */
+      div::-webkit-scrollbar {
+        width: 6px;
+      }
+      
+      div::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+      }
+      
+      div::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #FFD700, #FFA500);
+        border-radius: 3px;
+        transition: background 0.3s ease;
+      }
+      
+      div::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #FFA500, #FFD700);
+      }
+      
+      /* Custom scrollbar for Firefox */
+      div {
+        scrollbar-width: thin;
+        scrollbar-color: #FFD700 rgba(0, 0, 0, 0.3);
+      }
+      
+      @media (max-width: 768px) {
+        .desktop-separator {
+          display: none;
+        }
+        
+        /* Even thinner scrollbar on mobile */
+        div::-webkit-scrollbar {
+          width: 4px;
+        }
+      }
+      
+      @media (min-width: 769px) {
+        .desktop-separator {
+          display: inline;
+        }
+      }
+    `}
+  </style>
+</div>
         )}
 
         {/* New Post Modal */}

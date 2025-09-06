@@ -55,7 +55,6 @@ const styles = {
     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
     transform: 'translateY(0) scale(1)',
     position: 'relative',
-    left:'32.5%',
     overflow: 'hidden',
     width:'400px'
   },
@@ -608,6 +607,8 @@ const CreditCardSimulator = () => {
   const [billGenerated, setBillGenerated] = useState(false);
   const [currentBillAmount, setCurrentBillAmount] = useState(0);
   const [phase, setPhase] = useState('spending');
+  const [isMobile, setIsMobile] = useState(false);
+  
 
   const monthlyInterestRate = parseFloat(interestRate || 0) / 12 / 100;
   const totalOutstanding = currentBalance + currentSpending;
@@ -636,6 +637,16 @@ const CreditCardSimulator = () => {
     };
     setGameStateHistory(prev => [...prev, currentState]);
   };
+
+   useEffect(() => {
+        const checkMobile = () => {
+          setIsMobile(window.innerWidth <= 768);
+        };
+        
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+      }, []);
 
   const undoLastAction = () => {
     if (gameStateHistory.length === 0) {
@@ -955,6 +966,7 @@ const CreditCardSimulator = () => {
         </div>
 
         {!isSimulationStarted ? (
+          <div style={{width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
           <div style={styles.setupCard}>
             <h2 style={styles.setupTitle}>Setup Your Credit Card</h2>
             
@@ -1019,9 +1031,10 @@ const CreditCardSimulator = () => {
               </button>
             </div>
           </div>
+          </div>
         ) : (
           <div style={styles.dashboard}>
-            <div style={styles.cardsGrid}>
+            <div style={{...styles.cardsGrid,gridTemplateColumns: isMobile? 'repeat(auto-fit, minmax(150px, 1fr))': 'repeat(auto-fit, minmax(200px, 1fr))',}}>
               <div style={styles.summaryCard}>
                 <h3 style={styles.cardTitle}>Credit Limit</h3>
                 <p style={{...styles.cardValue, ...styles.blueValue}}>₹{parseFloat(creditLimit).toLocaleString()}</p>

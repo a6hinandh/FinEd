@@ -45,10 +45,9 @@ const FinancialChatbot = () => {
       // User is signed in
       
       const data = await fetchChatHistory(currentUser.uid);
-        console.log(data)
         setChatHistory(data);
       setUserName(currentUser.displayName); // save name
-      createChatHistory(currentUser.uid); // pass uid here
+       // pass uid here
     } else {
       // No user signed in, maybe redirect to login
       console.log("No user signed in");
@@ -77,6 +76,7 @@ const FinancialChatbot = () => {
       ) // adds message to the array
     });
     setChatHistoryId(docRef.id);
+    return docRef.id;
     console.log("Chat history created with ID:", docRef.id);
   } catch (error) {
     console.error("Error creating chat history:", error);
@@ -124,8 +124,12 @@ const FinancialChatbot = () => {
       timestamp: new Date(),
       mode: advisoryMode
     };
+    let id;
+    if(!chatHistoryId){
+     id= await createChatHistory(auth.currentUser.uid);
+    }
     
-    const chatDocRef = doc(db, "chatHistory", chatHistoryId);
+    const chatDocRef = doc(db, "chatHistory", chatHistoryId?chatHistoryId:id);
 
     await updateDoc(chatDocRef, {
       messages: arrayUnion(userMessage) // adds message to the array
@@ -159,7 +163,7 @@ const FinancialChatbot = () => {
         mode: advisoryMode
       };
 
-      const chatDocRef = doc(db, "chatHistory", chatHistoryId);
+      const chatDocRef = doc(db, "chatHistory", chatHistoryId?chatHistoryId:id);
 
     await updateDoc(chatDocRef, {
       messages: arrayUnion(botMessage) // adds message to the array
@@ -168,7 +172,6 @@ const FinancialChatbot = () => {
       setMessages(prev => [...prev, botMessage]);
     } catch (err) {
       setError(err.message);
-      
       const errorMessage = {
         id: Date.now() + 1,
         type: 'bot',
@@ -185,6 +188,7 @@ const FinancialChatbot = () => {
   const onSelectChat = (index) => {
     setMessages(chatHistory[index].messages);
     setShowHistoryModal(false)
+    {isMobile && setSidebarCollapsed(true)}
   }
 
   const generateMockResponse = (message, mode) => {
@@ -464,26 +468,31 @@ const FinancialChatbot = () => {
         {/* Header */}
         <div className="headerc">
           <div className="header-left">
-            {isMobile && (
+            
+            <div className="title-section">
+              <div className="title-row">
+                {isMobile ? (
               <button 
                 className="mobile-menu-btn"
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
               >
                 <Menu className="mobile-menu-icon" />
               </button>
-            )}
-            <div className="title-section">
-              <div className="title-row">
-                <Wallet className="title-icon" />
+            ):<Wallet className="title-icon" />}
+                
                 <h1 className="title"><span className="logo-fin">Fin</span>
                         <span className="logo-ed">Ed</span> AI</h1>
-              </div>
-              <span className="subtitle">Your Personal Financial Intelligence Platform</span>
-            </div>
-            <div className="status-indicator">
+
+                {!isMobile && (
+                  <div className="status-indicator">
               <div className="status-dot"></div>
               <span className="status-text">Live Markets</span>
             </div>
+                )}
+              </div>
+              <span className="subtitle">Your Personal Financial Intelligence Platform</span>
+            </div>
+            
           </div>
           <div className="header-actions">
             

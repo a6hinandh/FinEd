@@ -1,11 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 const CreditCardSimulationExplanation = () => {
   const [activeSection, setActiveSection] = useState(null);
+    const [isMobile, setIsMobile] = useState(false);
 
   const toggleSection = (section) => {
     setActiveSection(activeSection === section ? null : section);
   };
+
+     useEffect(() => {
+          const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+          };
+          
+          checkMobile();
+          window.addEventListener('resize', checkMobile);
+          return () => window.removeEventListener('resize', checkMobile);
+        }, []);
 
   const sectionData = [
     {
@@ -22,9 +33,9 @@ The simulation follows authentic credit card operations: spending phase → bill
       icon: '🔄',
       content: `The simulator operates in two distinct phases that mirror real credit card usage:
 
-**Spending Phase:** Users make purchases throughout the month. They can buy items up to their available credit limit. Multiple purchases can be made before generating a bill.
+Spending Phase: Users make purchases throughout the month. They can buy items up to their available credit limit. Multiple purchases can be made before generating a bill.
 
-**Payment Phase:** Once the bill is generated, users must choose how to pay: minimum payment, full payment, custom amount, or skip payment. Each choice has different consequences for interest charges and credit score.
+Payment Phase: Once the bill is generated, users must choose how to pay: minimum payment, full payment, custom amount, or skip payment. Each choice has different consequences for interest charges and credit score.
 
 This phase system teaches the importance of timing in credit card management and how billing cycles work.`
     },
@@ -35,35 +46,35 @@ This phase system teaches the importance of timing in credit card management and
       content: `Interest is calculated using the standard monthly rate formula:
 Monthly Rate = Annual Rate ÷ 12
 
-**When Interest Applies:**
+When Interest Applies:
 - Only on unpaid balances carried from previous months
 - NOT on new purchases within the same billing cycle (grace period)
 - Compounds monthly if balances remain unpaid
 
-**Key Learning:** The simulation shows how interest-free periods work for new purchases and how carrying balances becomes expensive over time. Users see real-time calculations of how much interest they're accumulating.`
+Key Learning:The simulation shows how interest-free periods work for new purchases and how carrying balances becomes expensive over time. Users see real-time calculations of how much interest they're accumulating.`
     },
     {
       id: 'payments',
       title: 'Payment Options & Consequences',
       icon: '💳',
-      content: `**Minimum Payment (Typical 5% of bill):**
+      content: `Minimum Payment (Typical 5% of bill):
 - Keeps account in good standing
 - Results in maximum interest charges
 - Small negative impact on credit score
 - Demonstrates the "minimum payment trap"
 
-**Full Payment:**
+Full Payment:
 - Eliminates all interest charges
 - Positive credit score boost (+5 points)
 - Resets balance to zero
 - Shows benefits of paying in full
 
-**Custom Payment:**
+Custom Payment:
 - Allows strategic partial payments
 - Moderate credit score impact
 - Teaches balance between cash flow and interest costs
 
-**Skipping Payment:**
+Skipping Payment:
 - Severe penalties (₹500 late fee)
 - Major credit score damage (-25 points)
 - Additional interest charges
@@ -75,18 +86,18 @@ Monthly Rate = Annual Rate ÷ 12
       icon: '📈',
       content: `The simulation models real credit score factors:
 
-**Payment History (Most Important):**
+Payment History (Most Important):
 - Full payments: +5 points
 - Partial payments: +2 points  
 - Minimum payments: -2 points
 - Missed payments: -25 points
 
-**Credit Utilization (Second Most Important):**
+Credit Utilization (Second Most Important):
 - Over 80% utilization: -8 points
 - 50-80% utilization: -3 points
 - Under 30%: No penalty (ideal range)
 
-**Score Ranges:**
+Score Ranges:
 - 750-850: Excellent (Green)
 - 650-749: Good (Yellow)  
 - 300-649: Poor (Red)
@@ -97,17 +108,17 @@ Users see immediate feedback on how their decisions affect their creditworthines
       id: 'key-metrics',
       title: 'Key Metrics Explained',
       icon: '📋',
-      content: `**Outstanding Balance:** Previous unpaid amounts that accrue interest
+      content: `Outstanding Balance: Previous unpaid amounts that accrue interest
 
-**Current Spending:** New purchases in the current billing cycle
+Current Spending: New purchases in the current billing cycle
 
-**Available Credit:** Credit limit minus total outstanding amount
+Available Credit: Credit limit minus total outstanding amount
 
-**Utilization Ratio:** Percentage of credit limit being used (critical for credit score)
+Utilization Ratio: Percentage of credit limit being used (critical for credit score)
 
-**Total Interest Paid:** Running total of all interest charges (shows true cost of carrying debt)
+Total Interest Paid: Running total of all interest charges (shows true cost of carrying debt)
 
-**Bill Amount:** Outstanding balance + current spending + accrued interest
+Bill Amount: Outstanding balance + current spending + accrued interest
 
 The dashboard provides real-time visibility into all these metrics, helping users understand the interconnected nature of credit card finances.`
     },
@@ -115,24 +126,24 @@ The dashboard provides real-time visibility into all these metrics, helping user
       id: 'scenarios',
       title: 'Learning Scenarios',
       icon: '🎓',
-      content: `**Scenario 1: Responsible Use**
+      content: `Scenario 1: Responsible Use
 - Make small purchases
 - Pay full balance each month
 - Watch credit score improve
 - See zero interest charges
 
-**Scenario 2: Minimum Payment Trap**
+Scenario 2: Minimum Payment Trap
 - Make large purchase
 - Pay only minimums
 - Watch interest compound
 - See debt spiral effect
 
-**Scenario 3: Strategic Partial Payments**
+Scenario 3: Strategic Partial Payments
 - Balance cash flow needs with interest costs
 - Learn optimal payment strategies
 - Understand trade-offs
 
-**Scenario 4: Credit Score Recovery**
+Scenario 4: Credit Score Recovery
 - Start with poor habits
 - Implement better payment strategies
 - Watch credit score gradually improve
@@ -143,24 +154,24 @@ Each scenario teaches different aspects of credit card financial literacy.`
       id: 'features',
       title: 'Simulator Features',
       icon: '⚙️',
-      content: `**Interactive Elements:**
+      content: `Interactive Elements:
 - Real-time calculations and updates
 - Visual feedback through charts and graphs
 - Immediate consequences for all actions
 
-**Educational Tools:**
+Educational Tools:
 - Credit score progress bar with color coding
 - Utilization ratio pie chart
 - Balance history line graph
 - Transaction history log
 
-**Safety Features:**
+Safety Features:
 - Undo function for learning from mistakes
 - Reset option to start over
 - Clear phase indicators
 - Helpful tips and warnings
 
-**Gamification:**
+Gamification:
 - Month-by-month progression
 - Achievement-style credit score improvements
 - Immediate feedback notifications
@@ -172,16 +183,16 @@ The interface is designed to make learning about credit cards engaging while mai
       id: 'educational-value',
       title: 'Educational Value',
       icon: '🧠',
-      content: `**Core Learning Objectives:**
+      content: `Core Learning Objectives:
 
-1. **Understanding Interest:** How it accumulates, when it applies, and how to avoid it
-2. **Payment Strategy:** Trade-offs between different payment approaches  
-3. **Credit Score Impact:** How financial decisions affect creditworthiness
-4. **Utilization Management:** Keeping credit usage in optimal ranges
-5. **Billing Cycles:** How real credit card timing works
-6. **Financial Planning:** Balancing spending with payment capacity
+1. Understanding Interest: How it accumulates, when it applies, and how to avoid it
+2. Payment Strategy: Trade-offs between different payment approaches  
+3. Credit Score Impact: How financial decisions affect creditworthiness
+4. Utilization Management: Keeping credit usage in optimal ranges
+5. Billing Cycles: How real credit card timing works
+6. Financial Planning: Balancing spending with payment capacity
 
-**Why Simulation Works:**
+Why Simulation Works:
 - Safe environment to make costly mistakes
 - Immediate feedback on decisions
 - Repetitive practice builds intuition
@@ -208,7 +219,7 @@ The simulator bridges the gap between theoretical knowledge and practical unders
         </div>
 
         {/* Quick Stats */}
-        <div style={styles.statsGrid}>
+        <div style={{...styles.statsGrid,gridTemplateColumns: isMobile? 'repeat(auto-fit, minmax(150px, 1fr))': 'repeat(auto-fit, minmax(200px, 1fr))'}}>
           <div style={styles.statCard}>
             <div style={styles.statIcon}>🎮</div>
             <div style={styles.statValue}>2 Phases</div>
@@ -335,7 +346,7 @@ The simulator bridges the gap between theoretical knowledge and practical unders
         {/* Key Insights */}
         <div style={styles.insightsCard}>
           <h2 style={styles.insightsTitle}>Key Financial Insights</h2>
-          <div style={styles.insightsGrid}>
+          <div style={{...styles.insightsGrid,gridTemplateColumns: isMobile ? 'repeat(auto-fit, minmax(150px, 1fr))' : 'repeat(auto-fit, minmax(200px, 1fr))'}}>
             <div style={styles.insightItem}>
               <div style={styles.insightIcon}>💰</div>
               <h4 style={styles.insightTitle}>Compound Interest Impact</h4>

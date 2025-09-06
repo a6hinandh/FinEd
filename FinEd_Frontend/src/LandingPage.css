@@ -767,7 +767,7 @@ body {
   }
   
   .footer-links-section {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--spacing-lg);
   }
 }
@@ -862,13 +862,13 @@ body {
   }
   
   .footer-links-section {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3,1fr);
     gap: var(--spacing-md);
   }
   
   .footer-column {
     padding: var(--spacing-md) 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    
   }
   
   .footer-column:last-child {
@@ -998,7 +998,7 @@ body {
 @media screen and (max-width: 480px) {
   /* Navigation stack completely */
   .nav {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     padding: var(--spacing-sm);
   }

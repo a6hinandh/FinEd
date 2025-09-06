@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 const FinancialSimulatorLanding = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [currentFeature, setCurrentFeature] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   const features = [
     "Real-time interest calculations",
@@ -22,6 +23,16 @@ const FinancialSimulatorLanding = () => {
     return () => clearInterval(interval);
   }, []); 
 
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   
 
   return (
@@ -37,11 +48,11 @@ const FinancialSimulatorLanding = () => {
         {/* Hero Section */}
         <div style={styles.hero}>
           <div style={styles.heroContent}>
-            <h1 style={styles.mainTitle}>
+            <h1 style={{...styles.mainTitle, fontSize : isMobile ? "2.5rem":"3rem"}}  >
               Financial Literacy
               <span style={styles.titleAccent}> Simulator</span>
             </h1>
-            <p style={styles.heroSubtitle}>
+            <p style={{...styles.heroSubtitle}}>
               Master credit cards and loans through interactive simulations. 
               Learn financial concepts in a safe, gamified environment.
             </p>
@@ -58,7 +69,7 @@ const FinancialSimulatorLanding = () => {
 
         {/* Main Simulator Options */}
         <div style={styles.simulatorSection}>
-          <h2 style={styles.sectionTitle}>Choose Your Learning Path</h2>
+          <h2 style={{...styles.sectionTitle,fontSize : isMobile ? "1.7em":"2.5rem"}}>Choose Your Learning Path</h2>
           
           <div style={styles.simulatorGrid}>
             {/* Credit Card Simulator */}
@@ -153,7 +164,7 @@ const FinancialSimulatorLanding = () => {
         {/* Stats Section */}
         <div style={styles.statsSection}>
           <h2 style={styles.statsTitle}>Why Financial Literacy Matters</h2>
-          <div style={styles.statsGrid}>
+          <div style={{...styles.statsGrid,gridTemplateColumns: isMobile ? 'repeat(auto-fit, minmax(150px, 1fr))' : 'repeat(auto-fit, minmax(200px, 1fr))'}}>
             <div style={styles.statItem}>
               <div style={styles.statNumber}>66%</div>
               <div style={styles.statLabel}>of adults lack financial literacy</div>
@@ -336,7 +347,7 @@ const styles = {
     backgroundImage: 'linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(255, 165, 0, 0.04) 100%)',
     borderRadius: '20px',
     padding: '30px',
-    paddingTop:'15px',
+    paddingTop:'0px',
     border: '2px solid rgba(255, 215, 0, 0.2)',
     boxShadow: '0 10px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 215, 0, 0.1)',
     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',

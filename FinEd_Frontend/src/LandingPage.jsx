@@ -6,6 +6,7 @@ import { PerspectiveCamera } from "@react-three/drei";
 import { degToRad } from "three/src/math/MathUtils.js";
 import './LandingPage.css';
 import { useNavigate } from "react-router-dom";
+import { auth } from './firebase';
 
 // Utility function for extending materials
 function extendMaterial(BaseMaterial, cfg) {
@@ -403,7 +404,14 @@ const Header = ({ handleNav }) => (
         <span className="logo-ed">Ed</span>
       </div>
       <div className="nav-links">
-        <button onClick={() => handleNav("/signup")} className="nav-cta">Get Started</button>
+        <button onClick={() => {
+          const user=auth.currentUser;
+        
+          if(!user){
+            handleNav('/signup');
+            return;
+          }
+          handleNav("/features")}} className="nav-cta">Get Started</button>
       </div>
     </nav>
   </header>

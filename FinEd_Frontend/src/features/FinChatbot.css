@@ -330,6 +330,7 @@
   display: flex;
   flex-direction: column;
   background: linear-gradient(145deg, #0a0a0a 0%, #1a1a1a 100%);
+  width: 100%;
 }
 
 /* Header */
@@ -345,6 +346,7 @@
 
 .header-left {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 20px;
 }
@@ -1124,7 +1126,7 @@
 /* Responsive Design */
 @media (max-width: 1300px) {
   .financial-chatbot-container {
-    width: 1000px;
+    width: 100%;
   }
   
   .sidebar {
@@ -1134,7 +1136,7 @@
 
 @media (max-width: 1100px) {
   .financial-chatbot-container {
-    width: 900px;
+    width: 100%;
   }
   
   .sidebar {

@@ -70,7 +70,6 @@ const styles = {
     transform: 'translateY(0) scale(1)',
     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
     position: 'relative',
-    left:'32.5%',
     overflow: 'hidden',
     width:'400px'
   },
@@ -682,12 +681,24 @@ const LoanSimulator = () => {
   const [showExtraPaymentInput, setShowExtraPaymentInput] = useState(false);
   const [originalLoanAmount, setOriginalLoanAmount] = useState(0);
   const [gameStateHistory, setGameStateHistory] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
+  
 
   // Calculate current month's interest due
   
   
   // Calculate penalty due (only if there are pending amounts)
   const currentPenaltyDue = pendingPenalty;
+
+  useEffect(() => {
+      const checkMobile = () => {
+        setIsMobile(window.innerWidth <= 768);
+      };
+      
+      checkMobile();
+      window.addEventListener('resize', checkMobile);
+      return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
   // Save current state before any action
   const saveCurrentState = () => {
@@ -1009,6 +1020,7 @@ const LoanSimulator = () => {
 
         {!isSimulationStarted ? (
           /* Loan Setup Card */
+          <div style={{width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
           <div style={styles.setupCard}>
             <h2 style={styles.setupTitle}>Setup Your Loan</h2>
             
@@ -1076,11 +1088,12 @@ const LoanSimulator = () => {
               </button>
             </div>
           </div>
+          </div>
         ) : (
           /* Simulation Dashboard */
           <div style={styles.dashboard}>
             {/* Summary Cards */}
-            <div style={styles.cardsGrid}>
+            <div style={{...styles.cardsGrid,gridTemplateColumns: isMobile? 'repeat(auto-fit, minmax(150px, 1fr))': 'repeat(auto-fit, minmax(200px, 1fr))',}}>
 
                 <div style={styles.summaryCard}>
                 <h3 style={styles.cardTitle}>EMI (per month)</h3>
