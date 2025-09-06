@@ -579,7 +579,7 @@ app.get("/api/health", async (req, res) => {
     healthCheck.status = "degraded";
   }
 
-  res.json(healthCheck);
+  res.status(200).json(healthCheck);
 });
 
 // --- Financial Tips Endpoint ---
