@@ -396,7 +396,7 @@ const PopupModal = ({ isOpen, onClose, title, children }) => {
 };
 
 // Header Component
-const Header = ({ handleNav }) => (
+const Header = ({ handleNav,  }) => (
   <header className="header">
     <nav className="nav">
       <div className="nav-brand">
@@ -418,14 +418,14 @@ const Header = ({ handleNav }) => (
 );
 
 // Hero Section Component
-const HeroSection = ({ isLoaded, onLearnMore, onJoinCommunity }) => (
+const HeroSection = ({ isLoaded, onLearnMore, onJoinCommunity, isMobile }) => (
   <main className="hero">
-    <div className={`hero-content ${isLoaded ? 'fade-in' : ''}`}>
+    <div className={`hero-content ${isLoaded ? 'fade-in' : ''}`} style={{paddingTop : isMobile ? "30px" : "0px"}}>
       <div className="hero-badge">
         <span className="badge-text">Gamified Financial Literacy Platform</span>
       </div>
       
-      <h1 className="hero-title">
+      <h1 className="hero-title" style={{paddingTop : isMobile ? "15px" : "10px"}} >
         Master Your Money,<br />
         <span className="hero-title-gold">Shape Your Future</span>
       </h1>
@@ -698,11 +698,22 @@ const Footer = () => {
 const FinEdLanding = () => {
   const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 500);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+      const checkMobile = () => {
+        setIsMobile(window.innerWidth <= 768);
+      };
+      
+      checkMobile();
+      window.addEventListener('resize', checkMobile);
+      return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
   const handleLearnMore = () => {
     navigate("/features");
@@ -728,11 +739,12 @@ const FinEdLanding = () => {
       
       {/* Content Overlay */}
       <div className="content-overlay">
-        <Header handleNav={navigate} />
+        <Header handleNav={navigate}  />
         <HeroSection 
           isLoaded={isLoaded}
           onLearnMore={handleLearnMore}
           onJoinCommunity={handleJoinCommunity}
+          isMobile={isMobile}
         />
         <Footer />
       </div>

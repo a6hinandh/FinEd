@@ -214,7 +214,6 @@ body {
 }
 
 .hero-content {
-  padding-top: 30px;
   max-width: 900px;
   opacity: 0;
   transform: translateY(30px);
@@ -252,7 +251,7 @@ body {
   margin-bottom: var(--spacing-xl);
   letter-spacing: -0.02em;
   font-family: var(--font-display);
-  padding-top: 15px;
+
 }
 
 .hero-title-gold {
