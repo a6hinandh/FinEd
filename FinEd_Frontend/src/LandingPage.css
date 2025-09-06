@@ -214,6 +214,7 @@ body {
 }
 
 .hero-content {
+  padding-top: 30px;
   max-width: 900px;
   opacity: 0;
   transform: translateY(30px);
