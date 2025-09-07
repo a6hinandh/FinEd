@@ -188,6 +188,7 @@ const FinancialChatbot = () => {
   const onSelectChat = (index) => {
     setMessages(chatHistory[index].messages);
     setShowHistoryModal(false)
+    setChatHistoryId(chatHistory[index].id);
     {isMobile && setSidebarCollapsed(true)}
   }
 
