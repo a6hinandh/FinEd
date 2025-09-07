@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
 const LoanSimulationExplanation = () => {
-  const [activeSection, setActiveSection] = useState(null);
+  const [activeSection, setActiveSection] = useState({});
     const [isMobile, setIsMobile] = useState(false);
 
   const toggleSection = (section) => {
-    setActiveSection(activeSection === section ? null : section);
+    setActiveSection((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
   };
 
 
@@ -272,7 +275,7 @@ The simulator helps users develop intuition for loan management before taking ac
                 </span>
               </button>
               
-              {activeSection === section.id && (
+              {activeSection[section.id] && (
                 <div style={styles.sectionContent}>
                   <div style={styles.sectionText}>
                     {section.content.split('\n').map((paragraph, index) => {

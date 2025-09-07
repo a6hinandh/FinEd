@@ -526,7 +526,7 @@ const Footer = () => {
           </p>
           <div className="footer-social">
             <a 
-              href="https://youtu.be/dQw4w9WgXcQ" 
+              href="https://www.youtube.com/watch?v=cFMwaZGT5Bg" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="social-link" 

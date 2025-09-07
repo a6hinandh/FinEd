@@ -1,11 +1,14 @@
 import React, { useState,useEffect } from 'react';
 
 const CreditCardSimulationExplanation = () => {
-  const [activeSection, setActiveSection] = useState(null);
+  const [activeSection, setActiveSection] = useState({});
     const [isMobile, setIsMobile] = useState(false);
 
   const toggleSection = (section) => {
-    setActiveSection(activeSection === section ? null : section);
+    setActiveSection((prev) => ({
+    ...prev,
+    [section]: !prev[section], 
+  }));
   };
 
      useEffect(() => {
@@ -245,7 +248,7 @@ The simulator bridges the gap between theoretical knowledge and practical unders
         {/* Main Content Sections */}
         <div style={styles.sectionsContainer}>
           {sectionData.map((section) => (
-            <div key={section.id} style={styles.sectionCard}>
+            <div key={section.id} style={styles.sectionCard} >
               <button
                 onClick={() => toggleSection(section.id)}
                 style={styles.sectionHeader}
@@ -262,7 +265,7 @@ The simulator bridges the gap between theoretical knowledge and practical unders
                 </span>
               </button>
               
-              {activeSection === section.id && (
+              {activeSection[section.id] && (
                 <div style={styles.sectionContent}>
                   <div style={styles.sectionText}>
                     {section.content.split('\n').map((paragraph, index) => {
