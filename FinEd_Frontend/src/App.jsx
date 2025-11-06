@@ -9,7 +9,7 @@ import LoanSimulationExplanation from "./features/LoanSimulationWorking";
 import LoanSimulator from "./features/LoanSimulator";
 import FinancialChatbot from "./features/FinChatbot";
 import FinNews from "./features/finNews";
-import StockSimulator from "../../StockSimulator";
+import StockSimulator from "./features/StockSimulator";
 import ScrollToTop from "./features/ScrollToTop";
 import { Tracker } from "./features/tracker";
 import AuthPage from "./features/SignUpPage";
